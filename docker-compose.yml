@@ -1,0 +1,38 @@
+version: '3.1'
+
+services:
+
+  db:
+    image: postgis/postgis:12-3.0
+    environment:
+      #dev only
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password1234
+      POSTGRES_DB: cms
+      DEFAULT_COLLACTION: en_US.UTF-8
+      DEFAULT_CTYPE: en_US.UTF-8
+      DEFAULT_ENCDOING: UTF8
+    ports:
+      - "15432:5432"
+    networks:
+      - backend
+    volumes:
+      - pgdata:/var/lib/postgresql/data/
+
+  web:
+    build: ./backend
+    restart: always
+    ports:
+      - "8000:8000"
+    networks:
+      - backend
+    depends_on:
+      - db
+    volumes:
+      - ${PWD}/backend/cms/.env:/app/cms/.env
+
+volumes:
+  pgdata:
+
+networks:
+  backend:
