@@ -5,6 +5,8 @@ RUN apt-get update &&\
     apt-get install -y binutils libproj-dev gdal-bin
 
 ENV PYTHONUNBUFFERED 1
+ENV GDAL_LIBRARY_PATH "/usr/lib/libgdal.so.20"
+#ENV GEOS_LIBRARY_PATH = "/usr/lib/libgeos_"
 
 RUN mkdir /app
 WORKDIR /app

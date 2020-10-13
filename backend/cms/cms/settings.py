@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     'sample',
     'rest_framework',
     'rest_framework_gis',
+    'corsheaders'
 ]
 
 MIDDLEWARE = [
@@ -60,6 +61,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
+    'django.middleware.common.CommonMiddleware',
 ]
 
 ROOT_URLCONF = 'cms.urls'
@@ -121,7 +124,9 @@ USE_L10N = True
 
 USE_TZ = True
 
-
+CORS_ALLOWED_ORIGINS = [
+  "http://192.168.1.54:3000"
+]
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 STATIC_URL = '/static/'

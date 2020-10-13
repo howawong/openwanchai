@@ -25,3 +25,26 @@ class WorldBorder(models.Model):
     def __str__(self):
         return self.name
 # Create your models here.
+
+
+class DistrictMinorWork(models.Model):
+    identifier = models.CharField(max_length=256)   
+    project_name = models.CharField(max_length=256)   
+    attachment = models.CharField(max_length=256)   
+    proposer = models.CharField(max_length=256)   
+    objective = models.TextField()   
+    desc = models.TextField()   
+    project_number = models.CharField(max_length=256)   
+    address = models.CharField(max_length=256, null=True)   
+    remarks = models.CharField(max_length=256, null=True)   
+    start_date = models.CharField(max_length=256, null=True)   
+    end_date = models.CharField(max_length=256, null=True)   
+    project_pdf = models.CharField(max_length=2056) 
+    document_date = models.CharField(max_length=128)
+    budget = models.DecimalField(decimal_places=4, max_digits=50)
+    audience = models.CharField(max_length=128, null=True)
+    audience_size = models.CharField(max_length=128, null=True)
+    mpoly = models.MultiPolygonField()
+  
+    def __str__(self):
+        return self.project_name
