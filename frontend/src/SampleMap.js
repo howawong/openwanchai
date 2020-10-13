@@ -4,24 +4,14 @@ import { Map, TileLayer, Marker, Popup, GeoJSON } from 'react-leaflet'
 
 
 class SampleMap extends React.Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
-      lat: -61.666666,
-      lng: 17.024441,
-      zoom: 5,
+      lat: 22.27702,
+      lng: 114.17232,
+      zoom: 15,
 	  result: []
     };
-  }
-
-  componentDidMount() {
-    console.log("loading")
-    fetch("http://192.168.1.54:8000/sample/borders").then(res => res.json()).then(
-	  result => {
-	    console.log(result);
-		this.setState({...this.state, result: result});
-	  }
-	);
   }
 
   render() {
@@ -33,7 +23,7 @@ class SampleMap extends React.Component {
           attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
           url='http://{s}.tile.osm.org/{z}/{x}/{y}.png'
         />
-		{ this.state.result.map(gj => (<GeoJSON data={gj} />))}
+		{ this.props.locations.map(gj => (<GeoJSON data={gj} style={{color: '#ff0000'}} />))}
       </Map>
     );
   }
