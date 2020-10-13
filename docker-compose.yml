@@ -29,7 +29,7 @@ services:
     depends_on:
       - db
     volumes:
-      - ${PWD}/backend/cms/.env:/app/cms/.env
+      - ./backend/cms/.env:/app/cms/.env
 
 volumes:
   pgdata:
