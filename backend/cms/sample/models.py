@@ -27,24 +27,37 @@ class WorldBorder(models.Model):
 # Create your models here.
 
 
-class DistrictMinorWork(models.Model):
-    identifier = models.CharField(max_length=256)   
+  
+class DistrictMinorWorkMetaData(models.Model):
+    identifier = models.CharField(max_length=256, primary_key=True)   
     project_name = models.CharField(max_length=256)   
+    committee = models.CharField(max_length=256)
+    document_no = models.CharField(max_length=256)
+    document_date = models.DateField()
+    project_pdf = models.CharField(max_length=2056) 
     attachment = models.CharField(max_length=256)   
     proposer = models.CharField(max_length=256)   
     objective = models.TextField()   
-    desc = models.TextField()   
-    project_number = models.CharField(max_length=256)   
-    address = models.CharField(max_length=256, null=True)   
-    remarks = models.CharField(max_length=256, null=True)   
-    start_date = models.CharField(max_length=256, null=True)   
-    end_date = models.CharField(max_length=256, null=True)   
-    project_pdf = models.CharField(max_length=2056) 
-    document_date = models.CharField(max_length=128)
-    budget = models.DecimalField(decimal_places=4, max_digits=50)
-    audience = models.CharField(max_length=128, null=True)
+    audience_all_citizen = models.CharField(max_length=32)
+    audience_elderly = models.CharField(max_length=32)
+    audience_youth = models.CharField(max_length=32)
+    audience_disabled = models.CharField(max_length=32)
+    audience_kids = models.CharField(max_length=32)
+    audience_others = models.CharField(max_length=32)
     audience_size = models.CharField(max_length=128, null=True)
-    mpoly = models.MultiPolygonField()
-  
+    ballpark = models.DecimalField(decimal_places=0, max_digits=50)
+    ballpark_text = models.CharField(max_length=128, null=True)
+    outline = models.TextField()
+    location = models.CharField(max_length=512)
+
     def __str__(self):
         return self.project_name
+
+
+class DistrictMinorWork(models.Model):
+    identifier = models.CharField(max_length=256, primary_key=True)   
+    project_name = models.CharField(max_length=256)   
+    metadata = models.OneToOneField('DistrictMinorWorkMetaData', null=True, on_delete=models.CASCADE, to_field='identifier')
+    mpoly = models.MultiPolygonField()
+
+
