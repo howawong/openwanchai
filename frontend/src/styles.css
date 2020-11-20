@@ -1,0 +1,63 @@
+.banner {
+  background: #EFF9FB;
+}
+
+.banner .title {
+  font-family: "Noto Sans TC";
+  font-style: normal;
+  font-weight: 500;
+  font-size: 2em;
+  line-height: 26px;
+  /* identical to box height */
+  text-align: center;
+  color: #6D6D6D;
+}
+
+.banner .searchBar {
+  background: #FFFFFF;
+  margin-top: 2em;
+  /* x */
+  box-shadow: 0px 4px 50px rgba(0, 0, 0, 0.1);
+  border-radius: 48px;
+  display: flex;
+  flex-wrap: wrap;
+  height: 4em;
+}
+
+.banner .searchBar div {
+  width: 33%;
+  text-align: center;
+  display: table-cell; 
+  vertical-align: middle; 
+}
+
+.banner .searchBar input {
+  width: 70%;
+}
+
+.page {
+  background: #FAFAFA;
+  position:absolute;
+  top:0px;
+  right:0px;
+  bottom:0px;
+  left:0px;
+}
+
+.page .border {
+  width: 95%;
+  height: 0px;
+  margin: auto;
+  border: 0.5px solid #A5A5A5;
+}
+
+.page .title {
+  font-family: Noto Sans TC;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 1.5em;
+  line-height: 35px;
+  text-align: center;
+  color: #6D6D6D;
+}
+
