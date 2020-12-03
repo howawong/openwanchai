@@ -1,5 +1,6 @@
 .banner {
   background: #EFF9FB;
+  margin-bottom:0px;
 }
 
 .banner .title {
@@ -13,7 +14,8 @@
   color: #6D6D6D;
 }
 
-.banner .searchBar {
+.searchBar {
+  margin: 0 auto;
   background: #FFFFFF;
   margin-top: 2em;
   /* x */
@@ -24,20 +26,32 @@
   height: 4em;
 }
 
-.banner .searchBar div {
+.searchBar div {
   width: 33%;
   text-align: center;
-  display: table-cell; 
-  vertical-align: middle; 
+  display: flex;
+  align-items: center;
 }
 
-.banner .searchBar input {
+.searchBar input {
   width: 70%;
+  margin-left: 10%;
+  border: none;
+}
+
+.heatmap-container {
+  margin-top:5em;
+  margin-left:5em;
+  margin-right:5em;
+  padding-bottom: 10em;
+}
+
+.heatmap-container .right-container {
+  text-align:right;
 }
 
 .page {
   background: #FAFAFA;
-  position:absolute;
   top:0px;
   right:0px;
   bottom:0px;
@@ -45,9 +59,11 @@
 }
 
 .page .border {
+  clear:both;
   width: 95%;
   height: 0px;
   margin: auto;
+  margin-top: 3em;
   border: 0.5px solid #A5A5A5;
 }
 
@@ -60,4 +76,211 @@
   text-align: center;
   color: #6D6D6D;
 }
+
+
+.detail .mapContainer {
+  width: 100%;
+  
+}
+
+.detail {
+}
+
+.detail .header {
+  padding-top: 3em;
+  padding-bottom: 3em;
+  text-align: center;
+}
+
+.detail .mapContainer .leaflet-container {
+  height: 300px;
+  margin: 10px auto;
+  text-align:center;
+}
+
+.card {
+  
+  border-radius: 1em;
+}
+
+  
+
+.browse-gallery .card{
+  display: inline-block;
+  width: 50vw;
+  min-width: 0;
+  display: inline-block;
+  border-top: none;
+  /*float: left;*/
+  position: relative;
+  cursor: pointer;
+  margin-right: 5.7px;
+  white-space: nowrap;
+
+}
+
+.project-category-gallery {
+    width: 100%;
+    overflow-x: hidden;
+    overflow-y: hidden;
+    white-space: nowrap;
+    float: left;
+    padding-bottom: 1.5em;
+}
+
+.project-category-gallery:after {
+  clear: both
+}
+
+.project-category-gallery .card{
+  width: 18rem;
+  display: inline-block;
+  min-width: 0;
+  display: inline-block;
+  border-top: none;
+  /*float: left;*/
+  position: relative;
+  cursor: pointer;
+  margin-right: 5.7px;
+  white-space: nowrap;
+
+}
+
+
+
+.browse-gallery {
+    width: 100%;
+    padding-left:5em;
+    overflow-x: hidden;
+    overflow-y: hidden;
+    white-space: nowrap;
+    float: left;
+    padding-bottom: 1.5em;
+}
+
+.browse-gallery .img {
+    width: 5000px;
+    display: inline-block;
+    border-top: none;
+    /*float: left;*/
+    position: relative;
+    cursor: pointer;
+    margin-right: 5.7px;
+    white-space: nowrap;
+    background:#fff;
+}
+
+
+
+.card .img {
+  width: 10em;
+}
+
+.card .title {
+  font-family: Noto Sans TC;
+  font-style: normal;
+  font-weight: bold;
+  line-height: 29px;
+  display: flex;
+  align-items: center;
+  padding-bottom: 5em;
+
+}
+
+.card .date {
+  font-family: Inter;
+  font-style: normal;
+  font-weight: 500;
+  float: right;
+  text-align: right;
+
+  color: #ADADAD;
+}
+
+.card .price {
+  font-family: Inter;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 18px;
+  line-height: 22px;
+  color: #00AEFF;
+  padding-right:4em;
+}
+
+
+.title {
+  padding-top:4em;
+  padding-bottom: 2em;
+}
+
+.badge {
+  background: rgba(121, 121, 121, 0.1);
+  font-family: Noto Sans TC;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 13px;
+  line-height: 19px;
+	/* identical to box height */
+
+  text-align: right;
+  letter-spacing: 0.02em;
+  text-transform: capitalize;
+
+  color: #6F6F6F;
+}
+
+.footer {
+  background-color: #222222;
+  text-align:center;
+  color: #D8D8D8;
+  padding-top: 5em;
+  padding-bottom: 5em;
+  line-height: 3em;
+}
+
+.footer .link {
+  margin-left:5em;
+}
+
+.shadow-container {
+  padding: 3em;
+  background: #FFFFFF;
+/* x2 */
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.04);
+  border-radius: 16px;
+}
+
+.fullscreen {
+  position: absolute; top: 0; left: 0;
+}
+
+.btn-circle {
+  width: 2em;
+  height: 2em;
+  text-align: center;
+  display: flex; /* or inline-flex */
+  align-items: center; 
+  justify-content: center;
+  padding: 6px 0;
+  font-size: 12px;
+  line-height: 1.42;
+  border-radius: 20em;
+  background: #FFF;
+  color: #00AEFF;
+  border: 1px solid rgba(13, 62, 84, 0.2);
+  border-radius: 16px;
+  font-weight: bold;
+}
+
+.pagination {
+  margin-top:1em;
+  margin-bottom:1em;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.pagination .page-number {
+  color: #5F5F5F;
+}
+
 
