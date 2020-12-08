@@ -39,7 +39,9 @@ class Detail extends Component {
       <div className="page fullscreen">
         <div className="detail">
         <Row className="header">
-          <Col>OPENDATA</Col>
+          <Col>
+			<img src="/assets/logo.png" /> 
+          </Col>
           <Col><span className="title">搜尋灣仔區撥款項目</span></Col>
           <Col>
             <ButtonGroup aria-label="Basic example">

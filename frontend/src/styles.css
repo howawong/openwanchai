@@ -1,6 +1,9 @@
 .banner {
   background: #EFF9FB;
   margin-bottom:0px;
+  background-size: cover; 
+  min-height: 803px;
+  background-image: url("/assets/background.png");
 }
 
 .banner .title {
@@ -26,16 +29,57 @@
   height: 4em;
 }
 
+.searchBar2 {
+  background: #FFFFFF;
+  margin: 0 auto;
+  margin-top: 2em;
+  padding: 0.5em;
+  box-shadow: 0px 4px 50px rgba(0, 0, 0, 0.1);
+  border-radius: 48px;
+}
+
+.searchBar2 .rs-picker-daterange {
+  width: 80%;
+}
+
+
+
+.searchBar2 .date-range .rs-btn {
+  width: 100%;
+}
+
+.searchBar2 .left {
+  padding-left:0.5em;
+}
+
+.searchBar2 .right{
+  display: table-cell;
+  vertical-align: middle;
+  text-align:right;
+}
+
+.searchBar2 input {
+  width: 70%;
+  margin-left: 0.5em;
+  border: none;
+}
+
+
+
+.searchBar .right {
+ 
+}
+
 .searchBar div {
   width: 33%;
-  text-align: center;
-  display: flex;
-  align-items: center;
+}
+
+.searcbBar .sort {
 }
 
 .searchBar input {
   width: 70%;
-  margin-left: 10%;
+  margin-left: 0.5em;
   border: none;
 }
 
@@ -99,51 +143,50 @@
 }
 
 .card {
-  
+  padding: 0.5em; 
   border-radius: 1em;
 }
 
-  
+.project-type-card {
+  padding: 0.5em; 
+  border-radius: 1em;
+  border: 1px solid rgba(0,0,0,.125);
+  margin-left:0.5em;
+  min-width: 3em;
+  display: inline-block;
+
+}
+
+
+
+.project-type-card .label {
+  width: 100%;
+  text-align: center;
+}
+
+.project-type-card .img {
+  padding: 1em;
+}
+
 
 .browse-gallery .card{
   display: inline-block;
   width: 50vw;
   min-width: 0;
-  display: inline-block;
-  border-top: none;
-  /*float: left;*/
-  position: relative;
-  cursor: pointer;
-  margin-right: 5.7px;
-  white-space: nowrap;
-
+  margin-right: 1em;
 }
 
 .project-category-gallery {
+    position:relative;
     width: 100%;
     overflow-x: hidden;
     overflow-y: hidden;
     white-space: nowrap;
-    float: left;
-    padding-bottom: 1.5em;
+    padding-bottom:0.5em;
 }
 
 .project-category-gallery:after {
   clear: both
-}
-
-.project-category-gallery .card{
-  width: 18rem;
-  display: inline-block;
-  min-width: 0;
-  display: inline-block;
-  border-top: none;
-  /*float: left;*/
-  position: relative;
-  cursor: pointer;
-  margin-right: 5.7px;
-  white-space: nowrap;
-
 }
 
 
@@ -170,10 +213,26 @@
     background:#fff;
 }
 
+.most-visited {
+  margin-top:2em;
+}
 
+.card .left img {
+  min-height:100%;
+}
 
-.card .img {
-  width: 10em;
+.right-bottons {
+  float: right;
+  padding-bottom: 1em;
+}
+
+.right-bottons .badge {
+  margin-right: 4em;
+  padding: 0.5em;
+}
+
+.right-bottons img {
+  margin-right:0.5em;
 }
 
 .card .title {
@@ -181,8 +240,6 @@
   font-style: normal;
   font-weight: bold;
   line-height: 29px;
-  display: flex;
-  align-items: center;
   padding-bottom: 5em;
 
 }
@@ -209,8 +266,8 @@
 
 
 .title {
-  padding-top:4em;
-  padding-bottom: 2em;
+  /*padding-top:4em;
+  padding-bottom: 2em;*/
 }
 
 .badge {

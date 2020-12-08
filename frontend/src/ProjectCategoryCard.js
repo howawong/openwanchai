@@ -9,10 +9,12 @@ import Row from 'react-bootstrap/Row';
 class ProjectCategoryCardCard extends Component {
   render() {
     return (
-      <Card>
-        <Card.Img className="img" variant="top" src="https://upload.wikimedia.org/wikipedia/en/thumb/1/1f/Wan_Chai_District_Council_Logo.svg/200px-Wan_Chai_District_Council_Logo.svg.png" />       嘉年華
-		＜大坑節、慶回歸＞
-    </Card>  
+      <div className="project-type-card">
+        <div className="label">
+        <img className="img" src="/assets/icon/arts_home.svg" /><br/>
+        嘉年華<br/>
+		＜大坑節、慶回歸＞</div>
+    </div>  
     );
   }
 }

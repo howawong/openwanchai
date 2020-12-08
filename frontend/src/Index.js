@@ -16,12 +16,28 @@ class Index extends Component {
     return (
       <div className="page">
         <Jumbotron className="banner">
-          <div className="title">搜尋灣仔區撥款項目</div>
+		  <Row>
+		    <Col>
+			  <img src="/assets/logo.png" /> 
+			</Col>
+			<Col>
+              <div className="title">搜尋灣仔區撥款項目</div>
+			</Col>
+		    <Col>
+			</Col>
+		  </Row>
           <SearchBar />
         </Jumbotron>
+		<div className="most-visited">
         <div className="title">
           最多人查看項目
         </div>
+	  	<div className="right-bottons">
+          <span class="badge badge-secondary">查看全部</span>
+		  <img src="/assets/btn/previous.svg" />
+		  <img src="/assets/btn/next.svg" />
+		</div>
+		</div>
         <div class="browse-gallery">
           <CategoryCard />
           <CategoryCard />
@@ -34,7 +50,16 @@ class Index extends Component {
         <div className="title">
           尋找項目種類
         </div>
-        <div class="project-category-gallery">
+        <div className="right-bottons">
+          <span class="badge badge-secondary">查看全部</span>
+		  <img src="/assets/btn/previous.svg" />
+		  <img src="/assets/btn/next.svg" />
+		</div>
+		<br/>
+		<br/>
+        <div className="project-category-gallery">
+          <ProjectCategoryCard />
+          <ProjectCategoryCard />
           <ProjectCategoryCard />
           <ProjectCategoryCard />
           <ProjectCategoryCard />
