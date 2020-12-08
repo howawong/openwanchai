@@ -7,6 +7,7 @@ import Row from 'react-bootstrap/Row';
 import CategoryCard from './CategoryCard';
 import './styles.css';
 import SampleMap from './SampleMap';
+import {fetchDetail} from './api';
 
 
 
@@ -21,7 +22,7 @@ class Detail extends Component {
 
   componentDidMount() {
     const {id} = this.state;
-    fetch("http://192.168.1.54:8000/sample/detail?objectID=2018MWP008").then(res => res.json()).then(
+    fetchDetail("2018MWP008").then(res => res.json()).then(
 	  result => {
 		this.setState({...this.state, result: [result]});
 	  }

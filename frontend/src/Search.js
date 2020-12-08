@@ -10,7 +10,7 @@ import SearchBar from './SearchBar';
 import SwitchModeButtonGroup from './SwitchModeButtonGroup';
 import CategoryCard from './CategoryCard';
 import { Slider, RangeSlider } from 'rsuite';
-
+import { fetchList } from './api';
 
 
 class Search extends React.Component {
@@ -21,7 +21,7 @@ class Search extends React.Component {
 
   fetchData() {
     const {yearRange} = this.state;
-    fetch("http://192.168.1.54:8000/sample/dmw?min_year=" + yearRange[0] + "&max_year=" + yearRange[1]).then(res => res.json()).then(
+    fetchList(yearRange[0], yearRange[1]).then(
 	  result => {
 	    console.log(result);
 		this.setState({...this.state, result: result});
