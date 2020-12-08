@@ -41,7 +41,7 @@ class WorldBorderList(APIView):
 class DMWMetaDataSerializer(serializers.ModelSerializer):
     class Meta:
         model = DistrictMinorWorkMetaData
-        fields = ["project_name", "ballpark", "project_pdf", "document_date", "ballpark", "audience_size", "outline", "location"]
+        fields = ["project_name", "identifier", "ballpark", "project_pdf", "document_date", "ballpark", "audience_size", "outline", "location"]
 
 
 class DMWSerializer(GeoFeatureModelSerializer):
@@ -63,5 +63,14 @@ class DMWList(APIView):
             serializer = DMWSerializer(d)
             output.append(serializer.data)
         return Response(output)
+
+class DMWDetail(APIView):
+    def get(self, request, format=None):
+        objectID = self.request.query_params.get('objectID')
+        detail = DistrictMinorWork.objects.get(identifier=objectID)
+        serializer = DMWSerializer(detail, many=False)
+        return Response(serializer.data)
+
+
 
 # Create your views here.
