@@ -11,6 +11,12 @@ import SwitchModeButtonGroup from './SwitchModeButtonGroup';
 import CategoryCard from './CategoryCard';
 import { Slider, RangeSlider } from 'rsuite';
 import { fetchList } from './api';
+import {
+  BrowserView,
+  MobileView,
+  isBrowser,
+  isMobile
+} from "react-device-detect";
 
 
 class Search extends React.Component {
@@ -44,11 +50,30 @@ class Search extends React.Component {
   }
 
   render() {
-    const {yearRange} = this.state;
+    const {yearRange,result} = this.state;
+    const resultView = result.slice(0, 3).map(gj =>(
+      <div>
+        <CategoryCard 
+          name={gj.properties["project_name"]}
+          budget={gj.properties["metadata"]["ballpark"]}
+          projectId={gj.properties["metadata"]["identifier"]} 
+        />
+        <br/><br/>
+			</div>));
+
     return (
       <div className="App page">
-        <div class="flexbox">
-          <div class="col2">
+        <MobileView>
+          <div className="leaflet-container-mobile">
+            <SampleMap locations={this.state.result.slice(0,3)}/>
+          </div>
+          <br/>
+          <br/>
+          {resultView}
+        </MobileView>
+        <BrowserView>
+        <div className="flexbox">
+          <div className="col2">
 
             <SwitchModeButtonGroup />
             <SearchBar />
@@ -58,22 +83,13 @@ class Search extends React.Component {
               <button type="button" class="btn btn-circle">&#x3e;</button>
             </div>
             <br/>
-            {
-            this.state.result.slice(0, 3).map(gj =>(
-            <div>
-              <CategoryCard 
-                name={gj.properties["project_name"]}
-                budget={gj.properties["metadata"]["ballpark"]}
-                projectId={gj.properties["metadata"]["identifier"]} 
-              />
-              <br/><br/>
-			</div>) 
-            )}
-          </div>
-          <div class="leaflet-container col">
+            {resultView}
+            </div>
+          <div className="leaflet-container col">
             <SampleMap locations={this.state.result.slice(0,3)}/>
           </div>
         </div>
+        </BrowserView>
       </div>
     );
   }

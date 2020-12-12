@@ -11,6 +11,12 @@ import SwitchModeButtonGroup from './SwitchModeButtonGroup';
 import CategoryCard from './CategoryCard';
 import { Slider, RangeSlider } from 'rsuite';
 import { fetchList } from './api';
+import {
+  BrowserView,
+  MobileView,
+  isBrowser,
+  isMobile
+} from "react-device-detect";
 
 
 
@@ -49,7 +55,9 @@ class List extends React.Component {
     return (
       <div className="App page">
         <SwitchModeButtonGroup />
-		<SearchBar />
+        <BrowserView>
+ 		    <SearchBar />
+        </BrowserView>
         <div className="pagination">
           <span className="page-number"> 1 - 10/ 300 </span>&nbsp;&nbsp;
           <button type="button" class="btn btn-circle">&#x3c;</button>&nbsp;&nbsp;&nbsp;

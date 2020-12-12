@@ -7,6 +7,7 @@ import HeatMap from './HeatMap';
 import SearchBar from './SearchBar';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
+import Banner from './Banner';
 import './styles.css';
 
 
@@ -15,20 +16,8 @@ class Index extends Component {
   render() {
     return (
       <div className="page">
-        <Jumbotron className="banner">
-		  <Row>
-		    <Col>
-			  <img src="/assets/logo.png" /> 
-			</Col>
-			<Col>
-              <div className="title">搜尋灣仔區撥款項目</div>
-			</Col>
-		    <Col>
-			</Col>
-		  </Row>
-          <SearchBar />
-        </Jumbotron>
-		<div className="most-visited">
+	    <Banner />    
+	    	<div className="most-visited">
         <div className="title">
           最多人查看項目
         </div>

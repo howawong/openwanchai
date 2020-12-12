@@ -17,6 +17,27 @@
   color: #6D6D6D;
 }
 
+.panel {
+  margin: 0 auto;
+  background: #FFFFFF;
+  margin-top: 2em;
+  /* x */
+  box-shadow: 0px 4px 50px rgba(0, 0, 0, 0.1);
+  border-radius: 1em;
+}
+
+.panel .rs-picker-daterange {
+  width: 80%;
+}
+
+
+
+.panel .date-range .rs-btn {
+  width: 100%;
+}
+
+
+
 .searchBar {
   margin: 0 auto;
   background: #FFFFFF;
@@ -139,6 +160,11 @@
 .detail .mapContainer .leaflet-container {
   height: 300px;
   margin: 10px auto;
+  text-align:center;
+}
+
+.leaflet-container-mobile .leaflet-container {
+  height: 30vh;
   text-align:center;
 }
 
@@ -296,7 +322,7 @@
 }
 
 .footer .link {
-  margin-left:5em;
+  margin-left:2em;
 }
 
 .shadow-container {

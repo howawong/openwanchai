@@ -7,7 +7,14 @@ import Row from 'react-bootstrap/Row';
 import CategoryCard from './CategoryCard';
 import './styles.css';
 import SampleMap from './SampleMap';
+import DetailMobile from './DetailMobile';
 import {fetchDetail} from './api';
+import {
+  BrowserView,
+  MobileView,
+  isBrowser,
+  isMobile
+} from "react-device-detect";
 
 
 
@@ -34,8 +41,15 @@ class Detail extends Component {
   render() {
     const {id, result} = this.state;
     const map = result;
-	const properties = result && result.properties;
-	console.log(map);
+	  const properties = result && result.properties;
+	  console.log(map);
+    if (isMobile) {
+      return (
+        <DetailMobile map={result}/>
+      )
+    
+    }
+
     return (
       <div className="page fullscreen">
         <div className="detail">
