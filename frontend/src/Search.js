@@ -5,6 +5,7 @@ import 'leaflet/dist/leaflet.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Card from 'react-bootstrap/Card';
 import { Button } from 'rsuite';
+import { Link } from 'react-router-dom';
 import 'rsuite/dist/styles/rsuite-default.css';
 import SearchBar from './SearchBar';
 import SwitchModeButtonGroup from './SwitchModeButtonGroup';
@@ -51,13 +52,15 @@ class Search extends React.Component {
 
   render() {
     const {yearRange,result} = this.state;
-    const resultView = result.slice(0, 3).map(gj =>(
+    const resultView = result.slice(0, 10).map(gj =>(
       <div>
+        <Link to={"/detail/" + gj.properties["metadata"]["identifier"]}  style={{ textDecoration: 'none' }}>
         <CategoryCard 
           name={gj.properties["project_name"]}
           budget={gj.properties["metadata"]["ballpark"]}
           projectId={gj.properties["metadata"]["identifier"]} 
         />
+        </Link>
         <br/><br/>
 			</div>));
 

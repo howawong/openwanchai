@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { bbox, center } from '@turf/turf'
 import { Map, TileLayer, Marker, Popup, GeoJSON } from 'react-leaflet'
 
 
@@ -16,8 +17,11 @@ class SampleMap extends React.Component {
 
   render() {
     const position = [this.state.lat, this.state.lng];
-	console.log(this.props.locations);
+    if (this.props.locations.length > 0) {
+	    console.log(bbox(this.props.locations));
+    }
     return (
+
       <Map center={position} zoom={this.state.zoom}>
         <TileLayer
           attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'

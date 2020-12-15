@@ -38,15 +38,14 @@ class Detail extends Component {
                 <h1>粵曲歡唱娛坊眾</h1>
                 <br/>
                 <div>
-                <Row>
-                 <Col>地點: 灣仔區街坊福利會</Col><Col>對象: 區內所有居民</Col>
-               </Row>
-               <Row>
-                 <Col>預算撥款: $200k</Col><Col>開始日期: 7/3/2020</Col>
-               </Row>
-               <Row>
-                 <Col>類別: 聯誼  </Col><Col>結束日期: 7/3/2020</Col>
-               </Row>
+                <Row><Col><img src="/assets/icon/application.svg" />申請團體: 灣仔區街坊福利會</Col></Row>
+                <Row><Col><img src="/assets/icon/people.svg" />對象: 區內所有居民</Col></Row>
+                <Row><Col><img src="/assets/icon/place.svg" />地點: 灣仔區街坊福利會</Col></Row>
+                <Row><Col><img src="/assets/icon/counter.svg" />參加人數: 1,000人</Col></Row>
+                <Row><Col><img src="/assets/icon/dollar.svg" />撥款: $200k</Col></Row>
+                <Row><Col><img src="/assets/icon/calender.svg" />開始日期: 7/3/2020</Col></Row>
+                <Row><Col><img src="/assets/icon/type.svg" />類別: 聯誼</Col></Row>
+                <Row><Col><img src="/assets/icon/end date.svg" />結束日期: 7/3/2020</Col></Row>
                </div>
                <div className="border"/><br/>
                詳細:<br/><br/><br/>

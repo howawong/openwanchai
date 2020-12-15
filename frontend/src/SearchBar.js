@@ -4,6 +4,7 @@ import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import Slider, { Range } from 'rc-slider';
 import Col from 'react-bootstrap/Col';
+import { Link } from 'react-router-dom';
 import Row from 'react-bootstrap/Row';
 import 'rc-slider/assets/index.css';
 import { DateRangePicker } from 'rsuite';
@@ -51,7 +52,7 @@ class SearchBar extends Component {
                placeholder="開始日期"
                align="left"
              />
-             <img src="/assets/icon/search_m.svg" className="search_m"/>
+             <Link to="/search"><img src="/assets/icon/search_m.svg" className="search_m"/></Link>
             </Col>
           </Row>
         </div>
