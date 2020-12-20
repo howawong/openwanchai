@@ -18,7 +18,7 @@ class SampleMap extends React.Component {
   render() {
     const position = [this.state.lat, this.state.lng];
     if (this.props.locations.length > 0) {
-	    console.log(bbox(this.props.locations));
+	    //console.log(bbox(this.props.locations));
     }
     return (
 

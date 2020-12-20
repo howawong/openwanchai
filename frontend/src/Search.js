@@ -10,7 +10,6 @@ import 'rsuite/dist/styles/rsuite-default.css';
 import SearchBar from './SearchBar';
 import SwitchModeButtonGroup from './SwitchModeButtonGroup';
 import CategoryCard from './CategoryCard';
-import { Slider, RangeSlider } from 'rsuite';
 import { fetchList } from './api';
 import {
   BrowserView,
@@ -23,22 +22,30 @@ import {
 class Search extends React.Component {
   constructor() {
     super();
-    this.state = {result: [], yearRange: [2008, 2016]}
+    this.state = {result: [], yearRange: [2008, 2016], page: 2, total: 0, size: 3, loading:false}
   }
 
-  fetchData() {
-    const {yearRange} = this.state;
-    fetchList(yearRange[0], yearRange[1]).then(
-	  result => {
-	    console.log(result);
-		this.setState({...this.state, result: result});
+  fetchData(page) {
+    const {yearRange, size, loading} = this.state;
+	if (! loading) {
+      fetchList(yearRange[0], yearRange[1], page, size).then(
+	    result => {
+		  this.setState({...this.state, 
+		     			 loading: false,
+						 page: page,
+					     result: result.results["features"], 
+					     totalPages: result.total_pages,
+					     total: result.count,
+					     lastPage: result.links.next === null,
+					     firstPage: result.links.previous === null});
 	  }
 	);
+	}
   }
 
   componentDidMount() {
     console.log("loading")
-    this.fetchData();	
+    this.fetchData(1);	
   }
 
   setValue(value) {
@@ -50,9 +57,31 @@ class Search extends React.Component {
 	this.fetchData();
   }
 
+  nextPage = () => {
+    const { lastPage, loading, page } = this.state;
+	console.log(lastPage, loading, page);
+	if (! loading && ! lastPage) {
+	  const newpage = page + 1;
+	  this.fetchData(newpage);
+	}
+  }
+
+  prevPage = () => {
+    const { firstPage, loading, page } = this.state;
+	console.log(firstPage, loading, page);
+	if (! loading && ! firstPage) {
+	  const newpage = page - 1;
+	  this.fetchData(newpage);
+	}
+ 
+  }
+
+
   render() {
-    const {yearRange,result} = this.state;
-    const resultView = result.slice(0, 10).map(gj =>(
+    const {yearRange,result, total, page, size} = this.state;
+	const start = (page - 1) * size + 1 ;
+	const end = Math.min((page) * size , total);
+    const resultView = result.map(gj =>(
       <div>
         <Link to={"/detail/" + gj.properties["metadata"]["identifier"]}  style={{ textDecoration: 'none' }}>
         <CategoryCard 
@@ -81,9 +110,9 @@ class Search extends React.Component {
             <SwitchModeButtonGroup />
             <SearchBar />
             <div className="pagination">
-              <span className="page-number"> 1 - 10/ 300 </span>&nbsp;&nbsp;
-              <button type="button" class="btn btn-circle">&#x3c;</button>&nbsp;&nbsp;&nbsp;
-              <button type="button" class="btn btn-circle">&#x3e;</button>
+              <span className="page-number"> {start} - {end}/ {total} </span>&nbsp;&nbsp;
+              <Button type="button" class="btn btn-circle" onClick={this.prevPage}>&#x3c;</Button>&nbsp;&nbsp;&nbsp;
+              <Button type="button" class="btn btn-circle" onClick={this.nextPage}>&#x3e;</Button>
             </div>
             <br/>
             {resultView}
