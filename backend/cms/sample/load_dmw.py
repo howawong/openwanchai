@@ -38,6 +38,20 @@ def run(verbose=True):
     DistrictMinorWorkMetaData.objects.all().delete()
     for idx, row in df.iterrows():
         row["document_date"] = datetime.strptime(row["document_date"], "%d/%m/%Y")
+        try:
+            row["expected_start_date"] = datetime.strptime(row["expected_start_date"], "%d/%m/%Y")
+        except:
+            row["expected_start_date"] = None
+        try:
+            row["expected_end_date"] = datetime.strptime(row["expected_end_date"], "%d/%m/%Y")
+        except:
+            row["expected_end_date"] = None
+        audience = []
+        audience_labels = ["區內所有居民", "老人", "青少年", "傷殘人士", "兒童及家長"]
+        for x, word in zip(["all_citizen", "elderly", "youth", "disabled", "kids"], audience_labels):
+            if row["audience_" + x].lower() == "yes":
+                audience.append(word)
+        row["audience"] = ",".join(audience)
         row["ballpark_text"] = row["ballpark"]
         try:
             row["ballpark"] = float(row["ballpark_text"])

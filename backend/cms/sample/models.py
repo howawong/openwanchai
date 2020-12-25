@@ -38,6 +38,10 @@ class DistrictMinorWorkMetaData(models.Model):
     attachment = models.CharField(max_length=256)   
     proposer = models.CharField(max_length=256)   
     objective = models.TextField()   
+    expected_start_date = models.DateField(default=None, null=True, blank=True)
+    expected_end_date = models.DateField(default=None, null=True, blank=True)
+    expected_date_format = models.CharField(max_length=64, default='')
+    audience = models.CharField(max_length=256, default='')   
     audience_all_citizen = models.CharField(max_length=32)
     audience_elderly = models.CharField(max_length=32)
     audience_youth = models.CharField(max_length=32)
@@ -61,3 +65,42 @@ class DistrictMinorWork(models.Model):
     mpoly = models.MultiPolygonField()
 
 
+class CommunityActivity(models.Model):
+    code = models.CharField(max_length=256, primary_key=True)
+    metadata = models.OneToOneField('CommunityActivityMetaData', null=True, on_delete=models.CASCADE, to_field='code')
+    mpoly = models.MultiPointField()   
+
+
+class CommunityActivityMetaData(models.Model):
+    code = models.CharField(max_length=256, primary_key=True)
+    group_type = models.CharField(max_length=256)
+    group_name = models.CharField(max_length=256)
+    document_date = models.CharField(max_length=256)
+    document_no = models.CharField(max_length=256)
+    project_name = models.CharField(max_length=256)
+    organization_name = models.CharField(max_length=256)
+    first_time = models.CharField(max_length=256)
+    document_url = models.CharField(max_length=256)
+    coorganizer_govt = models.CharField(max_length=256)
+    coorganizer_non_govt = models.CharField(max_length=256)
+    address = models.CharField(max_length=256)
+    latitude = models.DecimalField(decimal_places=0, max_digits=50)
+    longitude = models.DecimalField(decimal_places=0, max_digits=50)
+    date_type = models.CharField(max_length=256)
+    start_date = models.DateField(default=None, null=True, blank=True)
+    end_date = models.DateField(default=None, null=True, blank=True)
+    start_date_1 = models.DateField(default=None, null=True, blank=True)
+    start_date_type_1 = models.CharField(max_length=256)
+    end_date_type_2 = models.CharField(max_length=256)
+    end_date_type_2 = models.CharField(max_length=256)
+    audience_size = models.CharField(max_length=128, null=True)
+    nature = models.CharField(max_length=256)
+    objective = models.CharField(max_length=256)
+    audience = models.CharField(max_length=256)
+    helping_organization = models.CharField(max_length=256)
+    estimation = models.DecimalField(decimal_places=0, max_digits=50)
+    applied = models.DecimalField(decimal_places=0, max_digits=50)
+    income = models.DecimalField(decimal_places=0, max_digits=50)
+    payee = models.CharField(max_length=256)
+    def __str__(self):
+        return self.code + " "  + self.project_name
