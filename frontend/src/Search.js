@@ -1,7 +1,6 @@
 import React from 'react';
 import './App.css';
 import SampleMap from './SampleMap';
-import 'leaflet/dist/leaflet.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Card from 'react-bootstrap/Card';
 import { Button } from 'rsuite';
@@ -22,7 +21,8 @@ import {
 class Search extends React.Component {
   constructor() {
     super();
-    this.state = {result: [], yearRange: [2008, 2016], page: 2, total: 0, size: 3, loading:false}
+    this.state = {result: [], yearRange: [2008, 2016], page: 2, total: 0, size: 6, loading:false}
+	this.sampleMap = React.createRef();
   }
 
   fetchData(page) {
@@ -30,6 +30,12 @@ class Search extends React.Component {
 	if (! loading) {
       fetchList(yearRange[0], yearRange[1], page, size).then(
 	    result => {
+
+		  if (this.sampleMap.current) {
+		    console.log("clear");
+		    this.sampleMap.current.clear(result.results["features"]);
+		  }
+		  console.log(this.sampleMap);
 		  this.setState({...this.state, 
 		     			 loading: false,
 						 page: page,
@@ -76,32 +82,47 @@ class Search extends React.Component {
  
   }
 
+  paginationView = () => {
+    const {total, page, size} = this.state;
+    const start = (page - 1) * size + 1 ;
+	const end = Math.min((page) * size , total);
+
+    return (
+	  <div className="pagination">
+        <span className="page-number"> {start} - {end}/ {total} </span>&nbsp;&nbsp;
+        <Button type="button" className="btn btn-circle" onClick={this.prevPage}>&#x3c;</Button>&nbsp;&nbsp;&nbsp;
+        <Button type="button" className="btn btn-circle" onClick={this.nextPage}>&#x3e;</Button>
+      </div>
+
+	);
+  }
+  
 
   render() {
     const {yearRange,result, total, page, size} = this.state;
-	const start = (page - 1) * size + 1 ;
-	const end = Math.min((page) * size , total);
-    const resultView = result.map(gj =>(
-      <div>
-        <Link to={"/detail/" + gj.properties["metadata"]["identifier"]}  style={{ textDecoration: 'none' }}>
-        <CategoryCard 
+	const resultView = result.map((gj, index) =>(
+      <div key={index}>
+        <Link to={"/detail/" + gj.properties["identifier"]}  style={{ textDecoration: 'none' }}>
+        <CategoryCard key={index}
           name={gj.properties["project_name"]}
-          budget={gj.properties["metadata"]["ballpark"]}
-          projectId={gj.properties["metadata"]["identifier"]} 
+          budget={gj.properties["ballpark"]}
+          projectId={gj.properties["identifier"]} 
         />
         </Link>
         <br/><br/>
 			</div>));
-
+    const pagination = this.paginationView();
     return (
       <div className="App page">
         <MobileView>
           <div className="leaflet-container-mobile">
-            <SampleMap locations={this.state.result.slice(0,3)}/>
+            <SampleMap locations={result} ref={this.sampleMap}/>
           </div>
           <br/>
           <br/>
           {resultView}
+		  <br/>
+		  {pagination}
         </MobileView>
         <BrowserView>
         <div className="flexbox">
@@ -109,16 +130,11 @@ class Search extends React.Component {
 
             <SwitchModeButtonGroup />
             <SearchBar />
-            <div className="pagination">
-              <span className="page-number"> {start} - {end}/ {total} </span>&nbsp;&nbsp;
-              <Button type="button" class="btn btn-circle" onClick={this.prevPage}>&#x3c;</Button>&nbsp;&nbsp;&nbsp;
-              <Button type="button" class="btn btn-circle" onClick={this.nextPage}>&#x3e;</Button>
-            </div>
-            <br/>
+            {pagination}<br/>
             {resultView}
             </div>
           <div className="leaflet-container col">
-            <SampleMap locations={this.state.result.slice(0,3)}/>
+            <SampleMap locations={result} ref={this.sampleMap}/>
           </div>
         </div>
         </BrowserView>

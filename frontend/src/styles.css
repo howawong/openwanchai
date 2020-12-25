@@ -168,6 +168,10 @@
   text-align:center;
 }
 
+.leaflet-container {
+  background-color: "#ff00ff";
+}
+
 .card {
   padding: 0.5em; 
   border-radius: 1em;

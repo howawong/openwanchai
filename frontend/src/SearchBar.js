@@ -39,6 +39,10 @@ class SearchBar extends Component {
     const maxBudget = this.min + evt[1] / 100.0 * diff;
     this.setState({...this.state, minBudget: minBudget, maxBudget: maxBudget })
   };
+
+  getSearchURL = () => {
+    return "/search";
+  }
   
   render() {
     const { show, value, minBudget, maxBudget } = this.state;
@@ -71,7 +75,7 @@ class SearchBar extends Component {
                placeholder="開始日期"
                align="left"
              />
-             <Link to="/search"><img src="/assets/icon/search_m.svg" className="search_m"/></Link>
+             <Link to={this.getSearchURL()}><img src="/assets/icon/search_m.svg" className="search_m"/></Link>
             </Col>
           </Row>
         </div>

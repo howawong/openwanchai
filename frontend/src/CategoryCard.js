@@ -22,9 +22,9 @@ class CategoryCard extends Component {
           <br/>
           <div>
           <span className="price">{budget || "$100,000"}</span>
-          <span class="badge badge-secondary">社區服務</span>&nbsp;&nbsp;
-          <span class="badge badge-secondary">小型工程</span>
-          <span class="date">22/2/2020</span>
+          <span className="badge badge-secondary">社區服務</span>&nbsp;&nbsp;
+          <span className="badge badge-secondary">小型工程</span>
+          <span className="date">22/2/2020</span>
           </div>
         </Col>
       </Row>
