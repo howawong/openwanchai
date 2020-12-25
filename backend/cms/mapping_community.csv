@@ -1,0 +1,31 @@
+original,new
+Code,code
+邊種會？,group_type
+委員會／工作小組名稱,group_name
+文件日期﹙dd/mm/yyyy﹚,document_date
+文件號碼﹙XX/XXXX  eg: 12/2012） ❗️注意❗️ / 要用英字半形、/ 前後不要空格﹚,document_no
+活動名稱／計劃名稱,project_name
+團體名稱,organization_name
+是否首次申請,first_time
+文件 URL,document_url
+合辦團體﹙政府部門 / 區議會 / 工作小組相關﹚,coorganizer_govt
+合辦團體﹙非政府﹚,coorganizer_non_govt
+地點（地址） ►（拆地址：bit.ly/hkaddressparser）,address
+latitude,latitude
+longitude,longitude
+"參加人數﹙申請書 3f, 總人數即可﹚",audience_size
+活動日期：屬於以下邊種活動？,date_type
+活動開始日期（ddmmyyyy）,start_date
+活動結束日期（ddmmyyyy）,end_date
+活動開始日期（ddmmyyyy）.1,start_date_1
+若開始是虛期，必須註明,start_date_type_1
+活動結束日期（ddmmyyyy）.2,end_date_type_2
+若結束是虛期，必須註明,end_date_type_2
+性質﹙申請書 3a﹚,nature
+目的﹙申請書 3b﹚,objective
+對象﹙申請書 3e﹚,audience
+協辦機構,helping_organization
+活動估計費用﹙申請書4﹚,estimation
+活動向灣仔區議會申請的撥款額﹙申請書4﹚,applied
+其他收入 *只需填總額﹙申請書4﹚,income
+「付款方法」支票抬頭所寫公司（即係「」入面嗰句字）,payee

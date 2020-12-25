@@ -1,0 +1,23 @@
+original,new
+objectID,identifier
+委員會／工作小組名稱,committee
+文件號碼﹙XX/XXXX﹚,document_no
+文件URL,project_pdf
+是否附件,attachment
+文件日期,document_date
+工程名稱,project_name
+提交議員/ 單位,proposer
+工程目的,objective
+工程受惠對象 [區內所有居民],audience_all_citizen
+工程受惠對象 [老人],audience_elderly
+工程受惠對象 [青少年],audience_youth
+工程受惠對象 [傷殘人士],audience_disabled
+工程受惠對象 [兒童及家長],audience_kids
+工程受惠對象 [其他請於下面填寫],audience_others
+預期受惠人數,audience_size
+工程造價粗略估計,ballpark
+工程大綱,outline
+工程地點,location
+預計開始日期,expected_start_date
+預計完成日期,expected_end_date
+預計完成日期格式,expected_date_format
