@@ -8,7 +8,7 @@ import Row from 'react-bootstrap/Row';
 
 class CategoryCard extends Component {
   render() {
-    const {projectId, budget, name } = this.props;
+    const {projectId, budget, name, audience, startDate } = this.props;
     return (
       <div className="card">
       <Row>
@@ -18,13 +18,13 @@ class CategoryCard extends Component {
         <Col xs={8}>
           灣仔區街坊福利會<br/>
           <span className="title">{name || "粵曲歡唱娛坊眾"}</span><br/>
-          對象:區內所有居民<br/>
+          {audience || "對象:區內所有居民"}<br/>
           <br/>
           <div>
           <span className="price">{budget || "$100,000"}</span>
           <span className="badge badge-secondary">社區服務</span>&nbsp;&nbsp;
           <span className="badge badge-secondary">小型工程</span>
-          <span className="date">22/2/2020</span>
+          <span className="date">{startDate||"22/2/2020"}</span>
           </div>
         </Col>
       </Row>

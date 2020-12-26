@@ -10,6 +10,7 @@ import SearchBar from './SearchBar';
 import SwitchModeButtonGroup from './SwitchModeButtonGroup';
 import CategoryCard from './CategoryCard';
 import { fetchList } from './api';
+import qs from 'qs';
 import {
   BrowserView,
   MobileView,
@@ -19,16 +20,26 @@ import {
 
 
 class Search extends React.Component {
-  constructor() {
-    super();
-    this.state = {result: [], yearRange: [2008, 2016], page: 2, total: 0, size: 6, loading:false}
+  constructor(props) {
+    super(props);
+    const query = qs.parse(props.location.search.slice(1));
+    console.log("Search", props, query);
+    this.state = {result: [], page: 2, total: 0, size: 6, loading:false, query: query}
 	this.sampleMap = React.createRef();
   }
 
+  componentWillReceiveProps(nextProps) {
+    const query = qs.parse(nextProps.location.search);
+    console.log("Search", nextProps, query);
+    this.setState({result: [], page: 2, total: 0, size: 6, loading:false, query: query})
+    this.fetchData(1);
+  }
+
   fetchData(page) {
-    const {yearRange, size, loading} = this.state;
+    const {minDate, maxDate, size, loading, query} = this.state;
 	if (! loading) {
-      fetchList(yearRange[0], yearRange[1], page, size).then(
+      console.log(query);
+      fetchList(query.keyword, query.minDate, query.maxDate, query.minAmount, query.maxAmount, page, size).then(
 	    result => {
 
 		  if (this.sampleMap.current) {
@@ -99,14 +110,18 @@ class Search extends React.Component {
   
 
   render() {
-    const {yearRange,result, total, page, size} = this.state;
+    const {yearRange,result, total, page, size, query} = this.state;
 	const resultView = result.map((gj, index) =>(
       <div key={index}>
         <Link to={"/detail/" + gj.properties["identifier"]}  style={{ textDecoration: 'none' }}>
         <CategoryCard key={index}
           name={gj.properties["project_name"]}
           budget={gj.properties["ballpark"]}
-          projectId={gj.properties["identifier"]} 
+          audience={gj.properties["audience"]}
+          startDate={gj.properties["start_date"]}
+          committee={gj.properties["committee"]}
+          amount={gj.properties["amount"]}
+          projectId={gj["identifier"]} 
         />
         </Link>
         <br/><br/>
@@ -129,13 +144,13 @@ class Search extends React.Component {
           <div className="col2">
 
             <SwitchModeButtonGroup />
-            <SearchBar />
+            <SearchBar query={query}/>
             {pagination}<br/>
             {resultView}
             </div>
-          <div className="leaflet-container col">
-            <SampleMap locations={result} ref={this.sampleMap}/>
-          </div>
+            <div className="leaflet-container col">
+              <SampleMap locations={result} ref={this.sampleMap}/>
+            </div>
         </div>
         </BrowserView>
       </div>

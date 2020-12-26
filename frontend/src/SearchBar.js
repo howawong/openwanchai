@@ -10,6 +10,7 @@ import 'rc-slider/assets/index.css';
 import { DateRangePicker } from 'rsuite';
 import SearchBarPanelMobile from './SearchBarPanelMobile';
 import SearchBarPanel from './SearchBarPanel';
+import moment from 'moment';
 import {
   BrowserView,
   MobileView,
@@ -22,15 +23,30 @@ import numeral from 'numeral';
 class SearchBar extends Component {
   constructor(props) {
     super(props);
-	this.ref = React.createRef();
+    console.log("SearchBar", this.props.query);
+    const query = this.props.query;
+    this.ref = React.createRef();
+    this.keywordRef = React.createRef();
+    this.min = 5000;
     this.max = 900000;
-    this.min = 50000;
-    this.state = {show: false, minBudget: this.min, maxBudget: this.max};
+    const maxValue = query ? parseInt(query.maxAmount) : this.max;
+    const minValue = query ? parseInt(query.minAmount) : this.min;
+    const keyword = query ? query.keyword : "";
+    const minDate = new Date(query ? query.minDate : "2019-01-01");
+    const maxDate = new Date(query ? query.maxDate : "2020-04-01");
+    this.state = {show: false,
+                  minBudget: this.min, 
+				  maxBudget: this.max,
+				  keyword: keyword,
+				  minDate: minDate,
+				  maxDate: maxDate,
+				  value:[minValue, maxValue]};
   }
 
-  handleClose = () => { this.setState({show: false, value: this.state.value}) };
-  handleShow = () => { this.setState({show: true, value: this.state.value}) };
-  onChange = (value) => {this.setState({show:this.state.show, value: value});};
+  handleClose = () => { this.setState({...this.state, show: false}) };
+  handleShow = () => { this.setState({...this.state, show: true}) };
+  onChange = (value) => {this.setState({...this.state, value: value});};
+  onKeywordChange = (evt) => {this.setState({...this.state, keyword: evt.target.value})};
 
 
   onRangeAfterChange = (evt) => { console.log(evt); 
@@ -41,11 +57,29 @@ class SearchBar extends Component {
   };
 
   getSearchURL = () => {
+    const keyword = this.state.keyword;
+    const {minBudget, maxBudget, minDate, maxDate} = this.state;
+	const format = "YYYY-MM-DD";
+    var params = {
+      minAmount: minBudget,
+      maxAmount: maxBudget,
+      minDate: moment(minDate).format(format),
+      maxDate: moment(maxDate).format(format),
+      keyword: keyword
+    };
+    const queryString = Object.keys(params).map(key => key + '=' + params[key]).join('&');
+    if (queryString.length > 0)
+      return "/search?" + queryString;
     return "/search";
+  }
+
+  changeDateRange = (value) => {
+    this.setState({...this.state, minDate: value[0], maxDate: value[1]});
+	console.log(this.state, value);
   }
   
   render() {
-    const { show, value, minBudget, maxBudget } = this.state;
+    const { show, value, minBudget, maxBudget, keyword, maxDate, minDate } = this.state;
     const { before, allowedRange } = DateRangePicker;
     return (
       <div>
@@ -56,7 +90,7 @@ class SearchBar extends Component {
             <Col>
               <Button onClick={this.handleShow} variant="light">
               <img src="/assets/icon/sort.svg" className="sort"/></Button>
-              <input type="text" placeholder="輸入項目名稱/關鍵詞/地點..." />
+              <input type="text" ref={this.keywordRef} placeholder="輸入項目名稱/關鍵詞/地點..." onChange={this.onKeywordChange} value={keyword}/>
             </Col>
            <Col className="center">
              <Row>
@@ -67,6 +101,7 @@ class SearchBar extends Component {
            </Col>
            <Col className="right">
              <DateRangePicker
+			   value={[minDate, maxDate]}
                disabledDate={allowedRange("2012-01-01","2021-04-10")}
                showOneCalendar
                hoverRange="month"
@@ -74,6 +109,7 @@ class SearchBar extends Component {
                size="md"
                placeholder="開始日期"
                align="left"
+			   onChange={this.changeDateRange}
              />
              <Link to={this.getSearchURL()}><img src="/assets/icon/search_m.svg" className="search_m"/></Link>
             </Col>
@@ -86,8 +122,8 @@ class SearchBar extends Component {
               <Col>
                 <Button variant="light">
                 <img src="/assets/icon/sort.svg" className="sort"/></Button>
-                <input type="text" placeholder="輸入項目名稱/關鍵詞/地點..." />
-                <img src="/assets/icon/search_m.svg" className="search_m"/>
+                <input type="text" placeholder="輸入項目名稱/關鍵詞/地點..."  ref={this.keywordRef} onChange={this.onKeywordChange} value={keyword} />
+               <Link to={this.getSearchURL()}><img src="/assets/icon/search_m.svg" className="search_m"/></Link>
               </Col>
             </Row>
           </div>
