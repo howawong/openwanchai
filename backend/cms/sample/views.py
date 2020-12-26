@@ -43,8 +43,10 @@ class WorldBorderList(APIView):
 
 
 class SearchResultModel(models.Model):
-    identifier = models.CharField(max_length=256, primary_key=True)
+    key = models.CharField(max_length=256, primary_key=True)
+    identifier = models.CharField(max_length=256)
     project_name = models.CharField(max_length=256)
+    committee = models.CharField(max_length=256)
     document_url = models.CharField(max_length=1024)
     start_date = models.DateField()
     audience = models.CharField(max_length=256)
@@ -52,13 +54,14 @@ class SearchResultModel(models.Model):
     address = models.CharField(max_length=1024)
     record_type = models.CharField(max_length=1024)
     mpoly = models.GeometryField()
+    estimation = models.DecimalField(decimal_places=0, max_digits=50)
     
 
 class DMWSerializer(GeoFeatureModelSerializer):
      class Meta:
          model = SearchResultModel
          geo_field = "mpoly"
-         fields = ["identifier", "project_name", "document_url", "start_date", "audience", "objective", "address", "record_type"]
+         fields = ["identifier", "project_name", "document_url", "start_date", "audience", "objective", "address", "record_type", "estimation", "committee", "pk"]
 
 
 class DMWPaginiation(PageNumberPagination):
@@ -106,20 +109,21 @@ class DMWList(APIView):
         q = q & Q(metadata__start_date__range=[min_date, max_date])
         if len(keyword) > 0:
             keyword_q = Q(metadata__group_name__icontains = keyword)
-            keyword_q = keyword_q & Q(metadata__code__icontains = keyword)
-            keyword_q = keyword_q & Q(metadata__organization_name__icontains = keyword)
-            keyword_q = keyword_q & Q(metadata__project_name__icontains = keyword)
-            keyword_q = keyword_q & Q(metadata__coorganizer_govt__icontains = keyword)
-            keyword_q = keyword_q & Q(metadata__coorganizer_non_govt__icontains = keyword)
-            keyword_q = keyword_q & Q(metadata__address__icontains = keyword)
-            keyword_q = keyword_q & Q(metadata__objective__icontains = keyword)
-            keyword_q = keyword_q & Q(metadata__nature__icontains = keyword)
-            keyword_q = keyword_q & Q(metadata__helping_organization__icontains = keyword)
-            keyword_q = keyword_q & Q(metadata__payee__icontains = keyword)
+            keyword_q = keyword_q | Q(metadata__code__icontains = keyword)
+            keyword_q = keyword_q | Q(metadata__organization_name__icontains = keyword)
+            keyword_q = keyword_q | Q(metadata__project_name__icontains = keyword)
+            keyword_q = keyword_q | Q(metadata__coorganizer_govt__icontains = keyword)
+            keyword_q = keyword_q | Q(metadata__coorganizer_non_govt__icontains = keyword)
+            keyword_q = keyword_q | Q(metadata__address__icontains = keyword)
+            keyword_q = keyword_q | Q(metadata__objective__icontains = keyword)
+            keyword_q = keyword_q | Q(metadata__nature__icontains = keyword)
+            keyword_q = keyword_q | Q(metadata__helping_organization__icontains = keyword)
+            keyword_q = keyword_q | Q(metadata__payee__icontains = keyword)
+            q = q & keyword_q
 
-        comm = CommunityActivity.objects.all().annotate(record_type=models.Value('comm', output_field=models.CharField()))
-        comm = comm.values_list("mpoly", "metadata__code", "metadata__project_name", "metadata__document_url", "metadata__start_date", "metadata__audience", "metadata__objective", "metadata__address", "record_type")
-        dmw = dmw.values_list("mpoly", "metadata__identifier", "metadata__project_name", "metadata__project_pdf", "metadata__expected_start_date", "metadata__audience", "metadata__outline", "metadata__location", "record_type")
+        comm = CommunityActivity.objects.filter(q).annotate(record_type=models.Value('comm', output_field=models.CharField()))
+        comm = comm.values_list("mpoly", "metadata__code", "metadata__project_name", "metadata__document_url", "metadata__start_date", "metadata__audience", "metadata__objective", "metadata__address", "metadata__estimation", "metadata__group_name", "record_type")
+        dmw = dmw.values_list("mpoly", "metadata__identifier", "metadata__project_name", "metadata__project_pdf", "metadata__expected_start_date", "metadata__audience", "metadata__outline", "metadata__location", "metadata__ballpark", "metadata__committee" , "record_type")
         union = dmw.union(comm)
         result = union.order_by('-metadata__expected_start_date')
         return result
@@ -135,13 +139,16 @@ class DMWList(APIView):
                 m = SearchResultModel()
                 m.mpoly = r[0]
                 m.identifier = r[1]
+                m.key = r[1]
                 m.project_name = r[2]
                 m.document_url = r[3]
                 m.start_date = r[4]
                 m.audience = r[5]
                 m.objective = r[6]
                 m.address = r[7]
-                m.record_type = r[8]
+                m.record_type = r[-1]
+                m.committee = r[9]
+                m.estimation = r[8]
                 yield m
         model_from_page = gen_model_from_page_query_set(page)
 
