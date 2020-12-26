@@ -7,13 +7,21 @@ import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 import 'rc-slider/assets/index.css';
 import { DateRangePicker } from 'rsuite';
+import numeral from 'numeral';
 
 
 
 class SearchBarPanelMobile extends Component {
   constructor(props) {
     super(props);
-	  this.ref = React.createRef();
+	this.ref = React.createRef();
+    this.onAmountChanged = this.props.onAmountChanged;
+    this.onDateRangeChanged = this.props.onDateRangeChanged;
+    this.setState({dates: this.props.dates, budgets: this.props.budgets});
+  }
+
+  componentWillReceiveProps(props) {
+    this.setState({dates: this.props.dates, budgets: this.props.budgets});
   }
 
   handleClose = () => { this.setState({show: false}) };
@@ -21,19 +29,24 @@ class SearchBarPanelMobile extends Component {
   onChange = (value) => {this.setState({show:this.state.show});};
   
   render() {
-    const { show } = this.props;
+    const { show, dates, budgets } = this.props;
+    const minBudget = budgets[0];
+    const maxBudget = budgets[1];
     return (
       <div ref={this.ref} className="panel">
         <Modal.Body>
-          預算 1000K <Range defaultValue={[10,10000]}/> 2000K
+          預算 {numeral(minBudget).format("0,0a")} <Range defaultValue={[0, 100]} onAfterChange={this.onAmountChanged}/> {numeral(maxBudget).format("0,0a")}
         </Modal.Body>
         <Modal.Body>
           <DateRangePicker
+               value={dates}
                showOneCalendar
+               hoverRange="month"
                className="data-range"
                size="md"
                placeholder="開始日期"
                align="left"
+               onChange={this.onDateRangeChanged}
           />
         </Modal.Body>
 		    <Modal.Header>

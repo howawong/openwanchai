@@ -116,7 +116,7 @@ class Search extends React.Component {
         <Link to={"/detail/" + gj.properties["identifier"]}  style={{ textDecoration: 'none' }}>
         <CategoryCard key={index}
           name={gj.properties["project_name"]}
-          budget={gj.properties["ballpark"]}
+          budget={gj.properties["estimation"]}
           audience={gj.properties["audience"]}
           startDate={gj.properties["start_date"]}
           committee={gj.properties["committee"]}

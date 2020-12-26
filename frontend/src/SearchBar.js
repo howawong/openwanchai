@@ -61,8 +61,8 @@ class SearchBar extends Component {
     const {minBudget, maxBudget, minDate, maxDate} = this.state;
 	const format = "YYYY-MM-DD";
     var params = {
-      minAmount: minBudget,
-      maxAmount: maxBudget,
+      minAmount: Math.round(minBudget),
+      maxAmount: Math.round(maxBudget),
       minDate: moment(minDate).format(format),
       maxDate: moment(maxDate).format(format),
       keyword: keyword
@@ -127,7 +127,7 @@ class SearchBar extends Component {
               </Col>
             </Row>
           </div>
-          <SearchBarPanelMobile />
+          <SearchBarPanelMobile budgets={[minBudget, maxBudget]} dates={[minDate, maxDate]}  onAmountChanged={this.onRangeAfterChange} onDateRangeChanged={this.changeDateRange}/>
         </MobileView>
       </div>
     );
