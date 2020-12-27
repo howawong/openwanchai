@@ -19,7 +19,7 @@ import {
 
 
 
-class Detail extends Component {
+class Detail extends React.Component {
   constructor(params) {
     super(params);
 	const {id} = this.props.match.params;
@@ -84,16 +84,16 @@ class Detail extends Component {
     const map = result;
 	console.log(result);
 	const properties = result.length > 0 && result[0].properties;
+    const detail = this.getDetail(properties);
 
     console.log("map", map);
     if (isMobile) {
       return (
-        <DetailMobile map={result}/>
+        <DetailMobile map={result} detail={detail}/>
       )
     
     }
  
-    const detail = this.getDetail(properties);
    
     return (
       <div className="page fullscreen">
@@ -159,4 +159,6 @@ class Detail extends Component {
   }
 }
 
+
+console.log(Detail);
 export default Detail;

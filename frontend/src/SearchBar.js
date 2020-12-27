@@ -32,7 +32,7 @@ class SearchBar extends Component {
     const maxValue = query ? parseInt(query.maxAmount) : this.max;
     const minValue = query ? parseInt(query.minAmount) : this.min;
     const keyword = query ? query.keyword : "";
-    const minDate = new Date(query ? query.minDate : "2019-01-01");
+    const minDate = new Date(query ? query.minDate : "2012-01-01");
     const maxDate = new Date(query ? query.maxDate : "2020-04-01");
     this.state = {show: false,
                   minBudget: this.min, 
