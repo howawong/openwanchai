@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from django.http import Http404
 from rest_framework import serializers
 from rest_framework_gis.serializers import GeoFeatureModelSerializer
 from django.http import HttpResponse, JsonResponse 
@@ -41,6 +42,31 @@ class WorldBorderList(APIView):
         return Response(output)
 
 
+class DMWMetaDataSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = DistrictMinorWorkMetaData
+        fields = ["project_name", "identifier", "ballpark", "project_pdf", "document_date", "ballpark", "audience_size", "outline", "location", "expected_start_date", "expected_end_date", "expected_date_format", "committee", "objective"]
+
+
+class CommunityActivityMetaDataSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CommunityActivityMetaData
+        fields = ["code", "group_type", "group_name", "document_date", "document_no", "project_name", "organization_name", "first_time", "document_url", "coorganizer_govt", "coorganizer_non_govt", "address", "latitude", "longitude", "date_type", "start_date", "end_date", "start_date_1", "start_date_type_1", "end_date_type_2", "end_date_type_2", "audience_size", "nature", "objective", "audience", "helping_organization", "estimation", "applied", "income", "payee"]
+
+class CommunityActivitySerializer(GeoFeatureModelSerializer):
+    metadata = CommunityActivityMetaDataSerializer(many=False)
+    class Meta:
+        model = CommunityActivity
+        geo_field = "mpoly"
+        fields = ["metadata"]
+
+class DistrictMinorWorkSerializer(GeoFeatureModelSerializer):
+    metadata = DMWMetaDataSerializer(many=False)
+    class Meta:
+        model = DistrictMinorWork
+        geo_field = "mpoly"
+        fields = ["metadata"]
+
 
 class SearchResultModel(models.Model):
     key = models.CharField(max_length=256, primary_key=True)
@@ -57,7 +83,7 @@ class SearchResultModel(models.Model):
     estimation = models.DecimalField(decimal_places=0, max_digits=50)
     
 
-class DMWSerializer(GeoFeatureModelSerializer):
+class SearchResultSerializer(GeoFeatureModelSerializer):
      class Meta:
          model = SearchResultModel
          geo_field = "mpoly"
@@ -82,7 +108,7 @@ class DMWPaginiation(PageNumberPagination):
 
 
 class DMWList(APIView):
-    serializer_class = DMWSerializer
+    serializer_class = SearchResultSerializer
     pagination_class = DMWPaginiation
     http_method_names = ['get', 'head', 'options']
 
@@ -152,16 +178,26 @@ class DMWList(APIView):
                 yield m
         model_from_page = gen_model_from_page_query_set(page)
 
-        serializer = DMWSerializer(model_from_page, many=True)
+        serializer = SearchResultSerializer(model_from_page, many=True)
         data = serializer.data
         return paginator.get_paginated_response(data)
 
 class DMWDetail(GenericAPIView):
     def get(self, request, format=None):
-        objectID = self.request.query_params.get('objectID')
-        detail = DistrictMinorWork.objects.get(identifier=objectID)
-        serializer = DMWSerializer(detail, many=False)
-        return Response(serializer.data)
+        objectID = self.request.query_params.get('id')
+        detail  = DistrictMinorWork.objects.filter(identifier=objectID).first()
+        detail_type = "dmw"
+        serializer_class = DistrictMinorWorkSerializer
+        if detail is None:
+            detail_type = "comm"
+            detail = CommunityActivity.objects.filter(code=objectID).first()
+            serializer_class = CommunityActivitySerializer
+        if detail is None:
+            raise Http404
+        else:
+            data = serializer_class(detail, many=False).data
+            data["properties"]["type"] = detail_type
+            return Response(data)
 
 
 
