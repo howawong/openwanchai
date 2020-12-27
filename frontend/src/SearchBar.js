@@ -56,7 +56,7 @@ class SearchBar extends Component {
     this.setState({...this.state, minBudget: minBudget, maxBudget: maxBudget })
   };
 
-  getSearchURL = () => {
+  getSearchURL = (prefix="/search") => {
     const keyword = this.state.keyword;
     const {minBudget, maxBudget, minDate, maxDate} = this.state;
 	const format = "YYYY-MM-DD";
@@ -69,8 +69,8 @@ class SearchBar extends Component {
     };
     const queryString = Object.keys(params).map(key => key + '=' + params[key]).join('&');
     if (queryString.length > 0)
-      return "/search?" + queryString;
-    return "/search";
+      return prefix + "?" + queryString;
+    return prefix;
   }
 
   changeDateRange = (value) => {

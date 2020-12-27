@@ -4,7 +4,7 @@ const rootPath = () => {
 
 exports.fetchDetail = (detailId) => {
   const root = rootPath();
-  return fetch(root + "/sample/detail?objectID=" + detailId).then(res => res.json());
+  return fetch(root + "/sample/detail?id=" + detailId).then(res => res.json());
 };
 
 exports.fetchList = (keyword, minDate, maxDate, minAmount, maxAmount, page, size) => {

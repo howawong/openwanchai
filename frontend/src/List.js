@@ -22,71 +22,25 @@ import {
 
 
 class List extends Search {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
   }
 
-  render2() {
-    const {yearRange,result, total, page, size} = this.state;
-	const start = (page - 1) * size + 1 ;
-	const end = Math.min((page) * size , total);
-    const resultView = result.map(gj =>(
-      <div>
-        <Link to={"/detail/" + gj.properties["metadata"]["identifier"]}  style={{ textDecoration: 'none' }}>
-        <CategoryCard 
-          name={gj.properties["project_name"]}
-          budget={gj.properties["metadata"]["ballpark"]}
-          projectId={gj.properties["metadata"]["identifier"]} 
-        />
-        </Link>
-        <br/><br/>
-			</div>));
-    const pagination = (
-	  <div className="pagination">
-        <span className="page-number"> {start} - {end}/ {total} </span>&nbsp;&nbsp;
-        <Button type="button" class="btn btn-circle" onClick={this.prevPage}>&#x3c;</Button>&nbsp;&nbsp;&nbsp;
-        <Button type="button" class="btn btn-circle" onClick={this.nextPage}>&#x3e;</Button>
-      </div>
-	);
-    return (
-      <div className="App page">
-        <MobileView>
-          <div className="leaflet-container-mobile">
-            <SampleMap locations={result}/>
-          </div>
-          <br/>
-          <br/>
-          {resultView}
-		  <br/>
-		  {pagination}
-        </MobileView>
-        <BrowserView>
-        <div className="flexbox">
-          <div className="col2">
-
-            <SwitchModeButtonGroup />
-            <SearchBar />
-            {pagination}<br/>
-            {resultView}
-            </div>
-          <div className="leaflet-container col">
-            <SampleMap locations={result}/>
-          </div>
-        </div>
-        </BrowserView>
-      </div>
-    );
-
-  }
 
   render() {
-    const {yearRange} = this.state;
+    const {query} = this.state;
     const paginationView = this.paginationView();
     return (
       <div className="App page">
-        <SwitchModeButtonGroup />
+
+        <SwitchModeButtonGroup searchBarFunc={this.searchBarFunc}/>
+		<MobileView>
+          <div style={{display: "none"}}>
+            <SearchBar query={query} ref={this.searchBarRef}/>
+          </div>
+		</MobileView>
         <BrowserView>
- 		    <SearchBar />
+ 		    <SearchBar ref={this.searchBarRef}/>
         </BrowserView>
         {paginationView}
         <br/>
@@ -95,8 +49,12 @@ class List extends Search {
           <div>
           <CategoryCard 
             name={gj.properties["project_name"]}
-            budget={gj.properties["metadata"]["ballpark"]}
-            projectId={gj.properties["metadata"]["identifier"]} 
+            budget={gj.properties["estimation"]}
+            audience={gj.properties["audience"]}
+            startDate={gj.properties["start_date"]}
+            committee={gj.properties["committee"]}
+            amount={gj.properties["amount"]}
+            projectId={gj["identifier"]} 
           />
           <br/><br/>
 		  </div>) 

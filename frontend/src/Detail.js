@@ -39,11 +39,52 @@ class Detail extends Component {
   }
 
 
+  getDetail = (properties) => {
+    const output = {
+	  pdfURL : "",
+	  title: "",
+	  amount: 0,
+	};
+    if (properties) {
+	  const type = properties["type"];
+	  const metadata = properties["metadata"];
+	  if (type == "dmw") {
+	    output.pdfURL = metadata["project_pdf"]; 
+	    output.title = metadata["project_name"];    
+		output.desc = metadata["objective"];
+		output.organization = metadata["committee"];
+		output.audience = metadata["audience"];
+		output.address = metadata["location"];
+		output.audience_size = metadata["audience_size"];
+		output.amount = metadata["ballpark"];
+		output.start_date = metadata["expected_start_date"];
+		output.end_date = metadata["expected_end_date"];
+
+	  }
+	  if (type == "comm") {
+	    output.pdfURL = metadata["document_url"];
+		output.title = metadata["project_name"];
+		output.desc = metadata["objective"];
+		output.organization = metadata["organization_name"];
+		output.audience = metadata["audience"];
+		output.address = metadata["address"];
+		output.audience_size = metadata["audience_size"];
+		output.amount = metadata["estimation"];
+		output.start_date = metadata["start_date"];
+		output.end_date = metadata["end_date"];
+	  }
+	} 
+	return output;
+  }
+
+
 
   render() {
     const {id, result} = this.state;
     const map = result;
-	  const properties = result.length > 0 && result[0].properties;
+	console.log(result);
+	const properties = result.length > 0 && result[0].properties;
+
     console.log("map", map);
     if (isMobile) {
       return (
@@ -51,7 +92,9 @@ class Detail extends Component {
       )
     
     }
-
+ 
+    const detail = this.getDetail(properties);
+   
     return (
       <div className="page fullscreen">
         <div className="detail">
@@ -78,34 +121,34 @@ class Detail extends Component {
         <br/>
         <div>
           <Row>
-            <Col><h1>{properties && properties["project_name"]}</h1></Col>
+            <Col><h1>{detail.title}</h1></Col>
             <Col><img src="/assets/icon/construction_list.svg" /></Col>
           </Row>
         </div>
         <div className="border"/><br/>
         <div>  
           <Row>
-            <Col><img src="/assets/icon/application.svg" />申請團體: 灣仔區街坊福利會</Col>
-            <Col><img src="/assets/icon/people.svg" />對象: 區內所有居民</Col>
+            <Col><img src="/assets/icon/application.svg" />申請團體: {detail.organization}</Col>
+            <Col><img src="/assets/icon/people.svg" />對象: {detail.audience}</Col>
           </Row>
           <Row>
-            <Col><img src="/assets/icon/place.svg" />地點: 灣仔區街坊福利會</Col>
-            <Col><img src="/assets/icon/counter.svg" />參加人數: 1,000人</Col>
+            <Col><img src="/assets/icon/place.svg" />地點: {detail.address}</Col>
+            <Col><img src="/assets/icon/counter.svg" />參加人數: {detail.audience_size}人</Col>
           </Row>
           <Row>
-            <Col><img src="/assets/icon/dollar.svg" />撥款: $200k</Col>
-            <Col><img src="/assets/icon/calender.svg" />開始日期: 7/3/2020</Col>
+            <Col><img src="/assets/icon/dollar.svg" />撥款: {detail.amount}</Col>
+            <Col><img src="/assets/icon/calender.svg" />開始日期: {detail.start_date}</Col>
           </Row>
           <Row>
             <Col><img src="/assets/icon/type.svg" />類別: 聯誼</Col>
-            <Col><img src="/assets/icon/end date.svg" />結束日期: 7/3/2020</Col>
+            <Col><img src="/assets/icon/end date.svg" />結束日期: {detail.end_date}</Col>
           </Row>
         </div>
         <div className="border"/><br/>
         詳細:<br/><br/><br/>
-        回力場住得親十聽防美！離的高怎的可讀發合。何觀自了期還對……身近了相新急應體？告現開他年中學：土新人坐考理價金有的他，想達去治人媽決東習中信回主弟；英那北天有關時的配一作、光可然日生、歡方神次界是車如現定我黨小的出現告自天例屋市一！
+		{detail.desc}
         <div className="border"/><br/>
-		計劃書: &nbsp;&nbsp;<a href={properties && properties["metadata"]["project_pdf"]} target="_blank"><Button color="blue"> 下載 </Button></a>
+		計劃書: &nbsp;&nbsp;<a href={detail.pdfURL} target="_blank"><Button color="blue"> 下載 </Button></a>
         </div>
         </Col>
         <Col xs={2}></Col>

@@ -24,6 +24,7 @@ class Search extends React.Component {
     super(props);
     const query = qs.parse(props.location.search.slice(1));
     console.log("Search", props, query);
+    this.searchBarRef = React.createRef();
     this.state = {result: [], page: 2, total: 0, size: 6, loading:false, query: query}
 	this.sampleMap = React.createRef();
   }
@@ -108,6 +109,9 @@ class Search extends React.Component {
 	);
   }
   
+  searchBarFunc = () => {
+    return this.searchBarRef;
+  }
 
   render() {
     const {yearRange,result, total, page, size, query} = this.state;
@@ -131,6 +135,10 @@ class Search extends React.Component {
       <div className="App page">
         <MobileView>
           <div className="leaflet-container-mobile">
+            <SwitchModeButtonGroup searchBarFunc={this.searchBarFunc}/>
+            <div style={{display: "none"}}>
+              <SearchBar query={query} ref={this.searchBarRef}/>
+            </div>
             <SampleMap locations={result} ref={this.sampleMap}/>
           </div>
           <br/>
@@ -142,9 +150,8 @@ class Search extends React.Component {
         <BrowserView>
         <div className="flexbox">
           <div className="col2">
-
-            <SwitchModeButtonGroup />
-            <SearchBar query={query}/>
+            <SwitchModeButtonGroup searchBarFunc={this.searchBarFunc}/>
+            <SearchBar query={query} ref={this.searchBarRef}/>
             {pagination}<br/>
             {resultView}
             </div>
