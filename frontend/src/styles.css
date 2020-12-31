@@ -26,6 +26,10 @@
   border-radius: 1em;
 }
 
+.panel .right-col {
+  text-align: right;
+}
+
 .panel .rs-picker-daterange {
   width: 80%;
 }
@@ -59,6 +63,36 @@
   border-radius: 48px;
 }
 
+.searchBar2 .search_m {
+  margin-left: 0.5em;
+}
+
+.searchBar2 .left .col {
+  display: flex;
+  align-items: center; 
+}
+
+.searchBar2 .center .col {
+  display: flex;
+  align-items: center; 
+}
+
+.searchBar2 .center .col-auto {
+  display: flex;
+  align-items: center; 
+}
+
+
+
+.searchBar2 .row .col .row {
+  height: 100%;
+}
+
+.searchBar2 .center {
+  border-left: 2px solid #C4C4C4;
+  border-right: 2px solid #C4C4C4;
+}
+
 .searchBar2 .rs-picker-daterange {
   width: 80%;
 }
@@ -70,7 +104,14 @@
 }
 
 .searchBar2 .left {
-  padding-left:0.5em;
+  padding-left:2em;
+  display: table-cell;
+  vertical-align: middle;
+
+}
+
+.searchBar2 .left .sort {
+  height: 100%
 }
 
 .searchBar2 .right{
@@ -80,7 +121,8 @@
 }
 
 .searchBar2 input {
-  width: 70%;
+  width: 75%;
+  height: 75%;
   margin-left: 0.5em;
   border: none;
 }
@@ -223,7 +265,7 @@
 
 .browse-gallery {
     width: 100%;
-    padding-left:5em;
+    padding-left:1.5em;
     overflow-x: hidden;
     overflow-y: hidden;
     white-space: nowrap;
@@ -293,6 +335,12 @@
   color: #00AEFF;
   padding-right:4em;
 }
+
+.card .right {
+  width: 100%;
+}
+
+
 
 
 .title {

@@ -14,14 +14,22 @@ import numeral from 'numeral';
 class SearchBarPanelMobile extends Component {
   constructor(props) {
     super(props);
+    this.state = this.stateFromProps(props);
 	this.ref = React.createRef();
     this.onAmountChanged = this.props.onAmountChanged;
     this.onDateRangeChanged = this.props.onDateRangeChanged;
-    this.setState({dates: this.props.dates, budgets: this.props.budgets});
+  }
+
+  stateFromProps = (props) => {
+    const showDateRange = props.showDateRange ?? true;
+    const showBudget = props.showBudget ?? true;
+    const visible = props.visible ?? true;
+    const newState = {...this.state, dates: props.dates, budgets: props.budgets, showDateRange, showBudget, visible};
+    return newState;
   }
 
   componentWillReceiveProps(props) {
-    this.setState({dates: this.props.dates, budgets: this.props.budgets});
+    this.setState(this.stateFromProps(props));
   }
 
   handleClose = () => { this.setState({show: false}) };
@@ -29,15 +37,18 @@ class SearchBarPanelMobile extends Component {
   onChange = (value) => {this.setState({show:this.state.show});};
   
   render() {
-    const { show, dates, budgets } = this.props;
+    const { visible, dates, budgets, showDateRange, showBudget } = this.state;
+
     const minBudget = budgets[0];
     const maxBudget = budgets[1];
-    return (
-      <div ref={this.ref} className="panel">
-        <Modal.Body>
-          預算 {numeral(minBudget).format("0,0a")} <Range defaultValue={[0, 100]} onAfterChange={this.onAmountChanged}/> {numeral(maxBudget).format("0,0a")}
-        </Modal.Body>
-        <Modal.Body>
+    if (! visible) {
+      return (<div></div>);
+    }
+    
+    const dateRangeDiv = (
+      <Modal.Body>
+          開始日期
+          <Modal.Header>
           <DateRangePicker
                value={dates}
                showOneCalendar
@@ -48,8 +59,33 @@ class SearchBarPanelMobile extends Component {
                align="left"
                onChange={this.onDateRangeChanged}
           />
+          </Modal.Header>
         </Modal.Body>
-		    <Modal.Header>
+
+    );
+
+    const budgetDiv = (
+      <Modal.Body>
+        <Row>
+          <Col>預算</Col>
+          <Col className="right-col">{numeral(minBudget).format("0,0a")} - {numeral(maxBudget).format("0,0a")}</Col>
+        </Row>
+        <Row>
+          <Col>&nbsp;</Col>
+        </Row>
+        <Row>
+          <Col>
+            <Range defaultValue={[0, 100]} onAfterChange={this.onAmountChanged}/> 
+          </Col>
+        </Row>
+      </Modal.Body>
+    );
+   
+    return (
+      <div ref={this.ref} className="panel">
+        {showBudget && budgetDiv}
+        {showDateRange && dateRangeDiv}
+          <Modal.Header>
 			    項目種類
 		    </Modal.Header>
 		    <Modal.Body>

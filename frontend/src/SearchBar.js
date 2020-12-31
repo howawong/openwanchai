@@ -4,6 +4,7 @@ import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import Slider, { Range } from 'rc-slider';
 import Col from 'react-bootstrap/Col';
+import Image from 'react-bootstrap/Image';
 import { Link } from 'react-router-dom';
 import Row from 'react-bootstrap/Row';
 import 'rc-slider/assets/index.css';
@@ -43,6 +44,7 @@ class SearchBar extends Component {
 				  value:[minValue, maxValue]};
   }
 
+  toggle = () => { console.log(this.state); if (this.state.show) { this.handleClose(); } else { this.handleShow();} }
   handleClose = () => { this.setState({...this.state, show: false}) };
   handleShow = () => { this.setState({...this.state, show: true}) };
   onChange = (value) => {this.setState({...this.state, value: value});};
@@ -84,19 +86,18 @@ class SearchBar extends Component {
     return (
       <div>
         <BrowserView>
-        <SearchBarPanel show={show} handleClose={this.handleClose}/>
         <div className="searchBar2">
           <Row>
-            <Col>
-              <Button onClick={this.handleShow} variant="light">
-              <img src="/assets/icon/sort.svg" className="sort"/></Button>
+            <Col className="left">
+              <Image src="/assets/icon/sort.svg" className="sort" onClick={this.toggle}/>
               <input type="text" ref={this.keywordRef} placeholder="輸入項目名稱/關鍵詞/地點..." onChange={this.onKeywordChange} value={keyword}/>
             </Col>
            <Col className="center">
              <Row>
-              <Col>預算 <span>{numeral(minBudget).format("0,0a")}</span> </Col>
-              <Col xs={6}><Range defaultValue={[0, 100]} onAfterChange={this.onRangeAfterChange}/></Col>
-              <Col>{numeral(maxBudget).format("0,0a")}</Col>
+			  <Col xs="auto">預算</Col>
+              <Col xs="auto">{numeral(minBudget).format("0,0a")}</Col>
+              <Col><Range defaultValue={[0, 100]} onAfterChange={this.onRangeAfterChange}/></Col>
+              <Col xs="auto">{numeral(maxBudget).format("0,0a")}</Col>
              </Row>
            </Col>
            <Col className="right">
@@ -115,19 +116,19 @@ class SearchBar extends Component {
             </Col>
           </Row>
         </div>
+        <SearchBarPanelMobile showDateRange={false} showBudget={false} budgets={[minBudget, maxBudget]} dates={[minDate, maxDate]}  onAmountChanged={this.onRangeAfterChange} onDateRangeChanged={this.changeDateRange} visible={show}/>
         </BrowserView>
         <MobileView>
           <div className="searchBar2">
             <Row>
               <Col>
-                <Button variant="light">
-                <img src="/assets/icon/sort.svg" className="sort"/></Button>
+                <Image src="/assets/icon/sort.svg" className="sort" onClick={this.toggle} />
                 <input type="text" placeholder="輸入項目名稱/關鍵詞/地點..."  ref={this.keywordRef} onChange={this.onKeywordChange} value={keyword} />
                <Link to={this.getSearchURL()}><img src="/assets/icon/search_m.svg" className="search_m"/></Link>
               </Col>
             </Row>
           </div>
-          <SearchBarPanelMobile budgets={[minBudget, maxBudget]} dates={[minDate, maxDate]}  onAmountChanged={this.onRangeAfterChange} onDateRangeChanged={this.changeDateRange}/>
+          <SearchBarPanelMobile budgets={[minBudget, maxBudget]} dates={[minDate, maxDate]}  onAmountChanged={this.onRangeAfterChange} onDateRangeChanged={this.changeDateRange} visible={show}/>
         </MobileView>
       </div>
     );

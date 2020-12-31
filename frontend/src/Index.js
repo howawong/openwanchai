@@ -6,9 +6,18 @@ import ProjectCategoryCard from './ProjectCategoryCard';
 import HeatMap from './HeatMap';
 import SearchBar from './SearchBar';
 import Col from 'react-bootstrap/Col';
+import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Banner from './Banner';
 import './styles.css';
+import {
+  BrowserView,
+  MobileView,
+  isBrowser,
+  isMobile
+} from "react-device-detect";
+
+
 
 
 
@@ -21,30 +30,37 @@ class Index extends Component {
         <div className="title">
           最多人查看項目
         </div>
+        <br/>
+        <BrowserView>
 	  	<div className="right-bottons">
           <span class="badge badge-secondary">查看全部</span>
 		  <img src="/assets/btn/previous.svg" />
 		  <img src="/assets/btn/next.svg" />
 		</div>
+        </BrowserView>
 		</div>
         <div class="browse-gallery">
           <CategoryCard />
           <CategoryCard />
           <CategoryCard />
         </div>
-        <br/>
-		<br/>&nbsp;
-		<br/>
+        <MobileView>
+          <Container> 
+            <span class="badge badge-secondary">查看全部</span>
+          </Container>
+        </MobileView>
         <div className="border"/>
+        <br/>
         <div className="title">
           尋找項目種類
         </div>
+        <BrowserView>
         <div className="right-bottons">
           <span class="badge badge-secondary">查看全部</span>
 		  <img src="/assets/btn/previous.svg" />
 		  <img src="/assets/btn/next.svg" />
 		</div>
-		<br/>
+        </BrowserView>
 		<br/>
         <div className="project-category-gallery">
           <ProjectCategoryCard />
@@ -56,7 +72,12 @@ class Index extends Component {
           <ProjectCategoryCard />
           <ProjectCategoryCard />
         </div>
-		<br/>&nbsp;<br/>
+		<br/>
+        <MobileView>
+          <Container> 
+            <span class="badge badge-secondary">查看全部</span>
+          </Container>
+        </MobileView>
         <div className="border"/>
 		<br/>
 		<HeatMap />
