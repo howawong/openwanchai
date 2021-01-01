@@ -24,8 +24,8 @@ class SwitchModeButtonGroup extends Component {
     return (
       <Row className="header">
         <Col>
-			    <img src="/assets/logo.png" /> 
-		    </Col>
+          <Link to="/"><img src="/assets/logo.png" /></Link>
+		</Col>
         <Col>
           <Link to={mapURL}><img src="/assets/icon/place.svg" /></Link>
           <Link to={listURL}><img src="/assets/icon/sort.svg" /></Link>&nbsp;
@@ -37,12 +37,12 @@ class SwitchModeButtonGroup extends Component {
   desktopView(mapURL, listURL) {
     return (
       <Row className="header">
-        <Col>
-			    <img src="/assets/logo.png" /> 
-		    </Col>
+        <Col sm={3}>
+          <Link to="/"><img src="/assets/logo.png" /></Link>
+		</Col>
         <Col><span className="title">搜尋灣仔區撥款項目</span></Col>
         <Col>
-          <ButtonGroup aria-label="Basic example">
+          <ButtonGroup>
             <Button variant="secondary"><Link to={mapURL}>地圖</Link></Button>
             <Button variant="secondary"><Link to={listURL}>列表</Link></Button>
             <Button variant="secondary">數據圖</Button>
@@ -60,7 +60,7 @@ class SwitchModeButtonGroup extends Component {
     console.log(ref, mapURL, listURL, this.searchBarFunc());
     return (
       <div>
-        <BrowserView>{this.mobileView(mapURL, listURL)}</BrowserView>
+        <BrowserView>{this.desktopView(mapURL, listURL)}</BrowserView>
         <MobileView>{this.mobileView(mapURL, listURL)}</MobileView>
       </div>
     );

@@ -23,17 +23,14 @@ class Search extends React.Component {
   constructor(props) {
     super(props);
     const query = qs.parse(props.location.search.slice(1));
-    console.log("Search", props, query);
     this.searchBarRef = React.createRef();
     this.state = {result: [], page: 2, total: 0, size: 6, loading:false, query: query}
 	this.sampleMap = React.createRef();
   }
 
   componentWillReceiveProps(nextProps) {
-    const query = qs.parse(nextProps.location.search);
-    console.log("Search", nextProps, query);
-    this.setState({result: [], page: 2, total: 0, size: 6, loading:false, query: query})
-    this.fetchData(1);
+    const query = qs.parse(nextProps.location.search.slice(1));
+    this.setState({result: [], page: 2, total: 0, size: 6, loading:false, query: query}, () => { this.fetchData(1);})
   }
 
   fetchData(page) {
@@ -68,11 +65,6 @@ class Search extends React.Component {
 
   setValue(value) {
     console.log(value);
-  }
-
-  setYearRange(yearRange) {
-    this.setState({...this.state, yearRange: yearRange});
-	this.fetchData();
   }
 
   nextPage = () => {
@@ -115,9 +107,10 @@ class Search extends React.Component {
 
   render() {
     const {yearRange,result, total, page, size, query} = this.state;
+    console.log("Search", query);
 	const resultView = result.map((gj, index) =>(
       <div key={index}>
-        <Link to={"/detail/" + gj.properties["identifier"]}  style={{ textDecoration: 'none' }}>
+        <Link to={"/detail/" + gj.properties["identifier"]}  style={{ textDecoration: 'none' }} target="_blank">
         <CategoryCard key={index}
           name={gj.properties["project_name"]}
           budget={gj.properties["estimation"]}

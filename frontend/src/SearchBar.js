@@ -24,24 +24,45 @@ import numeral from 'numeral';
 class SearchBar extends Component {
   constructor(props) {
     super(props);
-    console.log("SearchBar", this.props.query);
-    const query = this.props.query;
+    this.min = 0;
+    this.max = 5000000;
+    const state = this.stateFromProps(props.query);
     this.ref = React.createRef();
     this.keywordRef = React.createRef();
-    this.min = 5000;
-    this.max = 900000;
+    this.state = state;
+    console.log(this.state, props.query);
+  }
+
+  stateFromProps(query) {
     const maxValue = query ? parseInt(query.maxAmount) : this.max;
     const minValue = query ? parseInt(query.minAmount) : this.min;
     const keyword = query ? query.keyword : "";
     const minDate = new Date(query ? query.minDate : "2012-01-01");
     const maxDate = new Date(query ? query.maxDate : "2020-04-01");
-    this.state = {show: false,
-                  minBudget: this.min, 
-				  maxBudget: this.max,
-				  keyword: keyword,
-				  minDate: minDate,
-				  maxDate: maxDate,
-				  value:[minValue, maxValue]};
+    return {show: false,
+            minBudget: minValue, 
+		    maxBudget: maxValue,
+		    keyword: keyword,
+		    minDate: minDate,
+		    maxDate: maxDate,
+            result: [],
+            page: 0,
+            total: 0,
+            size: 6,
+		    value:[this.valueToPct(minValue), this.valueToPct(maxValue)]};
+
+  }
+
+  componentWillReceiveProps(nextProps) {
+    const state = this.stateFromProps(nextProps.query);
+    this.setState(state);
+  }
+
+
+
+  valueToPct = (value) => {
+    const diff = this.max - this.min;
+    return Math.round((value - this.min) / diff * 100.0);
   }
 
   toggle = () => { console.log(this.state); if (this.state.show) { this.handleClose(); } else { this.handleShow();} }
@@ -88,15 +109,15 @@ class SearchBar extends Component {
         <BrowserView>
         <div className="searchBar2">
           <Row>
-            <Col className="left">
+            <Col className="left d-none d-sm-block">
               <Image src="/assets/icon/sort.svg" className="sort" onClick={this.toggle}/>
               <input type="text" ref={this.keywordRef} placeholder="輸入項目名稱/關鍵詞/地點..." onChange={this.onKeywordChange} value={keyword}/>
             </Col>
-           <Col className="center">
+           <Col className="center d-none d-md-block">
              <Row>
 			  <Col xs="auto">預算</Col>
               <Col xs="auto">{numeral(minBudget).format("0,0a")}</Col>
-              <Col><Range defaultValue={[0, 100]} onAfterChange={this.onRangeAfterChange}/></Col>
+              <Col><Range defaultValue={value} onAfterChange={this.onRangeAfterChange}/></Col>
               <Col xs="auto">{numeral(maxBudget).format("0,0a")}</Col>
              </Row>
            </Col>
@@ -106,7 +127,7 @@ class SearchBar extends Component {
                disabledDate={allowedRange("2012-01-01","2021-04-10")}
                showOneCalendar
                hoverRange="month"
-               className="data-range"
+               className="date-range"
                size="md"
                placeholder="開始日期"
                align="left"

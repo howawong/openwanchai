@@ -27,11 +27,10 @@
 }
 
 .panel .right-col {
-  text-align: right;
 }
 
 .panel .rs-picker-daterange {
-  width: 80%;
+  width: 70%;
 }
 
 
@@ -94,7 +93,7 @@
 }
 
 .searchBar2 .rs-picker-daterange {
-  width: 80%;
+  width: 70%;
 }
 
 
@@ -111,13 +110,12 @@
 }
 
 .searchBar2 .left .sort {
-  height: 100%
 }
 
 .searchBar2 .right{
   display: table-cell;
   vertical-align: middle;
-  text-align:right;
+  text-align: right;
 }
 
 .searchBar2 input {
