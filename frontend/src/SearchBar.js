@@ -26,6 +26,7 @@ class SearchBar extends Component {
     super(props);
     this.min = 0;
     this.max = 5000000;
+    this.prefix = this.props.prefix ?? "/search";
     const state = this.stateFromProps(props.query);
     this.ref = React.createRef();
     this.keywordRef = React.createRef();
@@ -133,7 +134,7 @@ class SearchBar extends Component {
                align="left"
 			   onChange={this.changeDateRange}
              />
-             <Link to={this.getSearchURL()}><img src="/assets/icon/search_m.svg" className="search_m"/></Link>
+             <Link to={this.getSearchURL(this.prefix)}><img src="/assets/icon/search_m.svg" className="search_m"/></Link>
             </Col>
           </Row>
         </div>
@@ -145,7 +146,7 @@ class SearchBar extends Component {
               <Col>
                 <Image src="/assets/icon/sort.svg" className="sort" onClick={this.toggle} />
                 <input type="text" placeholder="輸入項目名稱/關鍵詞/地點..."  ref={this.keywordRef} onChange={this.onKeywordChange} value={keyword} />
-               <Link to={this.getSearchURL()}><img src="/assets/icon/search_m.svg" className="search_m"/></Link>
+               <Link to={this.getSearchURL(this.prefix)}><img src="/assets/icon/search_m.svg" className="search_m"/></Link>
               </Col>
             </Row>
           </div>

@@ -18,6 +18,8 @@ import {
   isBrowser,
   isMobile
 } from "react-device-detect";
+import Col from 'react-bootstrap/Col';
+import Row from 'react-bootstrap/Row';
 
 
 
@@ -26,6 +28,9 @@ class List extends Search {
     super(props);
   }
 
+  componentWillReceiveProps(nextProps) {
+    super.componentWillReceiveProps(nextProps);
+  }
 
   render() {
     const {query} = this.state;
@@ -36,18 +41,30 @@ class List extends Search {
         <SwitchModeButtonGroup searchBarFunc={this.searchBarFunc}/>
 		<MobileView>
           <div style={{display: "none"}}>
-            <SearchBar query={query} ref={this.searchBarRef}/>
+            <SearchBar query={query} ref={this.searchBarRef} prefix="/list" />
           </div>
 		</MobileView>
         <BrowserView>
- 		    <SearchBar ref={this.searchBarRef}/>
+ 		    <SearchBar ref={this.searchBarRef} prefix="/list" />
         </BrowserView>
         {paginationView}
+        <br/>
+        <Row>
+          <Col></Col>
+          <Col xs={2}>地點</Col>
+          <Col xs={2}>項目</Col>
+          <Col>對象</Col>
+          <Col>種類</Col>
+          <Col>開始日期</Col>
+          <Col>撥款</Col>
+        </Row>
         <br/>
         {
         this.state.result.map(gj =>(
           <div>
-          <CategoryCard 
+
+          <Link to={"/detail/" + gj.properties["identifier"]}  style={{ textDecoration: 'none' }} target="_blank">
+          <CategoryCard isLong={true}
             name={gj.properties["project_name"]}
             budget={gj.properties["estimation"]}
             audience={gj.properties["audience"]}
@@ -56,6 +73,7 @@ class List extends Search {
             amount={gj.properties["amount"]}
             projectId={gj["identifier"]} 
           />
+          </Link>
           <br/><br/>
 		  </div>) 
         )}

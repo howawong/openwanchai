@@ -288,7 +288,7 @@
 }
 
 .card .left img {
-  min-height:100%;
+  min-width:100%;
 }
 
 .right-bottons {
@@ -310,8 +310,10 @@
   font-style: normal;
   font-weight: bold;
   line-height: 29px;
-  padding-bottom: 5em;
-
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  text-align: left;
 }
 
 .card .date {
