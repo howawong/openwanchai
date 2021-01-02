@@ -35,19 +35,22 @@ class List extends Search {
   render() {
     const {query} = this.state;
     const paginationView = this.paginationView();
+    const keyword = isMobile ? query.keyword : "";
     return (
       <div className="App page">
 
-        <SwitchModeButtonGroup searchBarFunc={this.searchBarFunc}/>
+        <SwitchModeButtonGroup searchBarFunc={this.searchBarFunc} keyword={keyword}/>
 		<MobileView>
           <div style={{display: "none"}}>
             <SearchBar query={query} ref={this.searchBarRef} prefix="/list" />
           </div>
+          <div className="border-no-margin"></div>
 		</MobileView>
         <BrowserView>
  		    <SearchBar ref={this.searchBarRef} prefix="/list" />
         </BrowserView>
         {paginationView}
+        <BrowserView>
         <br/>
         <Row>
           <Col></Col>
@@ -58,6 +61,7 @@ class List extends Search {
           <Col>開始日期</Col>
           <Col>撥款</Col>
         </Row>
+        </BrowserView>
         <br/>
         {
         this.state.result.map(gj =>(

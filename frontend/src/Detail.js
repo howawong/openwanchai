@@ -23,6 +23,7 @@ class Detail extends React.Component {
   constructor(params) {
     super(params);
 	const {id} = this.props.match.params;
+    this.sampleMap = React.createRef();
     this.state = {id: id, result: []};
   }
 
@@ -32,7 +33,12 @@ class Detail extends React.Component {
     const {id} = this.state;
     fetchDetail(id).then(
 	  result => {
-    console.log(result);
+        console.log(result);
+        if (this.sampleMap.current) {
+		    console.log("clear");
+            console.log(result);
+		    this.sampleMap.current.clear([result]);
+		}
 		this.setState({...this.state, result: [result]});
 	  }
 	);
@@ -82,11 +88,9 @@ class Detail extends React.Component {
   render() {
     const {id, result} = this.state;
     const map = result;
-	console.log(result);
 	const properties = result.length > 0 && result[0].properties;
     const detail = this.getDetail(properties);
 
-    console.log("map", map);
     if (isMobile) {
       return (
         <DetailMobile map={result} detail={detail}/>
@@ -100,7 +104,7 @@ class Detail extends React.Component {
         <div className="detail">
         <Row className="header">
           <Col>
-			<img src="/assets/logo.png" /> 
+			<Link to="/"><img src="/assets/logo.png" /></Link>
           </Col>
           <Col><span className="title">搜尋灣仔區撥款項目</span></Col>
           <Col>
@@ -116,17 +120,17 @@ class Detail extends React.Component {
         <Col>
 		<div className="shadow-container">
 	    <div className="mapContainer">
-	      <SampleMap locations={map} className="map"/>
+	      <SampleMap locations={map} className="map" ref={this.sampleMap}/>
 		</div>
         <br/>
         <div>
           <Row>
-            <Col><h1>{detail.title}</h1></Col>
-            <Col><img src="/assets/icon/construction_list.svg" /></Col>
+            <Col><h3>{detail.title}</h3></Col>
+            <Col xs={2}><img src="/assets/icon/construction_list.svg" /></Col>
           </Row>
         </div>
         <div className="border"/><br/>
-        <div>  
+        <div className="detail-field-container">  
           <Row>
             <Col><img src="/assets/icon/application.svg" />申請團體: {detail.organization}</Col>
             <Col><img src="/assets/icon/people.svg" />對象: {detail.audience}</Col>
@@ -160,5 +164,4 @@ class Detail extends React.Component {
 }
 
 
-console.log(Detail);
 export default Detail;

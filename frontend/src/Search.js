@@ -128,7 +128,7 @@ class Search extends React.Component {
       <div className="App page">
         <MobileView>
           <div className="leaflet-container-mobile">
-            <SwitchModeButtonGroup searchBarFunc={this.searchBarFunc}/>
+            <SwitchModeButtonGroup searchBarFunc={this.searchBarFunc} keyword={query.keyword}/>
             <div style={{display: "none"}}>
               <SearchBar query={query} ref={this.searchBarRef}/>
             </div>

@@ -18,17 +18,21 @@ class SwitchModeButtonGroup extends Component {
     super(props);
     console.log(props);
     this.searchBarFunc = props.searchBarFunc;
+	this.keyword = props.keyword;
   }
 
   mobileView(mapURL, listURL) {
     return (
-      <Row className="header">
+      <Row className="page-header">
         <Col>
           <Link to="/"><img src="/assets/logo.png" /></Link>
 		</Col>
-        <Col>
-          <Link to={mapURL}><img src="/assets/icon/place.svg" /></Link>
-          <Link to={listURL}><img src="/assets/icon/sort.svg" /></Link>&nbsp;
+		<Col>
+		  尋找項目:  {this.keyword}
+		</Col>
+        <Col className="text-right">
+          <Link to={mapURL}><img className="img-btn" src="/assets/icon/place.svg" /></Link>
+          <Link to={listURL}><img className="img-btn" src="/assets/icon/sort.svg" /></Link>&nbsp;
         </Col>
       </Row>
     )

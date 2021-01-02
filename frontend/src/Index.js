@@ -23,6 +23,7 @@ import {
 
 class Index extends Component {
   render() {
+    const oneCol = isMobile;
     return (
       <div className="page">
 	    <Banner />    
@@ -40,9 +41,9 @@ class Index extends Component {
         </BrowserView>
 		</div>
         <div class="browse-gallery">
-          <CategoryCard />
-          <CategoryCard />
-          <CategoryCard />
+          <CategoryCard oneCol={oneCol}/>
+          <CategoryCard oneCol={oneCol}/>
+          <CategoryCard oneCol={oneCol}/>
         </div>
         <MobileView>
           <Container> 

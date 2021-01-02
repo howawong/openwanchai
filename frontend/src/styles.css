@@ -169,8 +169,18 @@
   height: 0px;
   margin: auto;
   margin-top: 3em;
-  border: 0.5px solid #A5A5A5;
+  border: 0.5px solid #a5a5a5;
 }
+
+.page .border-no-margin {
+  clear:both;
+  width: 95%;
+  height: 0.1px;
+  margin: auto;
+  background-color: #a5a5a5;
+}
+
+
 
 .page .title {
   font-family: Noto Sans TC;
@@ -189,6 +199,10 @@
 }
 
 .detail {
+}
+
+.detail-field-container img {
+  margin-right: 1em;
 }
 
 .detail .header {
@@ -215,6 +229,11 @@
 .card {
   padding: 0.5em; 
   border-radius: 1em;
+}
+
+.card-mobile {
+  margin-left: 1em;
+  margin-right: 1em;
 }
 
 .project-type-card {
@@ -418,4 +437,15 @@
   color: #5F5F5F;
 }
 
+.page-header {
+  padding: 1.0em;
+}
 
+.page-header .img-btn {
+  padding: 0.5em;
+}
+
+.page-header .col {
+  display: flex;
+  align-items: center;
+}

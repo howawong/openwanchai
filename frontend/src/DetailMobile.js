@@ -8,6 +8,7 @@ import CategoryCard from './CategoryCard';
 import './styles.css';
 import SampleMap from './SampleMap';
 import {fetchDetail} from './api';
+import SwitchModeButtonGroup from './SwitchModeButtonGroup';
 import {
   BrowserView,
   MobileView,
@@ -28,15 +29,20 @@ class DetailMobile extends Component {
 	  console.log(map);
     return (
       <div className="page fullscreen">
+        <SwitchModeButtonGroup searchBarFunc={() => {return {current: null}}}/>
         <div className="detail">
           <Row>
-            <Col>
+             <Col>
 	            <div className="mapContainer">
 	              <SampleMap locations={map} className="map"/>
-                <br/>
+                </div>
+             </Col>
+           </Row>
+           <Row className="p-3">
+             <Col>
                 <h1>{detail.title}</h1>
                 <br/>
-                <div>
+                <div className="detail-field-container">
                 <Row><Col><img src="/assets/icon/application.svg" />申請團體: {detail.organization}</Col></Row>
                 <Row><Col><img src="/assets/icon/people.svg" />對象: {detail.audience}</Col></Row>
                 <Row><Col><img src="/assets/icon/place.svg" />地點: {detail.address}</Col></Row>
@@ -45,17 +51,16 @@ class DetailMobile extends Component {
                 <Row><Col><img src="/assets/icon/calender.svg" />開始日期: {detail.start_date}</Col></Row>
                 <Row><Col><img src="/assets/icon/type.svg" />類別: 聯誼</Col></Row>
                 <Row><Col><img src="/assets/icon/end date.svg" />結束日期: {detail.end_date}</Col></Row>
-               </div>
-               <div className="border"/><br/>
-               詳細:<br/><br/><br/>
-			   {detail.desc}
-               <div className="border"/><br/>
+                </div>
+                <div className="border"/><br/>
+                 詳細:<br/><br/><br/>
+			     {detail.desc}
+                 <div className="border"/><br/>
 		          計劃書: &nbsp;&nbsp;
-				  <a href={detail.pdfURL} target="_blank">
+				 <a href={detail.pdfURL} target="_blank">
 				    <Button color="blue">下載</Button>
 			      </a>
-               </div>
-           </Col>
+             </Col>
           </Row>
         </div>
       </div>
