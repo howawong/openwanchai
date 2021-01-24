@@ -177,7 +177,7 @@ class DMWList(APIView):
 
         comm = CommunityActivity.objects.filter(q)
         comm = comm_value_list(comm)
-        dmw = dmw_vlaue_list(dmw)
+        dmw = dmw_value_list(dmw)
         union = dmw.union(comm)
         result = union.order_by('-metadata__expected_start_date')
         return result
