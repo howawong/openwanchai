@@ -203,6 +203,17 @@ class HotList(APIView):
         return Response(data)
 
 
+class CategorySerializer(serializers.ModelSerializer):
+    class Meta:
+         model = Category
+         fields = '__all__'
+
+class CategoryList(APIView):
+    def get(self, request):
+         serializer = CategorySerializer(Category.objects.all(), many=True)
+         data = serializer.data
+         return Response(data)
+
 
 
 
@@ -225,4 +236,4 @@ class DMWDetail(GenericAPIView):
 
 
 
-# Create your views here.
+#ll Create your views here.
