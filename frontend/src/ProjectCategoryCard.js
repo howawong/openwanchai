@@ -11,9 +11,9 @@ class ProjectCategoryCardCard extends Component {
     return (
       <div className="project-type-card">
         <div className="label">
-        <img className="img" src="/assets/icon/arts_home.svg" /><br/>
-        嘉年華<br/>
-		＜大坑節、慶回歸＞</div>
+        <img className="img" src={"/assets/icon/" +  (this.props.img ||"arts_home.svg")} /><br/>
+        { this.props.title || "嘉年華" }<br/>
+        </div>
     </div>  
     );
   }

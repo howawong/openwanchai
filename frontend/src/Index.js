@@ -3,13 +3,14 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import Jumbotron from 'react-bootstrap/Jumbotron';
 import CategoryCard from './CategoryCard';
 import ProjectCategoryCard from './ProjectCategoryCard';
-import HeatMap from './HeatMap';
 import SearchBar from './SearchBar';
 import Col from 'react-bootstrap/Col';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Banner from './Banner';
 import './styles.css';
+import HeatMap from './HeatMap';
+import { fetchCategories, fetchHot } from './api';
 import {
   BrowserView,
   MobileView,
@@ -22,8 +23,33 @@ import {
 
 
 class Index extends Component {
+  constructor(props) {
+    super(props);
+	this.state = {"categories": [], "hot": []}
+  }
+
+  componentDidMount() {
+    fetchCategories().then(cat => this.setState({...this.state, "categories": cat}));  
+    fetchHot().then(cat => this.setState({...this.state, "hot": cat["features"]}));  
+  }
+
   render() {
+    const { categories, hot } = this.state;
     const oneCol = isMobile;
+
+    const categoryCards =  categories.map(c => (<ProjectCategoryCard title={c.text} img={c.img}/>));
+    const hotCards =  hot.map(c => c["properties"]).map(c => (
+	  <CategoryCard
+	    oneCol={oneCol}
+		committee={c["committee"]}
+		projectId={c["identifier"]}
+		budget={c["estimation"]}
+		name={c["project_name"]}
+		audience={c["audience"]}
+        startDate={c["start_date"]}
+      />
+	));
+
     return (
       <div className="page">
 	    <Banner />    
@@ -41,9 +67,7 @@ class Index extends Component {
         </BrowserView>
 		</div>
         <div class="browse-gallery">
-          <CategoryCard oneCol={oneCol}/>
-          <CategoryCard oneCol={oneCol}/>
-          <CategoryCard oneCol={oneCol}/>
+		  {hotCards}
         </div>
         <MobileView>
           <Container> 
@@ -64,14 +88,7 @@ class Index extends Component {
         </BrowserView>
 		<br/>
         <div className="project-category-gallery">
-          <ProjectCategoryCard />
-          <ProjectCategoryCard />
-          <ProjectCategoryCard />
-          <ProjectCategoryCard />
-          <ProjectCategoryCard />
-          <ProjectCategoryCard />
-          <ProjectCategoryCard />
-          <ProjectCategoryCard />
+		  {categoryCards}
         </div>
 		<br/>
         <MobileView>

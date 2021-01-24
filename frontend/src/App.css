@@ -1,5 +1,12 @@
-.leaflet-container {
-  height: 100vh;
+
+
+.leaflet-container-parent {
+  position: relative;
+}
+
+.leaflet-container-parent .leaflet-container {
+  position: absolute;
+  height:200vh;
   width: 100%;
 }
 

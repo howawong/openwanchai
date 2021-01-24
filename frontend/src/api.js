@@ -9,15 +9,36 @@ exports.fetchDetail = (detailId) => {
 
 exports.fetchList = (keyword, minDate, maxDate, minAmount, maxAmount, page, size) => {
   const root = rootPath();
-  const url = root
+  var url = root
               + "/sample/dmw?"
-              + "min_date=" + minDate
-              + "&max_date=" + maxDate
-              + "&min_ballpark=" + minAmount
+  if (minDate.length > 0) {
+    url = url + "&min_date=" + minDate;
+  }
+
+  if (maxDate.length > 0) {
+    url = url + "&max_date=" + maxDate;
+  }
+
+  url = url   + "&min_ballpark=" + minAmount
               + "&max_ballpark=" + maxAmount
               + "&keyword=" + keyword
               + "&page=" + page
               + "&size=" + size;
+  return fetch(url).then(res => res.json());
+}
+
+
+exports.fetchCategories = () => {
+  const root = rootPath();
+  const url = root
+              + "/sample/categories";
+  return fetch(url).then(res => res.json());
+}
+
+exports.fetchHot = () => {
+  const root = rootPath();
+  const url = root
+              + "/sample/hot";
   return fetch(url).then(res => res.json());
 }
 

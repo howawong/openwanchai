@@ -12,6 +12,7 @@ import { DateRangePicker } from 'rsuite';
 import SearchBarPanelMobile from './SearchBarPanelMobile';
 import SearchBarPanel from './SearchBarPanel';
 import moment from 'moment';
+import { withRouter } from "react-router-dom";
 import {
   BrowserView,
   MobileView,
@@ -70,7 +71,18 @@ class SearchBar extends Component {
   handleClose = () => { this.setState({...this.state, show: false}) };
   handleShow = () => { this.setState({...this.state, show: true}) };
   onChange = (value) => {this.setState({...this.state, value: value});};
-  onKeywordChange = (evt) => {this.setState({...this.state, keyword: evt.target.value})};
+  onKeyDown = (evt) => {
+    if (evt.key == 'Enter') {
+	  const link = this.getSearchURL(this.prefix);
+      this.props.history.push(link);
+	}
+	
+  };
+
+  onKeywordChange = (evt) => {
+    this.setState({...this.state, keyword: evt.target.value});
+  };
+
 
 
   onRangeAfterChange = (evt) => { console.log(evt); 
@@ -105,6 +117,16 @@ class SearchBar extends Component {
   render() {
     const { show, value, minBudget, maxBudget, keyword, maxDate, minDate } = this.state;
     const { before, allowedRange } = DateRangePicker;
+	const handleStyle = {
+	  width: 20, 
+	  marginTop: -8,
+	  height: 20,
+	}
+
+	const input = (
+	  <input type="text" ref={this.keywordRef} placeholder="輸入項目名稱/關鍵詞/地點..." onChange={this.onKeywordChange} value={keyword} onKeyDown={this.onKeyDown}/>
+	);
+
     return (
       <div>
         <BrowserView>
@@ -112,13 +134,20 @@ class SearchBar extends Component {
           <Row>
             <Col className="left d-none d-sm-block">
               <Image src="/assets/icon/sort.svg" className="sort" onClick={this.toggle}/>
-              <input type="text" ref={this.keywordRef} placeholder="輸入項目名稱/關鍵詞/地點..." onChange={this.onKeywordChange} value={keyword}/>
+			  {input}
             </Col>
            <Col className="center d-none d-md-block">
              <Row>
 			  <Col xs="auto">預算</Col>
               <Col xs="auto">{numeral(minBudget).format("0,0a")}</Col>
-              <Col><Range defaultValue={value} onAfterChange={this.onRangeAfterChange}/></Col>
+              <Col>
+			    <Range
+				  defaultValue={value}
+				  onAfterChange={this.onRangeAfterChange}
+				  handleStyle={[handleStyle, handleStyle]}
+			  
+			    />
+		      </Col>
               <Col xs="auto">{numeral(maxBudget).format("0,0a")}</Col>
              </Row>
            </Col>
@@ -145,7 +174,7 @@ class SearchBar extends Component {
             <Row>
               <Col>
                 <Image src="/assets/icon/sort.svg" className="sort" onClick={this.toggle} />
-                <input type="text" placeholder="輸入項目名稱/關鍵詞/地點..."  ref={this.keywordRef} onChange={this.onKeywordChange} value={keyword} />
+				{input}
                <Link to={this.getSearchURL(this.prefix)}><img src="/assets/icon/search_m.svg" className="search_m"/></Link>
               </Col>
             </Row>
@@ -157,4 +186,4 @@ class SearchBar extends Component {
   }
 };
 
-export default SearchBar;
+export default withRouter(SearchBar);

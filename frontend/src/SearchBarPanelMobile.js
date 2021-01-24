@@ -38,6 +38,11 @@ class SearchBarPanelMobile extends Component {
   
   render() {
     const { visible, dates, budgets, showDateRange, showBudget } = this.state;
+    const handleStyle = {
+	  width: 20, 
+	  marginTop: -8,
+	  height: 20,
+	}
 
     const minBudget = budgets[0];
     const maxBudget = budgets[1];
@@ -75,7 +80,11 @@ class SearchBarPanelMobile extends Component {
         </Row>
         <Row>
           <Col>
-            <Range defaultValue={[0, 100]} onAfterChange={this.onAmountChanged}/> 
+            <Range
+			  defaultValue={[0, 100]}
+			  onAfterChange={this.onAmountChanged}
+			  handleStyle={[handleStyle, handleStyle]}
+			/> 
           </Col>
         </Row>
       </Modal.Body>

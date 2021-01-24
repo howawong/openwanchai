@@ -24,13 +24,13 @@ class Search extends React.Component {
     super(props);
     const query = qs.parse(props.location.search.slice(1));
     this.searchBarRef = React.createRef();
-    this.state = {result: [], page: 2, total: 0, size: 6, loading:false, query: query}
+    this.state = {result: [], page: 1, total: 0, size: 4, loading:false, query: query}
 	this.sampleMap = React.createRef();
   }
 
   componentWillReceiveProps(nextProps) {
     const query = qs.parse(nextProps.location.search.slice(1));
-    this.setState({result: [], page: 2, total: 0, size: 6, loading:false, query: query}, () => { this.fetchData(1);})
+    this.setState({result: [], page: 1, total: 0, size: 4, loading:false, query: query}, () => { this.fetchData(1);})
   }
 
   fetchData(page) {
@@ -148,7 +148,7 @@ class Search extends React.Component {
             {pagination}<br/>
             {resultView}
             </div>
-            <div className="leaflet-container col">
+            <div className="leaflet-container-parent col">
               <SampleMap locations={result} ref={this.sampleMap}/>
             </div>
         </div>
