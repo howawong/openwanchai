@@ -20,7 +20,6 @@ def home_view(request):
 
 def search_config_view(request):
     output = DistrictMinorWork.objects.all().aggregate(Min('budget'), Max('budget'))
-    print(output)
     return JsonResponse({'budget': {'min': float(output['budget__min']), 'max': float(output['budget__max'])}})
 
 
@@ -38,7 +37,6 @@ class WorldBorderList(APIView):
         for d in borders:
             serializer = WorldBorderSerializer(d)
             output.append(serializer.data)
-            print(serializer.data)
         return Response(output)
 
 
@@ -107,6 +105,36 @@ class DMWPaginiation(PageNumberPagination):
         })
 
 
+def gen_model_from_page_query_set(page):
+    for r in page:
+        m = SearchResultModel()
+        m.mpoly = r[0]
+        m.identifier = r[1]
+        m.key = r[1]
+        m.project_name = r[2]
+        m.document_url = r[3]
+        m.start_date = r[4]
+        m.audience = r[5]
+        m.objective = r[6]
+        m.address = r[7]
+        m.record_type = r[-1]
+        m.committee = r[9]
+        m.estimation = r[8]
+        yield m
+
+
+def comm_value_list(comm):
+    comm = comm.annotate(record_type=models.Value('comm', output_field=models.CharField()))
+    comm = comm.values_list("mpoly", "metadata__code", "metadata__project_name", "metadata__document_url", "metadata__start_date", "metadata__audience", "metadata__objective", "metadata__address", "metadata__estimation", "metadata__group_name", "record_type")
+    return comm
+
+
+def dmw_value_list(dmw):
+    dmw = dmw.annotate(record_type=models.Value('dmw', output_field=models.CharField()))
+    dmw = dmw.values_list("mpoly", "metadata__identifier", "metadata__project_name", "metadata__project_pdf", "metadata__expected_start_date", "metadata__audience", "metadata__outline", "metadata__location", "metadata__ballpark", "metadata__committee" , "record_type")
+    return dmw
+
+
 class DMWList(APIView):
     serializer_class = SearchResultSerializer
     pagination_class = DMWPaginiation
@@ -128,7 +156,7 @@ class DMWList(APIView):
             keyword_q = keyword_q | Q(metadata__location__icontains=keyword)
             q = q & keyword_q
         
-        dmw = DistrictMinorWork.objects.filter(q).annotate(record_type=models.Value('dmw', output_field=models.CharField()))
+        dmw = DistrictMinorWork.objects.filter(q)
         
 
         q = Q(metadata__estimation__gte=min_ballpark) & Q(metadata__estimation__lte=max_ballpark)
@@ -147,9 +175,9 @@ class DMWList(APIView):
             keyword_q = keyword_q | Q(metadata__payee__icontains = keyword)
             q = q & keyword_q
 
-        comm = CommunityActivity.objects.filter(q).annotate(record_type=models.Value('comm', output_field=models.CharField()))
-        comm = comm.values_list("mpoly", "metadata__code", "metadata__project_name", "metadata__document_url", "metadata__start_date", "metadata__audience", "metadata__objective", "metadata__address", "metadata__estimation", "metadata__group_name", "record_type")
-        dmw = dmw.values_list("mpoly", "metadata__identifier", "metadata__project_name", "metadata__project_pdf", "metadata__expected_start_date", "metadata__audience", "metadata__outline", "metadata__location", "metadata__ballpark", "metadata__committee" , "record_type")
+        comm = CommunityActivity.objects.filter(q)
+        comm = comm_value_list(comm)
+        dmw = dmw_vlaue_list(dmw)
         union = dmw.union(comm)
         result = union.order_by('-metadata__expected_start_date')
         return result
@@ -159,28 +187,24 @@ class DMWList(APIView):
         paginator = DMWPaginiation()
         page = paginator.paginate_queryset(queryset, request)
         
-        def gen_model_from_page_query_set(page):
-            for r in page:
-                print(r)
-                m = SearchResultModel()
-                m.mpoly = r[0]
-                m.identifier = r[1]
-                m.key = r[1]
-                m.project_name = r[2]
-                m.document_url = r[3]
-                m.start_date = r[4]
-                m.audience = r[5]
-                m.objective = r[6]
-                m.address = r[7]
-                m.record_type = r[-1]
-                m.committee = r[9]
-                m.estimation = r[8]
-                yield m
         model_from_page = gen_model_from_page_query_set(page)
 
         serializer = SearchResultSerializer(model_from_page, many=True)
         data = serializer.data
         return paginator.get_paginated_response(data)
+
+
+class HotList(APIView):
+   def get(self, request):
+        page = comm_value_list(CommunityActivity.objects.all()[:3]).union(dmw_value_list(DistrictMinorWork.objects.all()[:3]))
+        model_from_page = gen_model_from_page_query_set(page)
+        serializer = SearchResultSerializer(model_from_page, many=True)
+        data = serializer.data
+        return Response(data)
+
+
+
+
 
 class DMWDetail(GenericAPIView):
     def get(self, request, format=None):
