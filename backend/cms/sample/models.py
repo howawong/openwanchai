@@ -104,3 +104,9 @@ class CommunityActivityMetaData(models.Model):
     payee = models.CharField(max_length=256)
     def __str__(self):
         return self.code + " "  + self.project_name
+
+
+class Category(models.Model):
+    code = models.CharField(max_length=256, primary_key=True)
+    text = models.CharField(max_length=256)
+    img = models.CharField(max_length=256)
