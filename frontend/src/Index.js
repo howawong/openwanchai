@@ -102,7 +102,7 @@ class Index extends Component {
 		<footer className="section footer-classic context-dark bg-image footer">
 		  &nbsp;
 		  &nbsp;
-          Copyright © 2020灣仔生猛<br/>
+          Copyright © {new Date().getFullYear()} 灣仔生猛<br/>
           <div>
           <span className="link">關於灣仔生猛</span><span className="link">資料來源</span>&nbsp;<span className="link">下載 CSV</span>
           </div>

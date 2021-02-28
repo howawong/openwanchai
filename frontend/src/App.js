@@ -4,12 +4,13 @@ import Index from "./Index";
 import Search from "./Search";
 import Detail from "./Detail";
 import List from "./List";
+import './App.css';
 
 
 
 const AppRouter = () => (
   <Router>
-    <div>
+    <div id="router">
 	  <Route path="/" exact component={Index} />
 	  <Route path="/search" exact component={Search} />
 	  <Route path="/list" exact component={List} />

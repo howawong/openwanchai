@@ -100,7 +100,7 @@ class Detail extends React.Component {
  
    
     return (
-      <div className="page fullscreen">
+      <div className="page">
         <div className="detail">
         <Row className="header">
           <Col>

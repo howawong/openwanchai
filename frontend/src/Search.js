@@ -42,6 +42,7 @@ class Search extends React.Component {
 
 		  if (this.sampleMap.current) {
 		    console.log("clear");
+
 		    this.sampleMap.current.clear(result.results["features"]);
 		  }
 		  console.log(this.sampleMap);
@@ -110,7 +111,7 @@ class Search extends React.Component {
     console.log("Search", query);
 	const resultView = result.map((gj, index) =>(
       <div key={index}>
-        <Link to={"/detail/" + gj.properties["identifier"]}  style={{ textDecoration: 'none' }} target="_blank">
+        <Link to={"/detail/" + gj.properties["identifier"]}  style={{ textDecoration: 'none' }}>
         <CategoryCard key={index}
           name={gj.properties["project_name"]}
           budget={gj.properties["estimation"]}
@@ -140,7 +141,7 @@ class Search extends React.Component {
 		  <br/>
 		  {pagination}
         </MobileView>
-        <BrowserView>
+        {isBrowser && ( 
         <div className="flexbox">
           <div className="col2">
             <SwitchModeButtonGroup searchBarFunc={this.searchBarFunc}/>
@@ -151,8 +152,7 @@ class Search extends React.Component {
             <div className="leaflet-container-parent col">
               <SampleMap locations={result} ref={this.sampleMap}/>
             </div>
-        </div>
-        </BrowserView>
+        </div>)}
       </div>
     );
   }
