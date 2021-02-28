@@ -7,12 +7,12 @@ from datetime import datetime
 
 
 community_mapping = {
-      "code": "Code"
+      "code": "Map_Code"
       , 'mpoly': "MULTIPOINT"
 }
 
-world_shp = '2017 community involvement activities .shp'
-csv_file = '2017 community involvement activities.csv'
+world_shp = 'All_communities_involvement_activities_16_Feb_WGS_84.shp'
+csv_file = 'All_communities_involvement_activities_16_Feb_WGS_84.csv'
 column_mapping = 'mapping_community.csv'
 
 
@@ -46,7 +46,7 @@ def run(verbose=True):
             if row[c] == '':
                 row[c] = float(0)
             else:
-              row[c] = float(row[c])
+              row[c] = float(row[c].replace(",", ""))
         m = CommunityActivityMetaData(**row)
         m.save()
     sr = SpatialReference('EPSG:2326')

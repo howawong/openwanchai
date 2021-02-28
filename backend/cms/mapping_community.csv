@@ -1,5 +1,5 @@
 original,new
-Code,code
+MAP_CODE,code
 邊種會？,group_type
 委員會／工作小組名稱,group_name
 文件日期﹙dd/mm/yyyy﹚,document_date
@@ -8,7 +8,7 @@ Code,code
 團體名稱,organization_name
 是否首次申請,first_time
 文件 URL,document_url
-合辦團體﹙政府部門 / 區議會 / 工作小組相關﹚,coorganizer_govt
+合辦團體﹙政府部門/區議會/工作小組相關﹚,coorganizer_govt
 合辦團體﹙非政府﹚,coorganizer_non_govt
 地點（地址） ►（拆地址：bit.ly/hkaddressparser）,address
 latitude,latitude
