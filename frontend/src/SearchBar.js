@@ -39,8 +39,8 @@ class SearchBar extends Component {
     const maxValue = query ? parseInt(query.maxAmount) : this.max;
     const minValue = query ? parseInt(query.minAmount) : this.min;
     const keyword = query ? query.keyword : "";
-    const minDate = new Date(query ? query.minDate : "2012-01-01");
-    const maxDate = new Date(query ? query.maxDate : "2020-04-01");
+    const minDate = new Date(query ? query.minDate : "2010-01-01");
+    const maxDate = new Date(query ? query.maxDate : "2021-03-01");
     return {show: false,
             minBudget: minValue, 
 		    maxBudget: maxValue,
@@ -139,7 +139,7 @@ class SearchBar extends Component {
            <Col className="center d-none d-md-block">
              <Row>
 			  <Col xs="auto">預算</Col>
-              <Col xs="auto">{numeral(minBudget).format("0,0a")}</Col>
+              <Col xs="auto">{numeral(minBudget).format("0,0A")}</Col>
               <Col>
 			    <Range
 				  defaultValue={value}
@@ -148,7 +148,7 @@ class SearchBar extends Component {
 			  
 			    />
 		      </Col>
-              <Col xs="auto">{numeral(maxBudget).format("0,0a")}</Col>
+              <Col xs="auto">{numeral(maxBudget).format("0,0A")}</Col>
              </Row>
            </Col>
            <Col className="right">

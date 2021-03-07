@@ -95,7 +95,7 @@ class HeatMap extends Component {
         <Row>
           <BrowserView>
           <Col>
-		    <StackedBar />
+	    <StackedBar />
           </Col>
           </BrowserView>
           <Col>
@@ -109,7 +109,7 @@ class HeatMap extends Component {
         <MobileView>
           <Row>
             <Col>
-  		      <StackedBar />
+  	      <StackedBar />
             </Col>
           </Row>
         </MobileView>

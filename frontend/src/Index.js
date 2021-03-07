@@ -5,6 +5,7 @@ import CategoryCard from './CategoryCard';
 import ProjectCategoryCard from './ProjectCategoryCard';
 import SearchBar from './SearchBar';
 import Col from 'react-bootstrap/Col';
+import { Link } from 'react-router-dom';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Banner from './Banner';
@@ -39,6 +40,8 @@ class Index extends Component {
 
     const categoryCards =  categories.map(c => (<ProjectCategoryCard title={c.text} img={c.img}/>));
     const hotCards =  hot.map(c => c["properties"]).map(c => (
+
+        <Link to={"/detail/" + c["identifier"]}  style={{ textDecoration: 'none' }}>
 	  <CategoryCard
 	    oneCol={oneCol}
 		committee={c["committee"]}
@@ -47,7 +50,7 @@ class Index extends Component {
 		name={c["project_name"]}
 		audience={c["audience"]}
         startDate={c["start_date"]}
-      />
+      /></Link>
 	));
 
     return (

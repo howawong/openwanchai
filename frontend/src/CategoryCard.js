@@ -38,7 +38,7 @@ class CategoryCard extends Component {
               <span className="date">{startDate||"22/2/2020"}</span>
 			</Col>
 			<Col>
-              <span className="price">{budget || "$100,000"}</span>
+              <span className="price">${budget || "$100,000"}</span>
             </Col>
           </Row>
         </div>); 
@@ -55,7 +55,7 @@ class CategoryCard extends Component {
               {audience || "對象:區內所有居民"}<br/>
               <br/>
               <div>
-              <span className="price">{budget || "$100,000"}</span>
+              <span className="price">${budget || "$100,000"}</span>
               <span className="badge badge-secondary">社區服務</span>&nbsp;&nbsp;
               <span className="badge badge-secondary">小型工程</span>
               <span className="date">{startDate||"22/2/2020"}</span>
@@ -73,7 +73,7 @@ class CategoryCard extends Component {
           {committee || "灣仔區街坊福利會"}<br/>
           <div className="title">{name || "粵曲歡唱娛坊眾"}</div><br/>
           <span className="badge badge-secondary">社區服務</span><br/>
-          <span className="price" style={{paddingRight: "0.5em"}}>{budget || "$100,000"}</span><br/>
+          <span className="price" style={{paddingRight: "0.5em"}}>${budget || "$100,000"}</span><br/>
           <span className="date">{startDate||"22/2/2020"}</span>
         </div>
       );   
@@ -92,7 +92,7 @@ class CategoryCard extends Component {
             {committee || "灣仔區街坊福利會"}<br/>
             <div className="title">{name || "粵曲歡唱娛坊眾"}</div><br/>
 
-            <span className="price" style={{paddingRight: "0.5em"}}>{budget || "$100,000"}</span>
+            <span className="price" style={{paddingRight: "0.5em"}}>${budget || "$100,000"}</span>
             <span className="badge badge-secondary">社區服務</span>
             <span className="date">{startDate||"22/2/2020"}</span>
           </Col>

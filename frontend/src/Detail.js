@@ -57,7 +57,11 @@ class Detail extends React.Component {
 	  if (type == "dmw") {
 	    output.pdfURL = metadata["project_pdf"]; 
 	    output.title = metadata["project_name"];    
+		output.desc_title = "工程目的";
+		output.desc_title_2 = "工程大綱";
+
 		output.desc = metadata["objective"];
+		output.desc2 = metadata["outline"];
 		output.organization = metadata["committee"];
 		output.audience = metadata["audience"];
 		output.address = metadata["location"];
@@ -68,9 +72,15 @@ class Detail extends React.Component {
 
 	  }
 	  if (type == "comm") {
+		output.desc_title = "目的﹙申請書 3b﹚";
+		output.desc_title_2 = "其他資料內容﹙申請書7a﹚";
+
+
+
 	    output.pdfURL = metadata["document_url"];
 		output.title = metadata["project_name"];
-		output.desc = metadata["objective"];
+		output.desc = metadata["objective"]
+		output.desc2 = metadata["content"];
 		output.organization = metadata["organization_name"];
 		output.audience = metadata["audience"];
 		output.address = metadata["address"];
@@ -140,7 +150,7 @@ class Detail extends React.Component {
             <Col><img src="/assets/icon/counter.svg" />參加人數: {detail.audience_size}人</Col>
           </Row>
           <Row>
-            <Col><img src="/assets/icon/dollar.svg" />撥款: {detail.amount}</Col>
+            <Col><img src="/assets/icon/dollar.svg" />撥款: ${detail.amount}</Col>
             <Col><img src="/assets/icon/calender.svg" />開始日期: {detail.start_date}</Col>
           </Row>
           <Row>
@@ -149,8 +159,11 @@ class Detail extends React.Component {
           </Row>
         </div>
         <div className="border"/><br/>
-        詳細:<br/><br/><br/>
-		{detail.desc}
+        詳細:<br/><br/>
+	        {detail.desc_title}<br/>
+		{detail.desc}<br/><br/>
+	        {detail.desc_title_2}<br/>
+		{detail.desc2}
         <div className="border"/><br/>
 		計劃書: &nbsp;&nbsp;<a href={detail.pdfURL} target="_blank"><Button color="blue"> 下載 </Button></a>
         </div>

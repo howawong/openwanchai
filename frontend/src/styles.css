@@ -201,6 +201,7 @@
 
 .detail-field-container img {
   margin-right: 1em;
+  width: 14pt;
 }
 
 .detail .header {
@@ -446,4 +447,8 @@
 .page-header .col {
   display: flex;
   align-items: center;
+}
+
+.flexbox .result-column {
+  overflow-y:scroll;
 }

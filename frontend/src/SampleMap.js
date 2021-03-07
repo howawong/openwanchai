@@ -23,7 +23,8 @@ class SampleMap extends React.Component {
     this.geoJsonLayer.current.leafletElement.clearLayers().addData(newData);
     if (newData.length > 0) {
 	  const boundary = this.geoJsonLayer.current.leafletElement.getBounds();
-	  this.map.current.leafletElement.fitBounds(boundary);
+	  console.log("bound", boundary);
+	  this.map.current.leafletElement.fitBounds(boundary, {maxZoom: 12});
     }
   }
 

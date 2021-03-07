@@ -45,7 +45,7 @@ export default class StackedBar extends React.Component {
     return (
       <div className="content c-white">
         <h1>&nbsp;&nbsp;&nbsp;&nbsp;</h1>
-        <ResponsiveContainer height={250} width={300}>
+        <ResponsiveContainer height={250} width={400}>
           <BarChart
             layout="vertical"
             data={data}

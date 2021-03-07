@@ -40,14 +40,14 @@ class DetailMobile extends Component {
            </Row>
            <Row className="p-3">
              <Col>
-                <h1>{detail.title}</h1>
+                <h2>{detail.title}</h2>
                 <br/>
                 <div className="detail-field-container">
                 <Row><Col><img src="/assets/icon/application.svg" />申請團體: {detail.organization}</Col></Row>
                 <Row><Col><img src="/assets/icon/people.svg" />對象: {detail.audience}</Col></Row>
                 <Row><Col><img src="/assets/icon/place.svg" />地點: {detail.address}</Col></Row>
                 <Row><Col><img src="/assets/icon/counter.svg" />參加人數: {detail.audience_size}人</Col></Row>
-                <Row><Col><img src="/assets/icon/dollar.svg" />撥款: {detail.amount}k</Col></Row>
+                <Row><Col><img src="/assets/icon/dollar.svg" />撥款: ${detail.amount}k</Col></Row>
                 <Row><Col><img src="/assets/icon/calender.svg" />開始日期: {detail.start_date}</Col></Row>
                 <Row><Col><img src="/assets/icon/type.svg" />類別: 聯誼</Col></Row>
                 <Row><Col><img src="/assets/icon/end date.svg" />結束日期: {detail.end_date}</Col></Row>

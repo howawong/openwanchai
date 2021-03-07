@@ -143,7 +143,7 @@ class Search extends React.Component {
         </MobileView>
         {isBrowser && ( 
         <div className="flexbox">
-          <div className="col2">
+          <div className="col2 result-column">
             <SwitchModeButtonGroup searchBarFunc={this.searchBarFunc}/>
             <SearchBar query={query} ref={this.searchBarRef}/>
             {pagination}<br/>
