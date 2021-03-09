@@ -107,7 +107,7 @@ class Index extends Component {
 		  &nbsp;
           Copyright © {new Date().getFullYear()} 灣仔生猛<br/>
           <div>
-          <span className="link">關於灣仔生猛</span><span className="link">資料來源</span>&nbsp;<span className="link">下載 CSV</span>
+          <span className="link"><Link to="/about">關於灣仔生猛</Link></span><span className="link">資料來源</span>&nbsp;<span className="link">下載 CSV</span>
           </div>
 		  &nbsp;
 		  &nbsp;

@@ -163,6 +163,17 @@
   margin: 0;
 }
 
+.about-page {
+  padding: 5em;
+}
+
+.about-page img {
+  width: 40vw;
+  min-width: 420px;
+  margin-top:3em;
+  margin-bottom:3em;
+}
+
 .page .border {
   clear:both;
   width: 95%;
