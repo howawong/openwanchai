@@ -125,7 +125,7 @@ def gen_model_from_page_query_set(page):
 
 def comm_value_list(comm):
     comm = comm.annotate(record_type=models.Value('comm', output_field=models.CharField()))
-    comm = comm.values_list("mpoly", "metadata__code", "metadata__project_name", "metadata__document_url", "metadata__start_date", "metadata__audience", "metadata__objective", "metadata__address", "metadata__estimation", "metadata__group_name", "record_type")
+    comm = comm.values_list("activity__mpoly", "code", "project_name", "document_url", "start_date", "audience", "objective", "address", "estimation", "group_name", "record_type")
     return comm
 
 
@@ -159,24 +159,24 @@ class DMWList(APIView):
         dmw = DistrictMinorWork.objects.filter(q)
         
 
-        q = Q(metadata__estimation__gte=min_ballpark) & Q(metadata__estimation__lte=max_ballpark)
-        q = q & Q(metadata__start_date__range=[min_date, max_date])
+        q = Q(estimation__gte=min_ballpark) & Q(estimation__lte=max_ballpark)
+        q = q & Q(start_date__range=[min_date, max_date])
         if len(keyword) > 0:
-            keyword_q = Q(metadata__group_name__icontains = keyword)
-            keyword_q = keyword_q | Q(metadata__code__icontains = keyword)
-            keyword_q = keyword_q | Q(metadata__organization_name__icontains = keyword)
-            keyword_q = keyword_q | Q(metadata__project_name__icontains = keyword)
-            keyword_q = keyword_q | Q(metadata__coorganizer_govt__icontains = keyword)
-            keyword_q = keyword_q | Q(metadata__coorganizer_non_govt__icontains = keyword)
-            keyword_q = keyword_q | Q(metadata__address__icontains = keyword)
-            keyword_q = keyword_q | Q(metadata__objective__icontains = keyword)
-            keyword_q = keyword_q | Q(metadata__nature__icontains = keyword)
-            keyword_q = keyword_q | Q(metadata__helping_organization__icontains = keyword)
-            keyword_q = keyword_q | Q(metadata__payee__icontains = keyword)
+            keyword_q = Q(group_name__icontains = keyword)
+            keyword_q = keyword_q | Q(code__icontains = keyword)
+            keyword_q = keyword_q | Q(organization_name__icontains = keyword)
+            keyword_q = keyword_q | Q(project_name__icontains = keyword)
+            keyword_q = keyword_q | Q(coorganizer_govt__icontains = keyword)
+            keyword_q = keyword_q | Q(coorganizer_non_govt__icontains = keyword)
+            keyword_q = keyword_q | Q(address__icontains = keyword)
+            keyword_q = keyword_q | Q(objective__icontains = keyword)
+            keyword_q = keyword_q | Q(nature__icontains = keyword)
+            keyword_q = keyword_q | Q(helping_organization__icontains = keyword)
+            keyword_q = keyword_q | Q(payee__icontains = keyword)
             q = q & keyword_q
 
-        comm = CommunityActivity.objects.filter(q)
-        comm = comm_value_list(comm)
+        comm_metadata = CommunityActivityMetaData.objects.filter(q)
+        comm = comm_value_list(comm_metadata)
         dmw = dmw_value_list(dmw)
         union = dmw.union(comm)
         result = union.order_by('-metadata__expected_start_date')

@@ -36,7 +36,7 @@ def run(verbose=True):
     CommunityActivityMetaData.objects.all().delete()
     for idx, row in df.iterrows():
         row["document_date"] = datetime.strptime(row["document_date"], "%d/%m/%Y")
-        for d in ["start_date", "end_date", "start_date_1"]:
+        for d in ["start_date", "end_date", "start_date_1", "end_date_1"]:
             try:
                 row[d] = datetime.strptime(row[d], "%d/%m/%Y")
             except ValueError:
@@ -47,6 +47,10 @@ def run(verbose=True):
                 row[c] = float(0)
             else:
               row[c] = float(row[c].replace(",", ""))
+        if row["date_type"] == "區間活動":
+            row["start_date"] = row["start_date_1"]
+            row["end_date"] = row["end_date_1"]
+        del row["date_type"]
         m = CommunityActivityMetaData(**row)
         m.save()
     sr = SpatialReference('EPSG:2326')

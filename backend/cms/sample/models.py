@@ -73,6 +73,7 @@ class CommunityActivity(models.Model):
 
 class CommunityActivityMetaData(models.Model):
     code = models.CharField(max_length=256, primary_key=True)
+    activity = models.OneToOneField('CommunityActivity', null=True, on_delete=models.CASCADE, to_field='code')
     group_type = models.CharField(max_length=256)
     group_name = models.CharField(max_length=256)
     document_date = models.CharField(max_length=256)
@@ -89,10 +90,10 @@ class CommunityActivityMetaData(models.Model):
     date_type = models.CharField(max_length=256)
     start_date = models.DateField(default=None, null=True, blank=True)
     end_date = models.DateField(default=None, null=True, blank=True)
+    end_date_1 = models.DateField(default=None, null=True, blank=True)
     start_date_1 = models.DateField(default=None, null=True, blank=True)
     start_date_type_1 = models.CharField(max_length=256)
-    end_date_type_2 = models.CharField(max_length=256)
-    end_date_type_2 = models.CharField(max_length=256)
+    end_date_type_1 = models.CharField(max_length=256)
     audience_size = models.CharField(max_length=128, null=True)
     nature = models.CharField(max_length=256)
     objective = models.CharField(max_length=2048)

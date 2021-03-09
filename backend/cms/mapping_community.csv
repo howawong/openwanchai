@@ -19,11 +19,12 @@ longitude,longitude
 活動結束日期（ddmmyyyy）,end_date
 活動開始日期（ddmmyyyy）.1,start_date_1
 若開始是虛期，必須註明,start_date_type_1
-活動結束日期（ddmmyyyy）.2,end_date_type_2
-若結束是虛期，必須註明,end_date_type_2
+活動結束日期（ddmmyyyy）.1,end_date_1
+若結束是虛期，必須註明,end_date_type_1
 性質﹙申請書 3a﹚,nature
 目的﹙申請書 3b﹚,objective
 對象﹙申請書 3e﹚,audience
+活動日期：屬於以下邊種活動？,date_type
 協辦機構,helping_organization
 活動估計費用﹙申請書4﹚,estimation
 活動向灣仔區議會申請的撥款額﹙申請書4﹚,applied
