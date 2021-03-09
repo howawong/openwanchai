@@ -68,7 +68,8 @@
 
 .searchBar2 .left .col {
   display: flex;
-  align-items: center; 
+  align-items: center;
+  justify-content: center;
 }
 
 .searchBar2 .center .col {
@@ -120,9 +121,10 @@
 
 .searchBar2 input {
   width: 75%;
-  height: 75%;
+  height: 24pt;
   margin-left: 0.5em;
   border: none;
+  margin-top: 0.25em;
 }
 
 

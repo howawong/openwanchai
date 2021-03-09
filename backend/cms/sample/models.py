@@ -102,6 +102,7 @@ class CommunityActivityMetaData(models.Model):
     applied = models.DecimalField(decimal_places=0, max_digits=50)
     income = models.DecimalField(decimal_places=0, max_digits=50)
     payee = models.CharField(max_length=256)
+    content = models.TextField()   
     def __str__(self):
         return self.code + " "  + self.project_name
 

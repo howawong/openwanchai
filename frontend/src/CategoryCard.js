@@ -14,6 +14,7 @@ import {
 class CategoryCard extends Component {
   render() {
     const {projectId, budget, name, audience, startDate, committee, isLong, oneCol } = this.props;
+    const startDateFormatted = (startDate || "").replaceAll("-", "/");
     if (isBrowser) {
 	  if (isLong) {
 	    return (
@@ -35,7 +36,7 @@ class CategoryCard extends Component {
               <span className="badge badge-secondary">社區服務</span>&nbsp;&nbsp;
 			</Col>
 			<Col>
-              <span className="date">{startDate||"22/2/2020"}</span>
+              <span className="date">{startDateFormatted||"2020/02/01"}</span>
 			</Col>
 			<Col>
               <span className="price">${budget || "$100,000"}</span>
@@ -58,7 +59,7 @@ class CategoryCard extends Component {
               <span className="price">${budget || "$100,000"}</span>
               <span className="badge badge-secondary">社區服務</span>&nbsp;&nbsp;
               <span className="badge badge-secondary">小型工程</span>
-              <span className="date">{startDate||"22/2/2020"}</span>
+              <span className="date">{startDateFormatted||"2020/02/01"}</span>
               </div>
             </Col>
           </Row>
@@ -74,7 +75,7 @@ class CategoryCard extends Component {
           <div className="title">{name || "粵曲歡唱娛坊眾"}</div><br/>
           <span className="badge badge-secondary">社區服務</span><br/>
           <span className="price" style={{paddingRight: "0.5em"}}>${budget || "$100,000"}</span><br/>
-          <span className="date">{startDate||"22/2/2020"}</span>
+          <span className="date">{startDate||"2020/01/01"}</span>
         </div>
       );   
     

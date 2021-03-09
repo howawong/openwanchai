@@ -30,6 +30,7 @@ services:
       - db
     volumes:
       - ./backend/cms/.env:/app/cms/.env
+      - ./backend/:/app/backend
 
 volumes:
   pgdata:

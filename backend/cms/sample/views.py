@@ -49,7 +49,7 @@ class DMWMetaDataSerializer(serializers.ModelSerializer):
 class CommunityActivityMetaDataSerializer(serializers.ModelSerializer):
     class Meta:
         model = CommunityActivityMetaData
-        fields = ["code", "group_type", "group_name", "document_date", "document_no", "project_name", "organization_name", "first_time", "document_url", "coorganizer_govt", "coorganizer_non_govt", "address", "latitude", "longitude", "date_type", "start_date", "end_date", "start_date_1", "start_date_type_1", "end_date_type_2", "end_date_type_2", "audience_size", "nature", "objective", "audience", "helping_organization", "estimation", "applied", "income", "payee"]
+        fields = ["code", "group_type", "group_name", "document_date", "document_no", "project_name", "organization_name", "first_time", "document_url", "coorganizer_govt", "coorganizer_non_govt", "address", "latitude", "longitude", "date_type", "start_date", "end_date", "start_date_1", "start_date_type_1", "end_date_type_2", "end_date_type_2", "audience_size", "nature", "objective", "audience", "helping_organization", "estimation", "applied", "income", "payee", "content"]
 
 class CommunityActivitySerializer(GeoFeatureModelSerializer):
     metadata = CommunityActivityMetaDataSerializer(many=False)
