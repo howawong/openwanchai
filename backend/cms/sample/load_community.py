@@ -2,9 +2,9 @@ from pathlib import Path
 from django.contrib.gis.utils import LayerMapping
 from django.contrib.gis.gdal import SpatialReference
 import pandas as pd
-from .models import CommunityActivity, CommunityActivityMetaData
+from .models import CommunityActivity, CommunityActivityMetaData, Category
 from datetime import datetime
-
+from django.contrib.gis.geos import Point
 
 community_mapping = {
       "code": "Map_Code"
@@ -36,7 +36,7 @@ def run(verbose=True):
     CommunityActivityMetaData.objects.all().delete()
     for idx, row in df.iterrows():
         row["document_date"] = datetime.strptime(row["document_date"], "%d/%m/%Y")
-        for d in ["start_date", "end_date", "start_date_1", "end_date_1"]:
+        for d in ["start_date", "end_date", "start_date_1", "end_date_1", "end_date_2", "start_date_2"]:
             try:
                 row[d] = datetime.strptime(row[d], "%d/%m/%Y")
             except ValueError:
@@ -50,7 +50,17 @@ def run(verbose=True):
         if row["date_type"] == "區間活動":
             row["start_date"] = row["start_date_1"]
             row["end_date"] = row["end_date_1"]
+        if "多日" in row["date_type"]:
+            row["start_date"] = row["start_date_2"]
+            row["end_date"] = row["end_date_2"]
         del row["date_type"]
+        if row["latitude"] != 0.0:
+            row["point"] = Point(row["longitude"], row["latitude"])
+
+        t = row["category_text"]
+        if "." in t:
+            t = t.split(".")[1]
+            row["category"] = Category.objects.filter(text=t).first()
         m = CommunityActivityMetaData(**row)
         m.save()
     sr = SpatialReference('EPSG:2326')

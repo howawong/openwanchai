@@ -3,6 +3,14 @@ from django.contrib.gis.db import models
 
 #wget https://thematicmapping.org/downloads/TM_WORLD_BORDERS-0.3.zip
 
+class Category(models.Model):
+    code = models.CharField(max_length=256, primary_key=True)
+    text = models.CharField(max_length=256)
+    img = models.CharField(max_length=256)
+    def __str__(self):
+        return self.text
+
+
 class WorldBorder(models.Model):
     # Regular Django fields corresponding to the attributes in the
     # world borders shapefile.
@@ -29,6 +37,7 @@ class WorldBorder(models.Model):
 
   
 class DistrictMinorWorkMetaData(models.Model):
+    category = models.ForeignKey(Category, on_delete=models.CASCADE, null=True)
     identifier = models.CharField(max_length=256, primary_key=True)   
     project_name = models.CharField(max_length=256)   
     committee = models.CharField(max_length=256)
@@ -72,7 +81,9 @@ class CommunityActivity(models.Model):
 
 
 class CommunityActivityMetaData(models.Model):
+    category = models.ForeignKey(Category, on_delete=models.CASCADE, null=True)
     code = models.CharField(max_length=256, primary_key=True)
+    point = models.PointField(null=True, default=None)
     activity = models.OneToOneField('CommunityActivity', null=True, on_delete=models.CASCADE, to_field='code')
     group_type = models.CharField(max_length=256)
     group_name = models.CharField(max_length=256)
@@ -91,7 +102,9 @@ class CommunityActivityMetaData(models.Model):
     start_date = models.DateField(default=None, null=True, blank=True)
     end_date = models.DateField(default=None, null=True, blank=True)
     end_date_1 = models.DateField(default=None, null=True, blank=True)
+    end_date_2 = models.DateField(default=None, null=True, blank=True)
     start_date_1 = models.DateField(default=None, null=True, blank=True)
+    start_date_2 = models.DateField(default=None, null=True, blank=True)
     start_date_type_1 = models.CharField(max_length=256)
     end_date_type_1 = models.CharField(max_length=256)
     audience_size = models.CharField(max_length=128, null=True)
@@ -103,12 +116,11 @@ class CommunityActivityMetaData(models.Model):
     applied = models.DecimalField(decimal_places=0, max_digits=50)
     income = models.DecimalField(decimal_places=0, max_digits=50)
     payee = models.CharField(max_length=256)
+    approved = models.CharField(max_length=256)
+    category_text = models.CharField(max_length=256, null=True, default="")
     content = models.TextField()   
     def __str__(self):
         return self.code + " "  + self.project_name
 
 
-class Category(models.Model):
-    code = models.CharField(max_length=256, primary_key=True)
-    text = models.CharField(max_length=256)
-    img = models.CharField(max_length=256)
+

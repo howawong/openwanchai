@@ -12,7 +12,8 @@ from django.db.models import Avg, Max, Min, Sum
 from django.db.models import Q, F
 from rest_framework.pagination import PageNumberPagination
 from django.contrib.gis.db import models
-
+from django.contrib.gis.geos import Point
+from django.contrib.gis.geos import GEOSGeometry
 
 def home_view(request):
     return HttpResponse('Hello, World!')
@@ -77,7 +78,8 @@ class SearchResultModel(models.Model):
     objective = models.CharField(max_length=1024)
     address = models.CharField(max_length=1024)
     record_type = models.CharField(max_length=1024)
-    mpoly = models.GeometryField()
+    mpoly = models.GeometryField(default=None, null=True)
+    mpoint = models.PointField()
     estimation = models.DecimalField(decimal_places=0, max_digits=50)
     
 
@@ -109,6 +111,8 @@ def gen_model_from_page_query_set(page):
     for r in page:
         m = SearchResultModel()
         m.mpoly = r[0]
+        if r[0] is None:
+            m.mpoly = r[10]
         m.identifier = r[1]
         m.key = r[1]
         m.project_name = r[2]
@@ -117,21 +121,24 @@ def gen_model_from_page_query_set(page):
         m.audience = r[5]
         m.objective = r[6]
         m.address = r[7]
-        m.record_type = r[-1]
+        m.record_type = r[11]
         m.committee = r[9]
         m.estimation = r[8]
+
+        print(11, r)
         yield m
 
 
 def comm_value_list(comm):
     comm = comm.annotate(record_type=models.Value('comm', output_field=models.CharField()))
-    comm = comm.values_list("activity__mpoly", "code", "project_name", "document_url", "start_date", "audience", "objective", "address", "estimation", "group_name", "record_type")
+    comm = comm.values_list("activity__mpoly", "code", "project_name", "document_url", "start_date", "audience", "objective", "address", "estimation", "group_name", "record_type", "point")
     return comm
 
 
 def dmw_value_list(dmw):
     dmw = dmw.annotate(record_type=models.Value('dmw', output_field=models.CharField()))
-    dmw = dmw.values_list("mpoly", "metadata__identifier", "metadata__project_name", "metadata__project_pdf", "metadata__expected_start_date", "metadata__audience", "metadata__outline", "metadata__location", "metadata__ballpark", "metadata__committee" , "record_type")
+    dmw = dmw.annotate(point=models.Value(None, output_field=models.CharField()))
+    dmw = dmw.values_list("mpoly", "metadata__identifier", "metadata__project_name", "metadata__project_pdf", "metadata__expected_start_date", "metadata__audience", "metadata__outline", "metadata__location", "metadata__ballpark", "metadata__committee" , "record_type", "point")
     return dmw
 
 
@@ -164,6 +171,7 @@ class DMWList(APIView):
         if len(keyword) > 0:
             keyword_q = Q(group_name__icontains = keyword)
             keyword_q = keyword_q | Q(code__icontains = keyword)
+            keyword_q = keyword_q | Q(document_no__icontains = keyword)
             keyword_q = keyword_q | Q(organization_name__icontains = keyword)
             keyword_q = keyword_q | Q(project_name__icontains = keyword)
             keyword_q = keyword_q | Q(coorganizer_govt__icontains = keyword)
