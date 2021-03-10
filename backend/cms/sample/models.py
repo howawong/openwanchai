@@ -7,8 +7,9 @@ class Category(models.Model):
     code = models.CharField(max_length=256, primary_key=True)
     text = models.CharField(max_length=256)
     img = models.CharField(max_length=256)
+    enabled = models.BooleanField(default=True)
     def __str__(self):
-        return self.text
+        return self.text + " " + str(self.code)
 
 
 class WorldBorder(models.Model):

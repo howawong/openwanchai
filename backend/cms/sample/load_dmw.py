@@ -2,7 +2,7 @@ from pathlib import Path
 from django.contrib.gis.utils import LayerMapping
 from django.contrib.gis.gdal import SpatialReference
 import pandas as pd
-from .models import DistrictMinorWork, DistrictMinorWorkMetaData
+from .models import DistrictMinorWork, DistrictMinorWorkMetaData, Category
 from datetime import datetime
 
 
@@ -35,6 +35,7 @@ def run(verbose=True):
     l = list(set(mapping.values()))
     df = df[l]
     print(df.head(n=5))
+    category = Category.objects.filter(text="小型工程").first()
     DistrictMinorWorkMetaData.objects.all().delete()
     for idx, row in df.iterrows():
         row["document_date"] = datetime.strptime(row["document_date"], "%d/%m/%Y")
@@ -58,6 +59,7 @@ def run(verbose=True):
         except:
             row["ballpark"] = 0
         m = DistrictMinorWorkMetaData(**row)
+        m.category = category
         m.save()
     sr = SpatialReference('EPSG:2326')
     DistrictMinorWork.objects.all().delete()

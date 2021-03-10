@@ -152,6 +152,12 @@ class DMWList(APIView):
         max_date = self.request.query_params.get('max_date', '2050-12-30')
         min_ballpark = int(self.request.query_params.get('min_ballpark', '0'))
         max_ballpark = int(self.request.query_params.get('max_ballpark', '9999999999'))
+        categories = self.request.query_params.get('categories', '')
+
+        categories = categories.split(',')
+        categories = [c.strip() for c in categories]
+        categories = [int(c) for c in categories if c.isnumeric()]
+
         keyword = self.request.query_params.get('keyword', '').strip()
         q = Q(metadata__ballpark__gte=min_ballpark) & Q(metadata__ballpark__lte=max_ballpark) & Q(metadata__expected_start_date__range=[min_date, max_date])
         if len(keyword) > 0:
@@ -163,6 +169,9 @@ class DMWList(APIView):
             keyword_q = keyword_q | Q(metadata__location__icontains=keyword)
             q = q & keyword_q
         
+        if categories:
+            q = q & Q(metadata__category__in=categories)
+
         dmw = DistrictMinorWork.objects.filter(q)
         
 
@@ -182,6 +191,9 @@ class DMWList(APIView):
             keyword_q = keyword_q | Q(helping_organization__icontains = keyword)
             keyword_q = keyword_q | Q(payee__icontains = keyword)
             q = q & keyword_q
+
+        if categories:
+            q = q & Q(category__in=categories)
 
         comm_metadata = CommunityActivityMetaData.objects.filter(q)
         comm = comm_value_list(comm_metadata)
@@ -218,7 +230,7 @@ class CategorySerializer(serializers.ModelSerializer):
 
 class CategoryList(APIView):
     def get(self, request):
-         serializer = CategorySerializer(Category.objects.all(), many=True)
+         serializer = CategorySerializer(Category.objects.filter(enabled=True), many=True)
          data = serializer.data
          return Response(data)
 
