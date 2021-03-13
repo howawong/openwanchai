@@ -14,6 +14,8 @@ from rest_framework.pagination import PageNumberPagination
 from django.contrib.gis.db import models
 from django.contrib.gis.geos import Point
 from django.contrib.gis.geos import GEOSGeometry
+from django.db.models import DateTimeField, ExpressionWrapper, F
+
 
 def home_view(request):
     return HttpResponse('Hello, World!')
@@ -109,10 +111,11 @@ class DMWPaginiation(PageNumberPagination):
 
 def gen_model_from_page_query_set(page):
     for r in page:
+        print(r)
         m = SearchResultModel()
         m.mpoly = r[0]
         if r[0] is None:
-            m.mpoly = r[10]
+          m.mpoly = r[10]
         m.identifier = r[1]
         m.key = r[1]
         m.project_name = r[2]
@@ -121,24 +124,25 @@ def gen_model_from_page_query_set(page):
         m.audience = r[5]
         m.objective = r[6]
         m.address = r[7]
-        m.record_type = r[11]
         m.committee = r[9]
         m.estimation = r[8]
-
-        print(11, r)
+        m.record_type = r[11]
         yield m
 
 
+
 def comm_value_list(comm):
-    comm = comm.annotate(record_type=models.Value('comm', output_field=models.CharField()))
-    comm = comm.values_list("activity__mpoly", "code", "project_name", "document_url", "start_date", "audience", "objective", "address", "estimation", "group_name", "record_type", "point")
+    comm = comm.annotate(rc=models.Value("comm", output_field=models.CharField()))
+    comm = comm.values_list("activity__mpoly", "code", "project_name", "document_url", "start_date", "audience", "objective", "address", "estimation", "group_name", "point", "rc")
+
     return comm
 
 
 def dmw_value_list(dmw):
-    dmw = dmw.annotate(record_type=models.Value('dmw', output_field=models.CharField()))
-    dmw = dmw.annotate(point=models.Value(None, output_field=models.CharField()))
-    dmw = dmw.values_list("mpoly", "metadata__identifier", "metadata__project_name", "metadata__project_pdf", "metadata__expected_start_date", "metadata__audience", "metadata__outline", "metadata__location", "metadata__ballpark", "metadata__committee" , "record_type", "point")
+    dmw = dmw.annotate(point=models.Value(None, output_field=models.PointField()))
+    dmw = dmw.annotate(rc=models.Value("dmw", output_field=models.CharField()))
+    #dmw = dmw.annotate(record_type=models.Value(None, output_field=models.PointField()))
+    dmw = dmw.values_list("mpoly", "metadata__identifier", "metadata__project_name", "metadata__project_pdf", "metadata__expected_start_date", "metadata__audience", "metadata__outline", "metadata__location", "metadata__ballpark", "metadata__committee" , "point", "rc")
     return dmw
 
 
@@ -153,7 +157,6 @@ class DMWList(APIView):
         min_ballpark = int(self.request.query_params.get('min_ballpark', '0'))
         max_ballpark = int(self.request.query_params.get('max_ballpark', '9999999999'))
         categories = self.request.query_params.get('categories', '')
-
         categories = categories.split(',')
         categories = [c.strip() for c in categories]
         categories = [int(c) for c in categories if c.isnumeric()]
@@ -169,9 +172,9 @@ class DMWList(APIView):
             keyword_q = keyword_q | Q(metadata__location__icontains=keyword)
             q = q & keyword_q
         
+        q = q & Q(metadata__isnull=False)
         if categories:
             q = q & Q(metadata__category__in=categories)
-        q = q & Q(metadata__isnull=True)
         dmw = DistrictMinorWork.objects.filter(q)
         
 
@@ -194,12 +197,14 @@ class DMWList(APIView):
         q = q & Q(parent__isnull=True)
         if categories:
             q = q & Q(category__in=categories)
-
+     
         comm_metadata = CommunityActivityMetaData.objects.filter(q)
         comm = comm_value_list(comm_metadata)
         dmw = dmw_value_list(dmw)
-        union = dmw.union(comm)
-        result = union.order_by('-metadata__expected_start_date')
+        #union = dmw.union(comm)
+        union = comm.union(dmw)
+        result = union
+        result = union.order_by('-start_date')
         return result
 
     def get(self, request):
@@ -216,8 +221,11 @@ class DMWList(APIView):
 
 class HotList(APIView):
    def get(self, request):
-        page = comm_value_list(CommunityActivity.objects.all()[:3]).union(dmw_value_list(DistrictMinorWork.objects.all()[:3]))
-        model_from_page = gen_model_from_page_query_set(page)
+        c = CommunityActivityMetaData.objects.all()[2:3]
+        page = gen_model_from_page_query_set(comm_value_list(c))
+        
+        page2 = gen_model_from_page_query_set(dmw_value_list(DistrictMinorWork.objects.all()[:3]))
+        model_from_page = list(page) + list(page2)
         serializer = SearchResultSerializer(model_from_page, many=True)
         data = serializer.data
         return Response(data)

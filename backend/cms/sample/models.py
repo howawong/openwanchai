@@ -75,12 +75,14 @@ class DistrictMinorWork(models.Model):
     project_name = models.CharField(max_length=256)   
     metadata = models.OneToOneField('DistrictMinorWorkMetaData', null=True, on_delete=models.CASCADE, to_field='identifier')
     mpoly = models.MultiPolygonField()
+    gc = models.GeometryCollectionField(default=None, null=True)
 
 
 class CommunityActivity(models.Model):
     code = models.CharField(max_length=256, primary_key=True)
     metadata = models.OneToOneField('CommunityActivityMetaData', null=True, on_delete=models.CASCADE, to_field='code')
-    mpoly = models.MultiPointField()   
+    mpoly = models.MultiPointField()
+    gc = models.GeometryCollectionField(default=None, null=True)
 
 
 class CommunityActivityMetaData(models.Model):
@@ -99,8 +101,8 @@ class CommunityActivityMetaData(models.Model):
     coorganizer_govt = models.CharField(max_length=512)
     coorganizer_non_govt = models.CharField(max_length=512)
     address = models.CharField(max_length=512)
-    latitude = models.DecimalField(decimal_places=0, max_digits=50)
-    longitude = models.DecimalField(decimal_places=0, max_digits=50)
+    latitude = models.DecimalField(decimal_places=6, max_digits=50)
+    longitude = models.DecimalField(decimal_places=6, max_digits=50)
     date_type = models.CharField(max_length=256)
     start_date = models.DateField(default=None, null=True, blank=True)
     end_date = models.DateField(default=None, null=True, blank=True)

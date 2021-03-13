@@ -36,7 +36,9 @@ def run(verbose=True):
     l = list(set(mapping.values()))
     df = df[l]
     CommunityActivityMetaData.objects.all().delete()
+    CommunityActivity.objects.all().delete()
     for idx, row in df.iterrows():
+        print(row["code"])
         row["document_date"] = datetime.strptime(row["document_date"], "%d/%m/%Y")
         for d in ["start_date", "end_date", "start_date_1", "end_date_1", "end_date_2", "start_date_2"]:
             try:
@@ -56,9 +58,14 @@ def run(verbose=True):
             row["start_date"] = row["start_date_2"]
             row["end_date"] = row["end_date_2"]
         del row["date_type"]
+        zero = "non-zero"
         if row["latitude"] != 0.0:
-            row["point"] = Point(row["longitude"], row["latitude"])
+            row["point"] = Point(row["latitude"], row["longitude"])
+        else:
+            zero = "zero"
+            row["point"] = Point(22.27702, 114.17232)
 
+        print(zero, row["longitude"], row["latitude"])
         t = row["category_text"]
         if "." in t:
             t = t.split(".")[1]
@@ -66,7 +73,6 @@ def run(verbose=True):
         last_char = row["code"][-1:]
         if last_char.isalpha():
             parent_code = row["code"][0:-1]
-            print(parent_code)
             row["parent"] = CommunityActivityMetaData.objects.filter(code=parent_code).first()
             row["version"] = last_char
         if row["stacked_bar_chart_amount"] == "":
@@ -79,6 +85,7 @@ def run(verbose=True):
                 print(row["code"], "amount wrong")
         m = CommunityActivityMetaData(**row)
         m.save()
+        print("saved")
     sr = SpatialReference('EPSG:2326')
     lm = LayerMapping(CommunityActivity, world_shp, community_mapping, transform=True)
     lm.save(verbose=False)
