@@ -35,3 +35,5 @@ longitude,longitude
 活動類型,category_text
 開始日期,start_date_2
 結束日期,end_date_2
+STACKED BAR CHART (Y/ N),stacked_bar_chart_flag
+STACKED BAR CHART 金額,stacked_bar_chart_amount

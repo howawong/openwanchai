@@ -11,8 +11,10 @@ community_mapping = {
       , 'mpoly': "MULTIPOINT"
 }
 
-world_shp = 'All_communities_involvement_activities_16_Feb_WGS_84.shp'
-csv_file = 'All_communities_involvement_activities_16_Feb_WGS_84.csv'
+
+prefix = "Projection_WGS_1984_REAL_All_communities_involvement_activities"
+world_shp = prefix + ".shp"
+csv_file = prefix + ".csv"
 column_mapping = 'mapping_community.csv'
 
 
@@ -61,6 +63,20 @@ def run(verbose=True):
         if "." in t:
             t = t.split(".")[1]
             row["category"] = Category.objects.filter(text=t).first()
+        last_char = row["code"][-1:]
+        if last_char.isalpha():
+            parent_code = row["code"][0:-1]
+            print(parent_code)
+            row["parent"] = CommunityActivityMetaData.objects.filter(code=parent_code).first()
+            row["version"] = last_char
+        if row["stacked_bar_chart_amount"] == "":
+            row["stacked_bar_chart_amount"] = None
+        else:
+            try:
+                row["stacked_bar_chart_amount"] = float(row["stacked_bar_chart_amount"].replace(",", ""))
+            except:
+                row["stacked_bar_chart_amount"] = 0.0
+                print(row["code"], "amount wrong")
         m = CommunityActivityMetaData(**row)
         m.save()
     sr = SpatialReference('EPSG:2326')

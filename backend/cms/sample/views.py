@@ -171,7 +171,7 @@ class DMWList(APIView):
         
         if categories:
             q = q & Q(metadata__category__in=categories)
-
+        q = q & Q(metadata__isnull=True)
         dmw = DistrictMinorWork.objects.filter(q)
         
 
@@ -191,7 +191,7 @@ class DMWList(APIView):
             keyword_q = keyword_q | Q(helping_organization__icontains = keyword)
             keyword_q = keyword_q | Q(payee__icontains = keyword)
             q = q & keyword_q
-
+        q = q & Q(parent__isnull=True)
         if categories:
             q = q & Q(category__in=categories)
 
@@ -253,6 +253,29 @@ class DMWDetail(GenericAPIView):
             data = serializer_class(detail, many=False).data
             data["properties"]["type"] = detail_type
             return Response(data)
+
+
+class StackedBarChart(GenericAPIView):
+    def get(self, request, format=None):
+        communities = CommunityActivityMetaData.objects.filter(Q(start_date__year__gte=2014) & Q(parent__isnull=True) & Q(stacked_bar_chart_flag="Y"))
+        agg = communities.values('start_date__year', 'group_name').annotate(Sum('stacked_bar_chart_amount')).order_by('start_date__year', 'group_name')
+        result = {}
+        committees = set()
+        for c in agg:
+            amount = c["stacked_bar_chart_amount__sum"]
+            committee = c["group_name"]
+            if committee == "":
+                continue
+            committees.add(committee)
+            year = c["start_date__year"]
+            key = year
+            if key not in result:
+                result[key] = {"name": key}
+            result[key].update({committee: amount})
+        committees = list(committees)
+        data = {"result": result.values(), "committees": committees}
+        return Response(data)
+
 
 
 
