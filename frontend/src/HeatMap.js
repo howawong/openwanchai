@@ -26,13 +26,10 @@ class HeatMap extends Component {
       fetchList("", "", "", 0, 99999999, 1, 999999).then(j => {
         const points = [];
         const r = j["results"]["features"];
-	      console.log("r", r);
     r.forEach(f => {
-	  console.log(f);
 	if (f["geometry"]) {
           const c = f["geometry"]["coordinates"];
 	  const type = f["geometry"]["type"]
-		console.log("c", c);
         if (type == "Point") {
            points.push(c)
         } else {
@@ -47,7 +44,6 @@ class HeatMap extends Component {
 	}}
     });
 	
-        console.log("heatmap", points.length);
         return points;
       }).then(points => this.setState({...this.state, points: points}));
   }

@@ -287,8 +287,7 @@
 
 .project-category-gallery {
     position:relative;
-    width: 100%;
-    overflow-x: hidden;
+    overflow-x: scroll;
     overflow-y: hidden;
     white-space: nowrap;
     padding-bottom:0.5em;
@@ -301,12 +300,10 @@
 
 
 .browse-gallery {
-    width: 100%;
     padding-left:1.5em;
-    overflow-x: hidden;
     overflow-y: hidden;
+    overflow-x: scroll;
     white-space: nowrap;
-    float: left;
     padding-bottom: 1.5em;
 }
 

@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Jumbotron from 'react-bootstrap/Jumbotron';
+import Image from 'react-bootstrap/Image';
 import CategoryCard from './CategoryCard';
 import ProjectCategoryCard from './ProjectCategoryCard';
 import SearchBar from './SearchBar';
@@ -26,12 +27,23 @@ import {
 class Index extends Component {
   constructor(props) {
     super(props);
-	this.state = {"categories": [], "hot": []}
+    this.state = {"categories": [], "hot": []}
+    this.galleryRef = React.createRef();
+    this.galleryRef2 = React.createRef();
   }
 
   componentDidMount() {
     fetchCategories().then(cat => this.setState({...this.state, "categories": cat}));  
     fetchHot().then(cat => this.setState({...this.state, "hot": cat["features"]}));  
+  }
+
+  handleNav = (ref, direction) => {
+    var delta = 100;
+    console.log("clicked", ref.current, ref.current.scrollLeft);
+    if (direction == "left") {
+      delta = delta * -1;
+    }
+    ref.current.scrollLeft += delta;
   }
 
   render() {
@@ -62,44 +74,34 @@ class Index extends Component {
           最多人查看項目
         </div>
         <br/>
-        <BrowserView>
 	  	<div className="right-bottons">
-          <span class="badge badge-secondary">查看全部</span>
-		  <img src="/assets/btn/previous.svg" />
-		  <img src="/assets/btn/next.svg" />
+          <span className="badge badge-secondary">查看全部</span>
+		  <button className="btn btn-link" onClick={() => this.handleNav(this.galleryRef, "left")}><img src="/assets/btn/previous.svg"/></button>
+		  <button className="btn btn-link" onClick={() => this.handleNav(this.galleryRef, "right")}><img src="/assets/btn/next.svg"/></button>
 		</div>
-        </BrowserView>
 		</div>
-        <div class="browse-gallery">
+	<div style={{clear:"both"}}></div>
+        <div className="browse-gallery" ref={this.galleryRef}>
 		  {hotCards}
         </div>
-        <MobileView>
-          <Container> 
-            <span class="badge badge-secondary">查看全部</span>
-          </Container>
-        </MobileView>
         <div className="border"/>
         <br/>
         <div className="title">
           尋找項目種類
         </div>
-        <BrowserView>
         <div className="right-bottons">
           <span class="badge badge-secondary">查看全部</span>
-		  <img src="/assets/btn/previous.svg" />
-		  <img src="/assets/btn/next.svg" />
+	          <button className="btn btn-link" onClick={() => this.handleNav(this.galleryRef2, "left")}><img src="/assets/btn/previous.svg"/></button>
+		  <button className="btn btn-link" onClick={() => this.handleNav(this.galleryRef2, "right")}><img src="/assets/btn/next.svg"/></button>
+
 		</div>
-        </BrowserView>
 		<br/>
-        <div className="project-category-gallery">
+
+	<div style={{clear:"both"}}></div>
+        <div className="project-category-gallery" ref={this.galleryRef2}>
 		  {categoryCards}
         </div>
 		<br/>
-        <MobileView>
-          <Container> 
-            <span class="badge badge-secondary">查看全部</span>
-          </Container>
-        </MobileView>
         <div className="border"/>
 		<br/>
 		<HeatMap />
