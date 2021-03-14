@@ -52,7 +52,7 @@ class DMWMetaDataSerializer(serializers.ModelSerializer):
 class CommunityActivityMetaDataSerializer(serializers.ModelSerializer):
     class Meta:
         model = CommunityActivityMetaData
-        fields = ["code", "group_type", "group_name", "document_date", "document_no", "project_name", "organization_name", "first_time", "document_url", "coorganizer_govt", "coorganizer_non_govt", "address", "latitude", "longitude", "date_type", "start_date", "end_date", "start_date_1", "start_date_type_1", "end_date_type_2", "end_date_type_2", "audience_size", "nature", "objective", "audience", "helping_organization", "estimation", "applied", "income", "payee", "content"]
+        fields = ["code", "group_type", "group_name", "document_date", "document_no", "project_name", "organization_name", "first_time", "document_url", "coorganizer_govt", "coorganizer_non_govt", "address", "latitude", "longitude", "date_type", "start_date", "end_date", "start_date_1", "start_date_type_1", "audience_size", "nature", "objective", "audience", "helping_organization", "estimation", "applied", "income", "payee", "content"]
 
 class CommunityActivitySerializer(GeoFeatureModelSerializer):
     metadata = CommunityActivityMetaDataSerializer(many=False)
@@ -82,20 +82,28 @@ class SearchResultModel(models.Model):
     record_type = models.CharField(max_length=1024)
     mpoly = models.GeometryField(default=None, null=True)
     mpoint = models.PointField()
+    category = Category
     estimation = models.DecimalField(decimal_places=0, max_digits=50)
-    
+ 
+
+class CategorySerializer(serializers.ModelSerializer):
+    class  Meta:
+        model = Category
+        fields = ["code", "text", "img"]
+
 
 class SearchResultSerializer(GeoFeatureModelSerializer):
-     class Meta:
-         model = SearchResultModel
-         geo_field = "mpoly"
-         fields = ["identifier", "project_name", "document_url", "start_date", "audience", "objective", "address", "record_type", "estimation", "committee", "pk"]
+    category = CategorySerializer(many=False)
+    class Meta:
+        model = SearchResultModel
+        geo_field = "mpoly"
+        fields = ["identifier", "project_name", "document_url", "start_date", "audience", "objective", "address", "record_type", "estimation", "committee", "pk", "category"]
 
 
 class DMWPaginiation(PageNumberPagination):
     page_size = 10
     page_size_query_param = 'size'
-    max_page_size = 100
+    max_page_size = 9999
 
     def get_paginated_response(self, data):
         return Response({
@@ -109,13 +117,13 @@ class DMWPaginiation(PageNumberPagination):
         })
 
 
-def gen_model_from_page_query_set(page):
+def gen_model_from_page_query_set(page, cat_dict):
     for r in page:
         print(r)
         m = SearchResultModel()
         m.mpoly = r[0]
         if r[0] is None:
-          m.mpoly = r[10]
+          m.mpoly = r[-2]
         m.identifier = r[1]
         m.key = r[1]
         m.project_name = r[2]
@@ -126,14 +134,16 @@ def gen_model_from_page_query_set(page):
         m.address = r[7]
         m.committee = r[9]
         m.estimation = r[8]
-        m.record_type = r[11]
+        m.record_type = r[-1]
+        if r[10] is not None:
+            m.category = cat_dict[r[10]]
         yield m
 
 
 
 def comm_value_list(comm):
     comm = comm.annotate(rc=models.Value("comm", output_field=models.CharField()))
-    comm = comm.values_list("activity__mpoly", "code", "project_name", "document_url", "start_date", "audience", "objective", "address", "estimation", "group_name", "point", "rc")
+    comm = comm.values_list("activity__mpoly", "code", "project_name", "document_url", "start_date", "audience", "objective", "address", "estimation", "group_name", "category__code", "point", "rc")
 
     return comm
 
@@ -142,8 +152,15 @@ def dmw_value_list(dmw):
     dmw = dmw.annotate(point=models.Value(None, output_field=models.PointField()))
     dmw = dmw.annotate(rc=models.Value("dmw", output_field=models.CharField()))
     #dmw = dmw.annotate(record_type=models.Value(None, output_field=models.PointField()))
-    dmw = dmw.values_list("mpoly", "metadata__identifier", "metadata__project_name", "metadata__project_pdf", "metadata__expected_start_date", "metadata__audience", "metadata__outline", "metadata__location", "metadata__ballpark", "metadata__committee" , "point", "rc")
+    dmw = dmw.values_list("mpoly", "metadata__identifier", "metadata__project_name", "metadata__project_pdf", "metadata__expected_start_date", "metadata__audience", "metadata__outline", "metadata__location", "metadata__ballpark", "metadata__committee", "metadata__category__code" , "point", "rc")
     return dmw
+
+def get_category_dict():
+    categories = Category.objects.all()
+    d = {}
+    for cat in categories:
+        d[cat.code] = cat
+    return d
 
 
 class DMWList(APIView):
@@ -211,8 +228,8 @@ class DMWList(APIView):
         queryset = self.get_queryset()
         paginator = DMWPaginiation()
         page = paginator.paginate_queryset(queryset, request)
-        
-        model_from_page = gen_model_from_page_query_set(page)
+        cat_dict = get_category_dict()
+        model_from_page = gen_model_from_page_query_set(page, cat_dict)
 
         serializer = SearchResultSerializer(model_from_page, many=True)
         data = serializer.data
@@ -222,9 +239,9 @@ class DMWList(APIView):
 class HotList(APIView):
    def get(self, request):
         c = CommunityActivityMetaData.objects.all()[2:3]
-        page = gen_model_from_page_query_set(comm_value_list(c))
-        
-        page2 = gen_model_from_page_query_set(dmw_value_list(DistrictMinorWork.objects.all()[:3]))
+        cat_dict = get_category_dict()
+        page = gen_model_from_page_query_set(comm_value_list(c), cat_dict)
+        page2 = gen_model_from_page_query_set(dmw_value_list(DistrictMinorWork.objects.all()[:3]), cat_dict)
         model_from_page = list(page) + list(page2)
         serializer = SearchResultSerializer(model_from_page, many=True)
         data = serializer.data
