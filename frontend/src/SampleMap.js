@@ -19,9 +19,8 @@ class SampleMap extends React.Component {
   }
 
   clear(newData) {
-    console.log("sample", newData);
+    newData = newData.filter(w => w.geometry)
     const l = newData.length;
-
     newData.forEach((d, i) => {
       d["index"] = i;
     });
@@ -50,7 +49,7 @@ class SampleMap extends React.Component {
     });
 
     var purpleIcon = new L.Icon({
-      iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-purple.png',
+      iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-violet.png',
       shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
       iconSize: [25, 41],
       iconAnchor: [12, 41],

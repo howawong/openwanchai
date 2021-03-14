@@ -38,12 +38,13 @@ class Index extends Component {
     const { categories, hot } = this.state;
     const oneCol = isMobile;
 
-    const categoryCards =  categories.map(c => (<ProjectCategoryCard title={c.text} img={c.img}/>));
+    const categoryCards =  categories.map(c => (<Link to={"/search?minAmount=0&maxAmount=5000000&minDate=2010-01-01&maxDate=2021-03-01&categories=" + c.code.toString() + "&keyword="}><ProjectCategoryCard title={c.text} img={c.img}/></Link>));
     const hotCards =  hot.map(c => c["properties"]).map(c => (
 
         <Link to={"/detail/" + c["identifier"]}  style={{ textDecoration: 'none' }}>
 	  <CategoryCard
 	    oneCol={oneCol}
+	        category={c["category"]}
 		committee={c["committee"]}
 		projectId={c["identifier"]}
 		budget={c["estimation"]}

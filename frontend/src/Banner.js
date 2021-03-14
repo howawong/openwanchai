@@ -22,7 +22,7 @@ class Banner extends Component {
   render() {
     return (
       <div>
-        <Jumbotron className="banner">
+        <Jumbotron className={ isBrowser ? "banner" : "banner-mobile"}>
 		      <Row>
 		        <Col xs={6}>
 			        <img src="/assets/logo.png" /> 

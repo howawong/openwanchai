@@ -10,7 +10,6 @@ import Row from 'react-bootstrap/Row';
 import 'rc-slider/assets/index.css';
 import { DateRangePicker } from 'rsuite';
 import SearchBarPanelMobile from './SearchBarPanelMobile';
-import SearchBarPanel from './SearchBarPanel';
 import moment from 'moment';
 import { withRouter } from "react-router-dom";
 import {
@@ -28,6 +27,7 @@ class SearchBar extends Component {
     this.min = 0;
     this.max = 5000000;
     this.prefix = this.props.prefix ?? "/search";
+    this.mapping = [1, 3, 4, 5, 6, 7, 8,9];
     const state = this.stateFromProps(props.query);
     this.ref = React.createRef();
     this.keywordRef = React.createRef();
@@ -41,17 +41,33 @@ class SearchBar extends Component {
     const keyword = query ? query.keyword : "";
     const minDate = new Date(query ? query.minDate : "2010-01-01");
     const maxDate = new Date(query ? query.maxDate : "2021-03-01");
+    const checked = [true, true, true, true, true, true, true, true];
+    console.log("q", query);
+    if (query && query.categories) {
+      const categories = query.categories.split(",").filter(x => !isNaN(x)).map(x => parseInt(x));
+      console.log(categories);
+      if (categories.length > 0) {
+      for (var i=0;i<8;i++) {
+        if (categories.indexOf(this.mapping[i]) == -1){
+	  checked[i] = false;
+	}
+      }
+   
+
+    }
+	}
     return {show: false,
             minBudget: minValue, 
-		    maxBudget: maxValue,
-		    keyword: keyword,
-		    minDate: minDate,
-		    maxDate: maxDate,
+        maxBudget: maxValue,
+        keyword: keyword,
+        minDate: minDate,
+        maxDate: maxDate,
             result: [],
             page: 0,
             total: 0,
             size: 6,
-		    value:[this.valueToPct(minValue), this.valueToPct(maxValue)]};
+      checked: checked,
+        value:[this.valueToPct(minValue), this.valueToPct(maxValue)]};
 
   }
 
@@ -68,15 +84,15 @@ class SearchBar extends Component {
   }
 
   toggle = () => { console.log(this.state); if (this.state.show) { this.handleClose(); } else { this.handleShow();} }
-  handleClose = () => { this.setState({...this.state, show: false}) };
+    handleClose = () => { this.setState({...this.state, show: false}) };
   handleShow = () => { this.setState({...this.state, show: true}) };
   onChange = (value) => {this.setState({...this.state, value: value});};
   onKeyDown = (evt) => {
     if (evt.key == 'Enter') {
-	  const link = this.getSearchURL(this.prefix);
+    const link = this.getSearchURL(this.prefix);
       this.props.history.push(link);
-	}
-	
+  }
+  
   };
 
   onKeywordChange = (evt) => {
@@ -94,14 +110,26 @@ class SearchBar extends Component {
 
   getSearchURL = (prefix="/search") => {
     const keyword = this.state.keyword;
-    const {minBudget, maxBudget, minDate, maxDate} = this.state;
-	const format = "YYYY-MM-DD";
+    const {minBudget, maxBudget, minDate, maxDate, checked} = this.state;
+
+
+    const format = "YYYY-MM-DD";
+
+    var categories = []
+    for (var i=0; i<8; i++) {
+      if (checked[i]) {
+        categories.push(this.mapping[i])
+      }
+    }
+
+    categories = categories.join(",")
     var params = {
       minAmount: Math.round(minBudget),
       maxAmount: Math.round(maxBudget),
       minDate: moment(minDate).format(format),
       maxDate: moment(maxDate).format(format),
-      keyword: keyword
+      keyword: keyword,
+      categories: categories
     };
     const queryString = Object.keys(params).map(key => key + '=' + params[key]).join('&');
     if (queryString.length > 0)
@@ -111,21 +139,32 @@ class SearchBar extends Component {
 
   changeDateRange = (value) => {
     this.setState({...this.state, minDate: value[0], maxDate: value[1]});
-	console.log(this.state, value);
+  console.log(this.state, value);
   }
+
+  handleToggle = (evt) => { 
+    console.log(evt.target);
+    const checked = this.state.checked;
+    const i = parseInt(evt.target.name);
+    checked[i] = ! checked[i];
+    console.log(checked);
+    this.setState({...this.state, checked}) 
+  };
+
+
   
   render() {
-    const { show, value, minBudget, maxBudget, keyword, maxDate, minDate } = this.state;
+    const { show, value, minBudget, maxBudget, keyword, maxDate, minDate, checked } = this.state;
     const { before, allowedRange } = DateRangePicker;
-	const handleStyle = {
-	  width: 20, 
-	  marginTop: -8,
-	  height: 20,
-	}
+  const handleStyle = {
+    width: 20, 
+    marginTop: -8,
+    height: 20,
+  }
 
-	const input = (
-	  <input type="text" ref={this.keywordRef} placeholder="輸入項目名稱/關鍵詞/地點..." onChange={this.onKeywordChange} value={keyword} onKeyDown={this.onKeyDown}/>
-	);
+  const input = (
+    <input type="text" ref={this.keywordRef} placeholder="輸入項目名稱/關鍵詞/地點..." onChange={this.onKeywordChange} value={keyword} onKeyDown={this.onKeyDown}/>
+  );
 
     return (
       <div>
@@ -134,26 +173,26 @@ class SearchBar extends Component {
           <Row>
             <Col className="left d-none d-sm-block">
               <Image src="/assets/icon/sort.svg" className="sort" onClick={this.toggle}/>
-			  {input}
+        {input}
             </Col>
            <Col className="center d-none d-md-block">
              <Row>
-			  <Col xs="auto">預算</Col>
+        <Col xs="auto">預算</Col>
               <Col xs="auto">{numeral(minBudget).format("0,0A")}</Col>
               <Col>
-			    <Range
-				  defaultValue={value}
-				  onAfterChange={this.onRangeAfterChange}
-				  handleStyle={[handleStyle, handleStyle]}
-			  
-			    />
-		      </Col>
+          <Range
+          defaultValue={value}
+          onAfterChange={this.onRangeAfterChange}
+          handleStyle={[handleStyle, handleStyle]}
+        
+          />
+          </Col>
               <Col xs="auto">{numeral(maxBudget).format("0,0A")}</Col>
              </Row>
            </Col>
            <Col className="right">
              <DateRangePicker
-			   value={[minDate, maxDate]}
+         value={[minDate, maxDate]}
                disabledDate={allowedRange("2012-01-01","2021-04-10")}
                showOneCalendar
                hoverRange="month"
@@ -161,25 +200,25 @@ class SearchBar extends Component {
                size="md"
                placeholder="開始日期"
                align="left"
-			   onChange={this.changeDateRange}
+         onChange={this.changeDateRange}
              />
              <Link to={this.getSearchURL(this.prefix)}><img src="/assets/icon/search_m.svg" className="search_m"/></Link>
             </Col>
           </Row>
         </div>
-        <SearchBarPanelMobile showDateRange={false} showBudget={false} budgets={[minBudget, maxBudget]} dates={[minDate, maxDate]}  onAmountChanged={this.onRangeAfterChange} onDateRangeChanged={this.changeDateRange} visible={show}/>
+        <SearchBarPanelMobile showDateRange={false} showBudget={false} budgets={[minBudget, maxBudget]} dates={[minDate, maxDate]}  onAmountChanged={this.onRangeAfterChange} onDateRangeChanged={this.changeDateRange} visible={show} toggle={this.handleToggle} checked={checked}/>
         </BrowserView>
         <MobileView>
           <div className="searchBar2">
             <Row>
               <Col>
                 <Image src="/assets/icon/sort.svg" className="sort" onClick={this.toggle} />
-				{input}
+        {input}
                <Link to={this.getSearchURL(this.prefix)}><img src="/assets/icon/search_m.svg" className="search_m"/></Link>
               </Col>
             </Row>
           </div>
-          <SearchBarPanelMobile budgets={[minBudget, maxBudget]} dates={[minDate, maxDate]}  onAmountChanged={this.onRangeAfterChange} onDateRangeChanged={this.changeDateRange} visible={show}/>
+          <SearchBarPanelMobile budgets={[minBudget, maxBudget]} dates={[minDate, maxDate]}  onAmountChanged={this.onRangeAfterChange} onDateRangeChanged={this.changeDateRange} visible={show} toggle={this.handleToggle} checked={checked}/>
         </MobileView>
       </div>
     );

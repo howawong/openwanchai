@@ -23,18 +23,31 @@ class HeatMap extends Component {
 
 
   componentDidMount() {
-      fetchList("", "", "", 0, 99999999, 1, 200).then(j => {
+      fetchList("", "", "", 0, 99999999, 1, 999999).then(j => {
         const points = [];
         const r = j["results"]["features"];
+	      console.log("r", r);
     r.forEach(f => {
+	  console.log(f);
+	if (f["geometry"]) {
           const c = f["geometry"]["coordinates"];
+	  const type = f["geometry"]["type"]
+		console.log("c", c);
+        if (type == "Point") {
+           points.push(c)
+        } else {
         c.forEach(d => {
             if (d.length == 2) {
               points.push([d[1], d[0]]);
-            }
+            } else {
+         
+	    }
           });
-        });
-        console.log(points);
+         
+	}}
+    });
+	
+        console.log("heatmap", points.length);
         return points;
       }).then(points => this.setState({...this.state, points: points}));
   }
@@ -44,10 +57,10 @@ class HeatMap extends Component {
       0.1: '#89BDE0', 0.2: '#96E3E6', 0.4: '#82CEB6',
       0.6: '#FAF3A5', 0.8: '#F5D98B', '1.0': '#DE9A96'
     };
-    const width = isMobile ? "80vw" : "30vw";
-    const height = isMobile ? "400px" : "200px";
+    const width = isMobile ? "80vw" : "70vw";
+    const height = isMobile ? "400px" : "600px";
     return (
-      <Map center={[0, 0]} zoom={13} className="index-heatmap" style={{width: width, height: height}}>
+      <Map center={[22.27, 114.17]} zoom={13} className="index-heatmap" style={{width: width, height: height}}>
         <TileLayer
             attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
             url='http://{s}.tile.osm.org/{z}/{x}/{y}.png'
@@ -57,13 +70,13 @@ class HeatMap extends Component {
           fitBoundsOnLoad
           fitBoundsOnUpdate
           points={this.state.points}
-          longitudeExtractor={m => m[1]}
-          latitudeExtractor={m => m[0]}
+          longitudeExtractor={m => m[0]}
+          latitudeExtractor={m => m[1]}
           gradient={gradient}
           intensityExtractor={m => parseFloat(m[2])}
-          radius={20.0}
+          radius={30.0}
           blur={20.0}
-          max={10.0}
+          max={200.0}
         /> 
      </Map>
     );

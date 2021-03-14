@@ -25,7 +25,7 @@ class Search extends React.Component {
     const query = qs.parse(props.location.search.slice(1));
     this.searchBarRef = React.createRef();
     this.state = {result: [], page: 1, total: 0, size: 4, loading:false, query: query}
-	this.sampleMap = React.createRef();
+    this.sampleMap = React.createRef();
   }
 
   componentWillReceiveProps(nextProps) {
@@ -36,10 +36,12 @@ class Search extends React.Component {
   fetchData(page) {
     const {minDate, maxDate, size, loading, query} = this.state;
 	if (! loading) {
-      console.log(query);
-      fetchList(query.keyword, query.minDate, query.maxDate, query.minAmount, query.maxAmount, page, size).then(
+      console.log("query", query);
+      if (query.categories === undefined) {
+        query.categories = ""
+      }
+      fetchList(query.keyword, query.minDate, query.maxDate, query.minAmount, query.maxAmount, page, size, query.categories.split(",")).then(
 	    result => {
-
 		  if (this.sampleMap.current) {
 		    console.log("clear");
 
@@ -113,6 +115,7 @@ class Search extends React.Component {
       <div key={index}>
         <Link to={"/detail/" + gj.properties["identifier"]}  style={{ textDecoration: 'none' }}>
         <CategoryCard key={index}
+	  category={gj.properties["category"]}
           name={gj.properties["project_name"]}
           budget={gj.properties["estimation"]}
           audience={gj.properties["audience"]}

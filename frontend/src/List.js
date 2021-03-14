@@ -69,6 +69,7 @@ class List extends Search {
 
           <Link to={"/detail/" + gj.properties["identifier"]}  style={{ textDecoration: 'none' }} target="_blank">
           <CategoryCard isLong={true}
+            category={gj.properties["category"]}
             name={gj.properties["project_name"]}
             budget={gj.properties["estimation"]}
             audience={gj.properties["audience"]}

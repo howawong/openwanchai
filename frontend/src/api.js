@@ -7,8 +7,21 @@ exports.fetchDetail = (detailId) => {
   return fetch(root + "/sample/detail?id=" + detailId).then(res => res.json());
 };
 
-exports.fetchList = (keyword, minDate, maxDate, minAmount, maxAmount, page, size) => {
+exports.fetchStackedBarChart = () => {
   const root = rootPath();
+  return fetch(root + "/sample/community_spending_by_committee").then(res => res.json());
+};
+
+
+exports.fetchList = (keyword, minDate, maxDate, minAmount, maxAmount, page, size, categories) => {
+  const root = rootPath();
+  if (categories === undefined || categories === "") {
+    categories = []
+  }
+  if (keyword === undefined) {
+    keyword = ""
+  }
+
   var url = root
               + "/sample/dmw?"
   if (minDate.length > 0) {
@@ -18,12 +31,14 @@ exports.fetchList = (keyword, minDate, maxDate, minAmount, maxAmount, page, size
   if (maxDate.length > 0) {
     url = url + "&max_date=" + maxDate;
   }
-
+  console.log("cat", categories)
   url = url   + "&min_ballpark=" + minAmount
               + "&max_ballpark=" + maxAmount
               + "&keyword=" + keyword
               + "&page=" + page
-              + "&size=" + size;
+              + "&size=" + size
+	      + "&categories=" + categories.join(",");
+  console.log(url);
   return fetch(url).then(res => res.json());
 }
 

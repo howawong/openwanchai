@@ -14,8 +14,10 @@ import numeral from 'numeral';
 class SearchBarPanelMobile extends Component {
   constructor(props) {
     super(props);
+    console.log(props);
+    this.toggle = this.props.toggle;
     this.state = this.stateFromProps(props);
-	this.ref = React.createRef();
+    this.ref = React.createRef();
     this.onAmountChanged = this.props.onAmountChanged;
     this.onDateRangeChanged = this.props.onDateRangeChanged;
   }
@@ -24,7 +26,8 @@ class SearchBarPanelMobile extends Component {
     const showDateRange = props.showDateRange ?? true;
     const showBudget = props.showBudget ?? true;
     const visible = props.visible ?? true;
-    const newState = {...this.state, dates: props.dates, budgets: props.budgets, showDateRange, showBudget, visible};
+    const checked = props.checked;
+    const newState = {...this.state, dates: props.dates, budgets: props.budgets, showDateRange, showBudget, visible, checked};
     return newState;
   }
 
@@ -32,12 +35,13 @@ class SearchBarPanelMobile extends Component {
     this.setState(this.stateFromProps(props));
   }
 
+
   handleClose = () => { this.setState({show: false}) };
   handleShow = () => { this.setState({show: true}) };
   onChange = (value) => {this.setState({show:this.state.show});};
   
   render() {
-    const { visible, dates, budgets, showDateRange, showBudget } = this.state;
+    const { visible, dates, budgets, showDateRange, showBudget, checked } = this.state;
     const handleStyle = {
 	  width: 20, 
 	  marginTop: -8,
@@ -98,15 +102,14 @@ class SearchBarPanelMobile extends Component {
 			    項目種類
 		    </Modal.Header>
 		    <Modal.Body>
-		      <Form.Check type="checkbox" label="小型工程" />
-		      <Form.Check type="checkbox" label="社區參與" />
-		      <Form.Check type="checkbox" label="聯誼" />
-		      <Form.Check type="checkbox" label="嘉年華" />
-		      <Form.Check type="checkbox" label="教學及訓練" />
-		      <Form.Check type="checkbox" label="比賽" />
-		      <Form.Check type="checkbox" label="直接服務" />
-		      <Form.Check type="checkbox" label="研究" />
-		      <Form.Check type="checkbox" label="文化活動" />
+		      <Form.Check type="checkbox" label="小型工程" checked={checked[0]} onChange={e => this.toggle(e)} name="0"/>
+		      <Form.Check type="checkbox" label="聯誼" checked={checked[1]} onChange={e => this.toggle(e)} name="1"/>
+		      <Form.Check type="checkbox" label="嘉年華" checked={checked[2]}  onChange={e => this.toggle(e)} name="2"/>
+		      <Form.Check type="checkbox" label="教學及訓練" checked={checked[3]} onChange={e => this.toggle(e)} name="3"/>
+		      <Form.Check type="checkbox" label="比賽" checked={checked[4]} onChange={e => this.toggle(e)} name="4"/>
+		      <Form.Check type="checkbox" label="直接服務" checked={checked[5]} onChange={e => this.toggle(e)} name="5"/>
+		      <Form.Check type="checkbox" label="研究" checked={checked[6]} onChange={e => this.toggle(e)} name="6"/>
+		      <Form.Check type="checkbox" label="文化活動" checked={checked[7]} onChange={e => this.toggle(e)} name="7"/>
 			  <br/>
 		    </Modal.Body>
       </div>

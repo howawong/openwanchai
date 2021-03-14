@@ -3,7 +3,15 @@
   margin-bottom:0px;
   background-size: cover; 
   min-height: 803px;
-  background-image: url("/assets/background.png");
+  background-image: url("/assets/bg landing.png");
+}
+
+.banner-mobile {
+  background: #EFF9FB;
+  margin-bottom:0px;
+  background-size: cover; 
+  min-height: 803px;
+  background-image: url("/assets/bg landing mobile.png");
 }
 
 .banner .title {

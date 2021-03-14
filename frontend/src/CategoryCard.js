@@ -13,7 +13,7 @@ import {
 
 class CategoryCard extends Component {
   render() {
-    const {projectId, budget, name, audience, startDate, committee, isLong, oneCol } = this.props;
+    const {projectId, budget, name, audience, startDate, committee, isLong, oneCol, category } = this.props;
     const startDateFormatted = (startDate || "").replaceAll("-", "/");
     if (isBrowser) {
 	  if (isLong) {
@@ -21,7 +21,7 @@ class CategoryCard extends Component {
         <div className="card">
           <Row>
             <Col className="my-auto" xs={1}>
-              <img src="/assets/icon/gift_list.svg"/>
+              <img src={"/assets/icon/" +  category.img}/>
             </Col>
             <Col xs={2}>
               {committee || "灣仔區街坊福利會"}<br/>
@@ -48,7 +48,7 @@ class CategoryCard extends Component {
         <div className="card">
           <Row>
             <Col className="left my-auto" xs={2}>
-              <img src="/assets/icon/gift_list.svg"/>
+              <img src={"/assets/icon/" + category.img}/>
             </Col>
             <Col xs={9}>
               {committee || "灣仔區街坊福利會"}<br/>
@@ -70,7 +70,7 @@ class CategoryCard extends Component {
     if (oneCol) {
       return (
         <div className="card card-mobile">
-          <img src="/assets/icon/gift_list.svg"/><br/>
+          <img src={"/assets/icon/" + category.img}/><br/>
           {committee || "灣仔區街坊福利會"}<br/>
           <div className="title">{name || "粵曲歡唱娛坊眾"}</div><br/>
           <span className="badge badge-secondary">社區服務</span><br/>
@@ -87,7 +87,7 @@ class CategoryCard extends Component {
       <div className="card card-mobile">
         <Row>
           <Col className="my-auto" xs={2}>
-           <img src="/assets/icon/gift_list.svg"/>
+           <img src={"/assets/icon/" + category.img}/>
           </Col>
           <Col xs={9}>
             {committee || "灣仔區街坊福利會"}<br/>

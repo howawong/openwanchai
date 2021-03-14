@@ -30,7 +30,7 @@ class SearchBarPanel extends Component {
 		  </Modal.Header>
 
 		  <Modal.Body>
-		    <Form.Check type="checkbox" label="小型工程" />
+		    <Form.Check type="checkbox" label="小型工程" defaultChecked/>
 		    <Form.Check type="checkbox" label="社區參與" />
 		    <Form.Check type="checkbox" label="聯誼" />
 		    <Form.Check type="checkbox" label="嘉年華" />
