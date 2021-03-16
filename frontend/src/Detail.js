@@ -36,7 +36,7 @@ class Detail extends React.Component {
         console.log(result);
         if (this.sampleMap.current) {
 		    console.log("clear");
-            console.log(result);
+            console.log(this.sampleMap);
 		    this.sampleMap.current.clear([result]);
 		}
 		this.setState({...this.state, result: [result]});
@@ -51,9 +51,11 @@ class Detail extends React.Component {
 	  title: "",
 	  amount: 0,
 	};
+
     if (properties) {
 	  const type = properties["type"];
 	  const metadata = properties["metadata"];
+	  console.log("metadata", metadata);
 	  if (type == "dmw") {
 	    output.pdfURL = metadata["project_pdf"]; 
 	    output.title = metadata["project_name"];    
@@ -98,19 +100,21 @@ class Detail extends React.Component {
   render() {
     const {id, result} = this.state;
     const map = result;
-	const properties = result.length > 0 && result[0].properties;
+    const properties = result.length > 0 && result[0].properties;
+    if (result && result.length > 0)
+      console.log("dadas", result[0]);
     const detail = this.getDetail(properties);
 
     if (isMobile) {
       return (
-        <DetailMobile map={result} detail={detail}/>
+        <DetailMobile map={map} detail={detail} detailRef={this.sampleMap}/>
       )
     
     }
  
    
     return (
-      <div className="page">
+      <div className="page w-100">
         <div className="detail">
         <Row className="header">
           <Col>

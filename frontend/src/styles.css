@@ -1,3 +1,7 @@
+.body {
+  background-color: "#F0F";
+}
+
 .banner {
   background: #EFF9FB;
   margin-bottom:0px;
@@ -167,8 +171,9 @@
 
 .page {
   background: #FAFAFA;
-  height: 100%;
   margin: 0;
+  overflow-x: hidden;
+  height: 100%;
 }
 
 .about-page {
@@ -233,8 +238,7 @@
 
 .detail .mapContainer .leaflet-container {
   height: 300px;
-  margin: 10px auto;
-  text-align:center;
+  margin: 0 auto;
 }
 
 .leaflet-container-mobile .leaflet-container {
@@ -422,7 +426,6 @@
 }
 
 .fullscreen {
-  position: absolute; top: 0; left: 0;
 }
 
 .btn-circle {
@@ -448,10 +451,16 @@
   margin-bottom:1em;
   display: flex;
   justify-content: flex-end;
+  
 }
 
 .pagination .page-number {
   color: #5F5F5F;
+  height: 100%;
+  display: inline-block;
+white-space: nowrap;
+  vertical-align: middle;
+
 }
 
 .page-header {

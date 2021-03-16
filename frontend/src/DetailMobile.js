@@ -24,22 +24,22 @@ class DetailMobile extends Component {
 
 
   render() {
-    const {map, detail} = this.props;
-	  const properties = map && map.properties;
-	  console.log(map);
+    const {map, detail, detailRef} = this.props;
+    const properties = map && map.properties;
+    console.log(map);
     return (
-      <div className="page fullscreen">
+      <div className="page w-100">
         <SwitchModeButtonGroup searchBarFunc={() => {return {current: null}}}/>
         <div className="detail">
-          <Row>
-             <Col>
+          <Row className="ml-0 mr-0">
+             <Col className="pl-0 pr-0">
 	            <div className="mapContainer">
-	              <SampleMap locations={map} className="map"/>
+	              <SampleMap locations={map} className="map" ref={detailRef}/>
                 </div>
              </Col>
            </Row>
-           <Row className="p-3">
-             <Col>
+           <Row className="p-3 ml-0 mr-0">
+             <Col className="pl-0 pr-0">
                 <h2>{detail.title}</h2>
                 <br/>
                 <div className="detail-field-container">

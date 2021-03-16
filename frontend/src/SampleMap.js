@@ -11,12 +11,14 @@ class SampleMap extends React.Component {
     this.state = {
       lat: 22.27702,
       lng: 114.17232,
-      zoom: 12,
+      zoom: 13,
 	  result: []
     };
     this.geoJsonLayer = React.createRef();
     this.map = React.createRef();
   }
+
+  
 
   clear(newData) {
     newData = newData.filter(w => w.geometry)
@@ -27,16 +29,21 @@ class SampleMap extends React.Component {
 
     this.geoJsonLayer.current.leafletElement.clearLayers().addData(newData);
     if (l > 0) {
-	  	  const boundary = this.geoJsonLayer.current.leafletElement.getBounds();
-	  console.log("bound", boundary);
-	  this.map.current.leafletElement.fitBounds(boundary, {maxZoom: 12});
+      const boundary = this.geoJsonLayer.current.leafletElement.getBounds();
+      console.log("bound", boundary);
+      const sw = boundary._southWest;
+      const ne = boundary._northEast;
+      boundary._southWest = L.latLng(sw.lat - 0.1 , sw.lng + 0.075);
+      boundary._northEast = L.latLng(ne.lat - 0.1 , ne.lng - 0.075);
+      this.map.current.leafletElement.fitBounds(boundary);
+      this.map.current.leafletElement.invalidateSize();
     }
   }
 
   render() {
     const position = [this.state.lat, this.state.lng];
     if (this.props.locations.length > 0) {
-	    console.log(this.props.locations[0]);
+      console.log(this.props.locations[0]);
     }
     console.log("sampleMap", this.geoJsonLayer);
     var greenIcon = new L.Icon({
@@ -78,15 +85,13 @@ class SampleMap extends React.Component {
     const icons = [blueIcon, purpleIcon, redIcon, greenIcon];
 
     return (
-      <ContainerDimensions>
-      <Map ref={this.map} center={position} zoom={this.state.zoom}>
+      <Map ref={this.map} center={position} zoom={this.state.zoom} trackResize={false}>
         <TileLayer
           attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
           url='http://{s}.tile.osm.org/{z}/{x}/{y}.png'
         />
         <GeoJSON ref={this.geoJsonLayer} data={this.props.locations} style={{color: '#ff00ff'}} pointToLayer={(gj, latlng)=> {console.log("Marker", gj); return new L.Marker(latlng, {icon: icons[gj["index"] % 4]});}} />
       </Map>
-      </ContainerDimensions>
     );
   }
 }

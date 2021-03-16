@@ -86,7 +86,7 @@ class CategoryCard extends Component {
     return (
       <div className="card card-mobile">
         <Row>
-          <Col className="my-auto" xs={2}>
+          <Col className="my-auto" xs={3}>
            <img src={"/assets/icon/" + category.img}/>
           </Col>
           <Col xs={9}>

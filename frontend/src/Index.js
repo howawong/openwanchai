@@ -75,7 +75,6 @@ class Index extends Component {
         </div>
         <br/>
 	  	<div className="right-bottons">
-          <span className="badge badge-secondary">查看全部</span>
 		  <button className="btn btn-link" onClick={() => this.handleNav(this.galleryRef, "left")}><img src="/assets/btn/previous.svg"/></button>
 		  <button className="btn btn-link" onClick={() => this.handleNav(this.galleryRef, "right")}><img src="/assets/btn/next.svg"/></button>
 		</div>
@@ -90,7 +89,6 @@ class Index extends Component {
           尋找項目種類
         </div>
         <div className="right-bottons">
-          <span class="badge badge-secondary">查看全部</span>
 	          <button className="btn btn-link" onClick={() => this.handleNav(this.galleryRef2, "left")}><img src="/assets/btn/previous.svg"/></button>
 		  <button className="btn btn-link" onClick={() => this.handleNav(this.galleryRef2, "right")}><img src="/assets/btn/next.svg"/></button>
 

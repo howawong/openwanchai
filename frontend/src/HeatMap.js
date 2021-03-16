@@ -26,24 +26,26 @@ class HeatMap extends Component {
       fetchList("", "", "", 0, 99999999, 1, 999999).then(j => {
         const points = [];
         const r = j["results"]["features"];
+	
     r.forEach(f => {
 	if (f["geometry"]) {
           const c = f["geometry"]["coordinates"];
 	  const type = f["geometry"]["type"]
         if (type == "Point") {
-           points.push(c)
+           points.push([c[1],c[0]])
         } else {
         c.forEach(d => {
             if (d.length == 2) {
+	       if ((d[1] > 23 || d[1] < 10) && ( d[0] < 114)){
+	       }else {
               points.push([d[1], d[0]]);
-            } else {
-         
-	    }
+              }
+            }
           });
          
 	}}
     });
-	
+	 console.log(points);
         return points;
       }).then(points => this.setState({...this.state, points: points}));
   }
@@ -66,13 +68,13 @@ class HeatMap extends Component {
           fitBoundsOnLoad
           fitBoundsOnUpdate
           points={this.state.points}
-          longitudeExtractor={m => m[0]}
-          latitudeExtractor={m => m[1]}
+          longitudeExtractor={m => m[1]}
+          latitudeExtractor={m => m[0]}
           gradient={gradient}
-          intensityExtractor={m => parseFloat(m[2])}
+          intensityExtractor={m => 250}
           radius={30.0}
-          blur={20.0}
-          max={200.0}
+          blur={10.0}
+          max={150.0}
         /> 
      </Map>
     );

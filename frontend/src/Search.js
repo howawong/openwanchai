@@ -96,9 +96,15 @@ class Search extends React.Component {
 
     return (
 	  <div className="pagination">
-        <span className="page-number"> {start} - {end}/ {total} </span>&nbsp;&nbsp;
-        <Button type="button" className="btn btn-circle" onClick={this.prevPage}>&#x3c;</Button>&nbsp;&nbsp;&nbsp;
-        <Button type="button" className="btn btn-circle" onClick={this.nextPage}>&#x3e;</Button>
+	 <table>
+	    <tr><td>
+        <div className="page-number h-100  justify-content-center h-100"> <h5>{start} - {end} / {total}</h5> </div>&nbsp;&nbsp;</td>
+        <td>
+        <button className="btn btn-link" onClick={() => this.prevPage()}><img src="/assets/btn/previous.svg"/></button></td>
+	 <td>   
+        <button className="btn btn-link" onClick={() => this.nextPage()}><img src="/assets/btn/next.svg"/></button></td>
+	    </tr>
+        </table>
       </div>
 
 	);
@@ -138,11 +144,9 @@ class Search extends React.Component {
             </div>
             <SampleMap locations={result} ref={this.sampleMap}/>
           </div>
-          <br/>
-          <br/>
+          {pagination}
           {resultView}
 		  <br/>
-		  {pagination}
         </MobileView>
         {isBrowser && ( 
         <div className="flexbox">
