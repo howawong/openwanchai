@@ -178,7 +178,7 @@ class SearchBar extends Component {
            <Col className="center d-none d-md-block">
              <Row>
         <Col xs="auto">預算</Col>
-              <Col xs="auto">{numeral(minBudget).format("0,0A")}</Col>
+              <Col xs="auto"><h4>{numeral(minBudget).format("00000,0A")}</h4></Col>
               <Col>
           <Range
           defaultValue={value}
@@ -187,7 +187,7 @@ class SearchBar extends Component {
         
           />
           </Col>
-              <Col xs="auto">{numeral(maxBudget).format("0,0A")}</Col>
+              <Col xs="auto"><h4>{numeral(maxBudget).format("0,0A")}</h4></Col>
              </Row>
            </Col>
            <Col className="right">
@@ -225,4 +225,4 @@ class SearchBar extends Component {
   }
 };
 
-export default withRouter(SearchBar);
+export default SearchBar;

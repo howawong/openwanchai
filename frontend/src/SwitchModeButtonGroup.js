@@ -31,8 +31,8 @@ class SwitchModeButtonGroup extends Component {
 		  尋找項目:  {this.keyword}
 		</Col>
         <Col className="text-right">
-          <Link to={mapURL}><img className="img-btn" src="/assets/icon/place.svg" /></Link>
-          <Link to={listURL}><img className="img-btn" src="/assets/icon/sort.svg" /></Link>&nbsp;
+          <Button onClick={this.props.clickMap}><img className="img-btn" src="/assets/icon/place.svg" /></Button>
+          <Button onClick={this.props.clickList}><img className="img-btn" src="/assets/icon/sort.svg" /></Button>&nbsp;
         </Col>
       </Row>
     )
@@ -47,8 +47,8 @@ class SwitchModeButtonGroup extends Component {
         <Col><span className="title">搜尋灣仔區撥款項目</span></Col>
         <Col>
           <ButtonGroup>
-            <Button variant="secondary"><Link to={mapURL}>地圖</Link></Button>
-            <Button variant="secondary"><Link to={listURL}>列表</Link></Button>
+            <Button variant="secondary" onClick={this.props.clickMap}>地圖</Button>
+            <Button variant="secondary" onClick={this.props.clickList}>列表</Button>
             <Button variant="secondary">數據圖</Button>
           </ButtonGroup> 
         </Col>

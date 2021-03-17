@@ -11,7 +11,7 @@ import SwitchModeButtonGroup from './SwitchModeButtonGroup';
 import CategoryCard from './CategoryCard';
 import { Slider, RangeSlider } from 'rsuite';
 import { fetchList } from './api';
-import Search from "./Search";
+import { SearchNoRouter } from "./Search";
 import {
   BrowserView,
   MobileView,
@@ -23,7 +23,7 @@ import Row from 'react-bootstrap/Row';
 
 
 
-class List extends Search {
+class List extends SearchNoRouter {
   constructor(props) {
     super(props);
   }

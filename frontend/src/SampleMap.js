@@ -3,6 +3,9 @@ import { bbox, center } from '@turf/turf'
 import { Map, TileLayer, Marker, Popup, GeoJSON } from 'react-leaflet';
 import { uuid } from 'uuidv4';
 import ContainerDimensions from 'react-container-dimensions';
+import L from 'leaflet';
+import { withRouter } from "react-router";
+
 
 
 class SampleMap extends React.Component {
@@ -38,6 +41,18 @@ class SampleMap extends React.Component {
       this.map.current.leafletElement.fitBounds(boundary);
       this.map.current.leafletElement.invalidateSize();
     }
+  }
+
+  clickToFeature(e) {
+    var layer = e.target;
+    let history = this.props.history;
+    history && history.push("/detail/" + layer.feature.properties.pk)
+  }
+
+  onEachFeature(feature, layer) {
+    layer.on({
+      click: this.clickToFeature.bind(this)
+    });
   }
 
   render() {
@@ -85,12 +100,12 @@ class SampleMap extends React.Component {
     const icons = [blueIcon, purpleIcon, redIcon, greenIcon];
 
     return (
-      <Map ref={this.map} center={position} zoom={this.state.zoom} trackResize={false}>
+      <Map ref={this.map} center={position} zoom={this.state.zoom}>
         <TileLayer
           attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
           url='http://{s}.tile.osm.org/{z}/{x}/{y}.png'
         />
-        <GeoJSON ref={this.geoJsonLayer} data={this.props.locations} style={{color: '#ff00ff'}} pointToLayer={(gj, latlng)=> {console.log("Marker", gj); return new L.Marker(latlng, {icon: icons[gj["index"] % 4]});}} />
+        <GeoJSON ref={this.geoJsonLayer} data={this.props.locations} style={{color: '#ff00ff'}} pointToLayer={(gj, latlng)=> {console.log("Marker", gj); return new L.Marker(latlng, {icon: icons[gj["index"] % 4]});}} onEachFeature={this.onEachFeature.bind(this)} />
       </Map>
     );
   }

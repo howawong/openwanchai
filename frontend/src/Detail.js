@@ -34,9 +34,9 @@ class Detail extends React.Component {
     fetchDetail(id).then(
 	  result => {
         console.log(result);
+        console.log("fuck", this.sampleMap);
         if (this.sampleMap.current) {
 		    console.log("clear");
-            console.log(this.sampleMap);
 		    this.sampleMap.current.clear([result]);
 		}
 		this.setState({...this.state, result: [result]});

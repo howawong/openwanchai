@@ -4,6 +4,7 @@ import createHistory from 'history/createBrowserHistory'
 import About from "./About";
 import Index from "./Index";
 import Search from "./Search";
+import SearchFull from "./SearchFull";
 import Detail from "./Detail";
 import List from "./List";
 import './App.css';
@@ -26,7 +27,6 @@ history.listen(location => {
 
 const AppRouter = () => {
 	useEffect(() => {
-	  console.log(location.pathname);
 		ReactGA.pageview(window.location.pathname + window.location.search)
 	}, [history]);
 	
@@ -34,6 +34,7 @@ const AppRouter = () => {
     <div id="router">
 	  <Route path="/" exact component={Index} />
 	  <Route path="/search" exact component={Search} />
+	  <Route path="/search_full" exact component={SearchFull} />
 	  <Route path="/list" exact component={List} />
 	  <Route path="/about" exact component={About} />
 	  <Route path="/detail/:id" exact component={Detail} />

@@ -17,20 +17,24 @@ import {
   isBrowser,
   isMobile
 } from "react-device-detect";
-
+import { withRouter } from "react-router";
 
 class Search extends React.Component {
   constructor(props) {
     super(props);
     const query = qs.parse(props.location.search.slice(1));
     this.searchBarRef = React.createRef();
-    this.state = {result: [], page: 1, total: 0, size: 4, loading:false, query: query}
+    this.state = {result: [], page: 1, total: 0, size: this.getSize(), loading:false, query: query}
     this.sampleMap = React.createRef();
+  }
+
+  getSize() {
+    return 4;
   }
 
   componentWillReceiveProps(nextProps) {
     const query = qs.parse(nextProps.location.search.slice(1));
-    this.setState({result: [], page: 1, total: 0, size: 4, loading:false, query: query}, () => { this.fetchData(1);})
+    this.setState({result: [], page: 1, total: 0, size: this.getSize(), loading:false, query: query}, () => { this.fetchData(1);})
   }
 
   fetchData(page) {
@@ -111,11 +115,13 @@ class Search extends React.Component {
   }
   
   searchBarFunc = () => {
+    console.log("ref", this.searchBarRef);
     return this.searchBarRef;
   }
 
   render() {
     const {yearRange,result, total, page, size, query} = this.state;
+    console.log(this.props);
     console.log("Search", query);
 	const resultView = result.map((gj, index) =>(
       <div key={index}>
@@ -138,9 +144,10 @@ class Search extends React.Component {
       <div className="App page">
         <MobileView>
           <div className="leaflet-container-mobile">
-            <SwitchModeButtonGroup searchBarFunc={this.searchBarFunc} keyword={query.keyword}/>
+            <SwitchModeButtonGroup searchBarFunc={this.searchBarFunc} keyword={query.keyword}
+	    clickMap={() => this.goTo("/search_full")} clickList={() => this.goTo("/list")}/>
             <div style={{display: "none"}}>
-              <SearchBar query={query} ref={this.searchBarRef}/>
+              <SearchBar query={query} ref={this.searchBarRef} history={this.props.history}/>
             </div>
             <SampleMap locations={result} ref={this.sampleMap}/>
           </div>
@@ -151,18 +158,26 @@ class Search extends React.Component {
         {isBrowser && ( 
         <div className="flexbox">
           <div className="col2 result-column">
-            <SwitchModeButtonGroup searchBarFunc={this.searchBarFunc}/>
-            <SearchBar query={query} ref={this.searchBarRef}/>
+            <SwitchModeButtonGroup searchBarFunc={this.searchBarFunc} clickMap={() => this.goTo("/search_full")} clickList={() => this.goTo("/list")}/>
+            <SearchBar query={query} ref={this.searchBarRef} history={this.props.history}/>
             {pagination}<br/>
             {resultView}
             </div>
             <div className="leaflet-container-parent col">
-              <SampleMap locations={result} ref={this.sampleMap}/>
+              <SampleMap locations={result} ref={this.sampleMap} history={this.props.history}/>
             </div>
         </div>)}
       </div>
     );
   }
+
+  goTo(x) {
+    const url = this.searchBarRef.current.getSearchURL(x);
+    this.props.history.push(url);
+  }
 }
 
-export default Search;
+const SearchNoRouter = Search;
+
+export { SearchNoRouter };
+export default withRouter(Search);

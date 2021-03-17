@@ -76,8 +76,8 @@ class SearchBarPanelMobile extends Component {
     const budgetDiv = (
       <Modal.Body>
         <Row>
-          <Col>預算</Col>
-          <Col className="right-col">{numeral(minBudget).format("0,0a")} - {numeral(maxBudget).format("0,0a")}</Col>
+          <Col className="right-col">
+	    <h4>預算&nbsp;{numeral(minBudget).format("000000,0A")} - {numeral(maxBudget).format("0,0A")}</h4></Col>
         </Row>
         <Row>
           <Col>&nbsp;</Col>
