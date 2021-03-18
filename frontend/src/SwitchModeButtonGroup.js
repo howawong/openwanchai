@@ -31,8 +31,9 @@ class SwitchModeButtonGroup extends Component {
 		  尋找項目:  {this.keyword}
 		</Col>
         <Col className="text-right">
-          <Button onClick={this.props.clickMap}><img className="img-btn" src="/assets/icon/place.svg" /></Button>
+          <Button onClick={this.props.clickMap}><img className="img-btn" src="/assets/icon/place.svg" /></Button>&nbsp;
           <Button onClick={this.props.clickList}><img className="img-btn" src="/assets/icon/sort.svg" /></Button>&nbsp;
+          <Button onClick={this.props.clickFullMap}><img className="img-btn" src="/assets/icon/sort.svg" /></Button>&nbsp;
         </Col>
       </Row>
     )
@@ -49,7 +50,7 @@ class SwitchModeButtonGroup extends Component {
           <ButtonGroup>
             <Button variant="secondary" onClick={this.props.clickMap}>地圖</Button>
             <Button variant="secondary" onClick={this.props.clickList}>列表</Button>
-            <Button variant="secondary">數據圖</Button>
+            <Button variant="secondary" onClick={this.props.clickFullMap}>數據圖</Button>
           </ButtonGroup> 
         </Col>
       </Row>

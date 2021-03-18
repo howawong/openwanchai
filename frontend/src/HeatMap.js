@@ -55,7 +55,7 @@ class HeatMap extends Component {
       0.1: '#89BDE0', 0.2: '#96E3E6', 0.4: '#82CEB6',
       0.6: '#FAF3A5', 0.8: '#F5D98B', '1.0': '#DE9A96'
     };
-    const width = isMobile ? "80vw" : "70vw";
+    const width = isMobile ? "100vw" : "70vw";
     const height = isMobile ? "400px" : "600px";
     return (
       <Map center={[22.27, 114.17]} zoom={13} className="index-heatmap" style={{width: width, height: height}}>
@@ -83,12 +83,12 @@ class HeatMap extends Component {
   render() {
     const heatmap = this.heatmap();
     return (
-      <div className="heatmap-container">
+      <div className={isMobile ? "heatmap-container-mobile" :"heatmap-container"}>
         <Row>
           <Col>
-            <h3>灣仔預算 Heatmap</h3>
+            <h3 className="ml-3">灣仔預算 Heatmap</h3>
             <br/>
-            <p>回力場住得親十聽防美！離的高怎的可讀發合。何觀自了期還對……身近了相新急應體？告現開他年中學：土新人坐考理價金有的他，想達去治人媽決東習中信回主弟；英那北天有關時的配一作、光可然日生、歡方神次界是車如現定我黨小的出現告自天例屋市一！</p>
+            <p className={isMobile? "ml-3 mr-3 mb-3" : ""}>回力場住得親十聽防美！離的高怎的可讀發合。何觀自了期還對……身近了相新急應體？告現開他年中學：土新人坐考理價金有的他，想達去治人媽決東習中信回主弟；英那北天有關時的配一作、光可然日生、歡方神次界是車如現定我黨小的出現告自天例屋市一！</p>
           </Col>
           <BrowserView>
           <Col>{heatmap}</Col>
@@ -103,26 +103,27 @@ class HeatMap extends Component {
         <br/>
         <br/>
         <br/>
+
+        <BrowserView>
         <Row>
-          <BrowserView>
-          <Col>
-	    <StackedBar />
+          <Col lg={9}>
+	          <StackedBar />
           </Col>
-          </BrowserView>
-          <Col>
+          <Col lg={3}>
             <div class="right-container">
-            <h3>邊個類別分得較多預算?</h3>
-            <br/>
+            <h3 className="ml-3">邊個類別分得較多預算?</h3>
             <p>回力場住得親十聽防美！離的高怎的可讀發合。何觀自了期還對……身近了相新急應體？告現開他年中學：土新人坐考理價金有的他，想達去治人媽決東習中信回主弟；英那北天有關時的配一作、光可然日生、歡方神次界是車如現定我黨小的出現告自天例屋市一！</p>
             </div>
           </Col>
         </Row>
+        </BrowserView>
         <MobileView>
-          <Row>
-            <Col>
+
+            <h3 className="ml-3">邊個類別分得較多預算?</h3>
+
+            <p className="ml-3 mr-3">回力場住得親十聽防美！離的高怎的可讀發合。何觀自了期還對……身近了相新急應體？告現開他年中學：土新人坐考理價金有的他，想達去治人媽決東習中信回主弟；英那北天有關時的配一作、光可然日生、歡方神次界是車如現定我黨小的出現告自天例屋市一！</p>
   	      <StackedBar />
-            </Col>
-          </Row>
+          <div className="mb-5"></div>
         </MobileView>
       </div>
     );

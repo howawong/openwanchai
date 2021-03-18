@@ -20,6 +20,7 @@ import {
 } from "react-device-detect";
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
+import { withRouter } from "react-router";
 
 
 
@@ -32,6 +33,10 @@ class List extends SearchNoRouter {
     super.componentWillReceiveProps(nextProps);
   }
 
+  getSize() {
+    return 8;
+  }
+
   render() {
     const {query} = this.state;
     const paginationView = this.paginationView();
@@ -39,15 +44,15 @@ class List extends SearchNoRouter {
     return (
       <div className="App page">
 
-        <SwitchModeButtonGroup searchBarFunc={this.searchBarFunc} keyword={keyword}/>
+        <SwitchModeButtonGroup searchBarFunc={this.searchBarFunc} keyword={keyword} clickFullMap={() => this.goTo("/search_full")} clickMap={() => this.goTo("/search")} clickList={() => this.goTo("/list")}/>
 		<MobileView>
           <div style={{display: "none"}}>
-            <SearchBar query={query} ref={this.searchBarRef} prefix="/list" />
+            <SearchBar query={query} ref={this.searchBarRef} prefix="/list" history={this.props.history} />
           </div>
           <div className="border-no-margin"></div>
 		</MobileView>
         <BrowserView>
- 		    <SearchBar ref={this.searchBarRef} prefix="/list" />
+ 		    <SearchBar ref={this.searchBarRef} prefix="/list" history={this.props.history} query={query}/>
         </BrowserView>
         {paginationView}
         <BrowserView>
@@ -87,4 +92,4 @@ class List extends SearchNoRouter {
   }
 }
 
-export default List;
+export default withRouter(List);

@@ -145,7 +145,7 @@ class Search extends React.Component {
         <MobileView>
           <div className="leaflet-container-mobile">
             <SwitchModeButtonGroup searchBarFunc={this.searchBarFunc} keyword={query.keyword}
-	    clickMap={() => this.goTo("/search_full")} clickList={() => this.goTo("/list")}/>
+	    clickMap={() => this.goTo("/search")} clickList={() => this.goTo("/list")} clickFullMap={() => this.goTo("/search_full")}/>
             <div style={{display: "none"}}>
               <SearchBar query={query} ref={this.searchBarRef} history={this.props.history}/>
             </div>
@@ -158,7 +158,7 @@ class Search extends React.Component {
         {isBrowser && ( 
         <div className="flexbox">
           <div className="col2 result-column">
-            <SwitchModeButtonGroup searchBarFunc={this.searchBarFunc} clickMap={() => this.goTo("/search_full")} clickList={() => this.goTo("/list")}/>
+            <SwitchModeButtonGroup searchBarFunc={this.searchBarFunc} clickMap={() => this.goTo("/search_full")} clickList={() => this.goTo("/list")} clickFullMap={() => this.goTo("/search_full")}/>
             <SearchBar query={query} ref={this.searchBarRef} history={this.props.history}/>
             {pagination}<br/>
             {resultView}

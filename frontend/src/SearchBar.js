@@ -24,6 +24,7 @@ import numeral from 'numeral';
 class SearchBar extends Component {
   constructor(props) {
     super(props);
+    console.log("query", props);
     this.min = 0;
     this.max = 5000000;
     this.prefix = this.props.prefix ?? "/search";
@@ -32,12 +33,12 @@ class SearchBar extends Component {
     this.ref = React.createRef();
     this.keywordRef = React.createRef();
     this.state = state;
-    console.log(this.state, props.query);
   }
 
   stateFromProps(query) {
     const maxValue = query ? parseInt(query.maxAmount) : this.max;
     const minValue = query ? parseInt(query.minAmount) : this.min;
+    console.log("query", query);
     const keyword = query ? query.keyword : "";
     const minDate = new Date(query ? query.minDate : "2010-01-01");
     const maxDate = new Date(query ? query.maxDate : "2021-03-01");

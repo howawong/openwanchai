@@ -47,11 +47,13 @@ class SearchFull extends SearchNoRouter {
     </div>));
     const { history } = this.props;
     const pagination = this.paginationView();
+    const switchButton = (<SwitchModeButtonGroup searchBarFunc={this.searchBarFunc} clickFullMap={() => this.goTo("/search_full")} clickMap={() => this.goTo("/search")} clickList={() => this.goTo("/list")}  />);
     return (
       <div className="App page">
         <MobileView>
 	  <div className="searchbar-overlay">
-          <SwitchModeButtonGroup searchBarFunc={this.searchBarFunc} keyword={query.keyword}/>
+
+        {switchButton}
 	  </div>
           <div className="map-fullscreen">
             <SampleMap locations={result} ref={this.sampleMap} history={history}/>
@@ -61,7 +63,7 @@ class SearchFull extends SearchNoRouter {
         <div className="flexbox">
           <div className="col2 searchbar-overlay">
             <div className="no-scroll">
-              <SwitchModeButtonGroup searchBarFunc={this.searchBarFunc} clickMap={() => this.goTo("/search_full")} clickList={() => this.goTo("/search")}  />
+              {switchButton}
               <SearchBar query={query} ref={this.searchBarRef} prefix="search_full"/>
             </div>
           </div>
