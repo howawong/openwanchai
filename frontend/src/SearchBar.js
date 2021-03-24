@@ -176,7 +176,7 @@ class SearchBar extends Component {
               <Image src="/assets/icon/sort.svg" className="sort" onClick={this.toggle}/>
         {input}
             </Col>
-           <Col className="center d-none d-md-block">
+           <Col className="center mr-2">
              <Row>
         <Col xs="auto">預算</Col>
               <Col xs="auto"><h4>{numeral(minBudget).format("00000,0A")}</h4></Col>
@@ -191,7 +191,7 @@ class SearchBar extends Component {
               <Col xs="auto"><h4>{numeral(maxBudget).format("0,0A")}</h4></Col>
              </Row>
            </Col>
-           <Col className="right">
+           <Col className="right d-none d-lg-block">
              <DateRangePicker
          value={[minDate, maxDate]}
                disabledDate={allowedRange("2012-01-01","2021-04-10")}

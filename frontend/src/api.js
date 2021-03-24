@@ -12,6 +12,16 @@ exports.fetchStackedBarChart = () => {
   return fetch(root + "/sample/community_spending_by_committee").then(res => res.json());
 };
 
+exports.fetchTreeMap = (year=null) => {
+  const root = rootPath();
+  var q = "";
+  if (year) {
+    q = "?year=" + year.toString();
+  }
+  return fetch(root + "/sample/community_spending_by_organization" + q).then(res => res.json());
+};
+
+
 
 exports.fetchList = (keyword, minDate, maxDate, minAmount, maxAmount, page, size, categories) => {
   const root = rootPath();

@@ -11,7 +11,8 @@ import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Banner from './Banner';
 import './styles.css';
-import HeatMap from './HeatMap';
+import Visuals from './Visuals';
+import Footer from './Footer';
 import { fetchCategories, fetchHot } from './api';
 import {
   BrowserView,
@@ -30,6 +31,7 @@ class Index extends Component {
     this.state = {"categories": [], "hot": []}
     this.galleryRef = React.createRef();
     this.galleryRef2 = React.createRef();
+    this.galleryRef3 = React.createRef();
   }
 
   componentDidMount() {
@@ -51,6 +53,7 @@ class Index extends Component {
     const oneCol = isMobile;
 
     const categoryCards =  categories.map(c => (<Link to={"/search?minAmount=0&maxAmount=5000000&minDate=2010-01-01&maxDate=2021-03-01&categories=" + c.code.toString() + "&keyword="}><ProjectCategoryCard title={c.text} img={c.img}/></Link>));
+    const categoryCardsLarge =  categories.map(c => (<Link to={"/search?minAmount=0&maxAmount=5000000&minDate=2010-01-01&maxDate=2021-03-01&categories=" + c.code.toString() + "&keyword="}><ProjectCategoryCard large={true} title={c.text} img={c.img}/></Link>));
     const hotCards =  hot.map(c => c["properties"]).map(c => (
 
         <Link to={"/detail/" + c["identifier"]}  style={{ textDecoration: 'none' }}>
@@ -68,20 +71,20 @@ class Index extends Component {
 
     return (
       <div className="page">
-	    <Banner />    
-	    	<div className="most-visited">
-        <div className="title">
-          最多人查看項目
-        </div>
-        <br/>
-	  	<div className="right-bottons">
-		  <button className="btn btn-link" onClick={() => this.handleNav(this.galleryRef, "left")}><img src="/assets/btn/previous.svg"/></button>
-		  <button className="btn btn-link" onClick={() => this.handleNav(this.galleryRef, "right")}><img src="/assets/btn/next.svg"/></button>
-		</div>
-		</div>
+	<Banner />    
+	<div className="most-visited">
+          <div className="title">
+            最多人查看項目
+          </div>
+          <br/>
+	  <div className="right-bottons">
+            <button className="btn btn-link" onClick={() => this.handleNav(this.galleryRef, "left")}><img src="/assets/btn/previous.svg"/></button>
+            <button className="btn btn-link" onClick={() => this.handleNav(this.galleryRef, "right")}><img src="/assets/btn/next.svg"/></button>
+	  </div>
+	</div>
 	<div style={{clear:"both"}}></div>
         <div className="browse-gallery" ref={this.galleryRef}>
-		  {hotCards}
+          {hotCards}
         </div>
         <div className="border"/>
         <br/>
@@ -89,30 +92,31 @@ class Index extends Component {
           尋找項目種類
         </div>
         <div className="right-bottons">
-	          <button className="btn btn-link" onClick={() => this.handleNav(this.galleryRef2, "left")}><img src="/assets/btn/previous.svg"/></button>
-		  <button className="btn btn-link" onClick={() => this.handleNav(this.galleryRef2, "right")}><img src="/assets/btn/next.svg"/></button>
-
-		</div>
-		<br/>
-
+	  <button className="btn btn-link" onClick={() => {
+            this.handleNav(this.galleryRef2, "left");
+            this.handleNav(this.galleryRef3, "left");
+	  
+	  }}><img src="/assets/btn/previous.svg"/></button>
+          <button className="btn btn-link" onClick={() => {
+            this.handleNav(this.galleryRef2, "right");
+            this.handleNav(this.galleryRef3, "right");
+	  
+	  } }><img src="/assets/btn/next.svg"/></button>
+	</div>
+	<br/>
 	<div style={{clear:"both"}}></div>
-        <div className="project-category-gallery" ref={this.galleryRef2}>
-		  {categoryCards}
+        <div className="project-category-gallery d-lg-none" ref={this.galleryRef3}>
+          {categoryCards}
         </div>
-		<br/>
+        <div className="project-category-gallery d-none d-lg-block" ref={this.galleryRef2}>
+          {categoryCardsLarge}
+        </div>
+
+        <br/>
         <div className="border"/>
-		<br/>
-		<HeatMap />
-		<footer className="section footer-classic context-dark bg-image footer">
-		  &nbsp;
-		  &nbsp;
-          Copyright © {new Date().getFullYear()} 灣仔生猛<br/>
-          <div>
-          <span className="link"><Link to="/about">關於灣仔生猛</Link></span><span className="link">資料來源</span>&nbsp;<span className="link">下載 CSV</span>
-          </div>
-		  &nbsp;
-		  &nbsp;
-		</footer>
+	<br/>
+        <Visuals />
+	<Footer />
       </div>
     );
   }

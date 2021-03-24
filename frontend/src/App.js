@@ -5,6 +5,9 @@ import About from "./About";
 import Index from "./Index";
 import Search from "./Search";
 import SearchFull from "./SearchFull";
+import TreeMapPage from "./TreeMapPage";
+import HeatMapPage from "./HeatMapPage";
+import StackedBarChartPage from "./StackedBarChartPage";
 import Detail from "./Detail";
 import List from "./List";
 import './App.css';
@@ -35,6 +38,9 @@ const AppRouter = () => {
 	  <Route path="/" exact component={Index} />
 	  <Route path="/search" exact component={Search} />
 	  <Route path="/search_full" exact component={SearchFull} />
+	  <Route path="/treemap" exact component={TreeMapPage} />
+	  <Route path="/heatmap" exact component={HeatMapPage} />
+	  <Route path="/spent-by-committee" exact component={StackedBarChartPage} />
 	  <Route path="/list" exact component={List} />
 	  <Route path="/about" exact component={About} />
 	  <Route path="/detail/:id" exact component={Detail} />

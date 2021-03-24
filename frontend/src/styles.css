@@ -102,7 +102,10 @@
 
 .searchBar2 .center {
   border-left: 2px solid #C4C4C4;
-  border-right: 2px solid #C4C4C4;
+}
+
+.searchBar2 .right {
+  border-left: 2px solid #C4C4C4;
 }
 
 .searchBar2 .rs-picker-daterange {
@@ -195,7 +198,7 @@
   background-size: auto;
 }
 
-.about-page .button {
+.back-button {
   padding: 0.5em;
   border-radius: 1em;
   background-clip: border-box;
@@ -244,6 +247,18 @@
   line-height: 35px;
   text-align: center;
   color: #6D6D6D;
+}
+
+.page .title-mobile {
+  font-family: Noto Sans TC;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 1.0em;
+  line-height: 35px;
+  text-align: right;
+  color: #6D6D6D;
+  margin-right: 1em;
+  margin-top: -0.25em;
 }
 
 
@@ -305,6 +320,10 @@
 .project-type-card .label {
   width: 100%;
   text-align: center;
+}
+
+.long-card {
+  width: 500px;
 }
 
 .project-type-card .img {
@@ -534,4 +553,13 @@ white-space: nowrap;
 .map-fullscreen .leaflet-container{
   width: 100%;
   height: 100%;
+}
+
+.no-event {
+  pointer-events:none;
+}
+
+.custom-tooltip {
+  background-color:#fff;
+  border:1px solid black;
 }

@@ -50,12 +50,13 @@ class Detail extends React.Component {
 	  pdfURL : "",
 	  title: "",
 	  amount: 0,
+	  other_versions: []
 	};
 
     if (properties) {
 	  const type = properties["type"];
 	  const metadata = properties["metadata"];
-	  console.log("metadata", metadata);
+	  console.log("metadata", properties);
 	  if (type == "dmw") {
 	    output.pdfURL = metadata["project_pdf"]; 
 	    output.title = metadata["project_name"];    
@@ -71,6 +72,8 @@ class Detail extends React.Component {
 		output.amount = metadata["ballpark"];
 		output.start_date = metadata["expected_start_date"];
 		output.end_date = metadata["expected_end_date"];
+		output.other_versions = properties["other_versions"];
+		output.category = properties["category"];
 
 	  }
 	  if (type == "comm") {
@@ -90,6 +93,8 @@ class Detail extends React.Component {
 		output.amount = metadata["estimation"];
 		output.start_date = metadata["start_date"];
 		output.end_date = metadata["end_date"];
+		output.other_versions = properties["other_versions"];
+		output.category = properties["category"];
 	  }
 	} 
 	return output;
@@ -101,10 +106,8 @@ class Detail extends React.Component {
     const {id, result} = this.state;
     const map = result;
     const properties = result.length > 0 && result[0].properties;
-    if (result && result.length > 0)
-      console.log("dadas", result[0]);
     const detail = this.getDetail(properties);
-
+    console.log("detail", detail);
     if (isMobile) {
       return (
         <DetailMobile map={map} detail={detail} detailRef={this.sampleMap}/>
@@ -112,7 +115,7 @@ class Detail extends React.Component {
     
     }
  
-   
+    console.log("metadata2", detail);  
     return (
       <div className="page w-100">
         <div className="detail">
@@ -140,7 +143,7 @@ class Detail extends React.Component {
         <div>
           <Row>
             <Col><h3>{detail.title}</h3></Col>
-            <Col xs={2}><img src="/assets/icon/construction_list.svg" /></Col>
+            <Col xs={2}><img src={"/assets/icon/" + (detail.category ? detail.category.img: "")} /></Col>
           </Row>
         </div>
         <div className="border"/><br/>
@@ -170,6 +173,7 @@ class Detail extends React.Component {
 		{detail.desc2}
         <div className="border"/><br/>
 		計劃書: &nbsp;&nbsp;<a href={detail.pdfURL} target="_blank"><Button color="blue"> 下載 </Button></a>
+              {detail.other_versions &&  detail.other_versions.map(ov => (<span>&nbsp;&nbsp;<a href={ov.document_url} target="_blank"><Button color="blue"> 下載 ({ov.document_no})</Button></a></span>))  }
         </div>
         </Col>
         <Col xs={2}></Col>

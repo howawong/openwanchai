@@ -9,8 +9,8 @@ import Row from 'react-bootstrap/Row';
 import Container from 'react-bootstrap/Container'
 import { Link } from 'react-router-dom';
 import Banner from './Banner';
+import Footer from './Footer';
 import './styles.css';
-import HeatMap from './HeatMap';
 import { fetchCategories, fetchHot } from './api';
 import {
   BrowserView,
@@ -18,7 +18,7 @@ import {
   isBrowser,
   isMobile
 } from "react-device-detect";
-
+import BackButton from './BackButton';
 
 
 
@@ -38,9 +38,7 @@ class About extends Component {
         <br/>
         <br/>
         <div className="text-right mr-5">
-          <Link className="button" to="/">
-            <b>&lt;</b> &nbsp;&nbsp;返回
-          </Link>
+	  <BackButton />
         </div>
         <br/>
         <br/>
@@ -88,22 +86,17 @@ class About extends Component {
   render() {
     return (
       <div className="page">
-	      <div className="about-page">
-	        <Row>
-	          <Col className="left-col">
-	          </Col>
-	          <Col>
+	<div className="about-page">
+	  <Row>
+	    <Col className="left-col">
+	    </Col>
+	    <Col>
               {this.about()}
               {this.source()}
-	          </Col>
-	        </Row>
-	      </div>
-	      <footer className="section footer-classic context-dark bg-image footer">
-        Copyright © {new Date().getFullYear()} 灣仔生猛<br/>
-        <div>
-        <span className="link"><Link to="/about">關於灣仔生猛</Link></span><span className="link">資料來源</span>&nbsp;<span className="link">下載 CSV</span>
-        </div>
-	      </footer>
+	    </Col>
+	  </Row>
+	</div>
+	<Footer />
       </div>
     );
   }

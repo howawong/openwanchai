@@ -18,7 +18,7 @@ const renderCustomizedLabel = (props) => {
   if  ( width < 50) {
     return (<span></span>);
   }
-  return <Label {...rest} fontSize="12" fill="#000000" fontWeight="Bold" />;
+  return <Label {...rest} fontSize="12" fill="#fff" fontWeight="Bold" />;
 };
 
 export default class StackedBar extends React.Component {
@@ -40,21 +40,21 @@ export default class StackedBar extends React.Component {
     const { result, committees } = this.state;
     result.forEach(r => {r["name"] = r["name"].toString();  });
     const colors = [
-			"#C94C27",
-			"#005CA5",
-			"#ECE211",
-			"#00905F",
-			"#4BA1D9",
-			"#DE9027",
-			"#5CC097",
-			"#FABBA3",
-			"#8351A1",
-			"#ED1E2E",
-			"#6DBBE8",
-			"#F37651",
-			"#6CBE45",
-			"#D5A7CD",
-			"#C15F97",
+        "#999999",
+	"#005CA5",
+	"#ECE211",
+	"#00905F",
+	"#4BA1D9",
+	"#DE9027",
+	"#FABBA3",
+	"#8351A1",
+	"#ED1E2E",
+	"#6DBBE8",
+	"#F37651",
+	"#6CBE45",
+	"#D5A7CD",
+	"#C15F97",
+
     ]
     const bars = committees.map((c, i) => (
       <Bar dataKey={c} fill={colors[i]} stackId="a">
@@ -64,9 +64,9 @@ export default class StackedBar extends React.Component {
 
     return (
       <div className="content c-white">
-        <h1>&nbsp;&nbsp;&nbsp;&nbsp;</h1>
-        <ResponsiveContainer height={250} width="100%">
+        <ResponsiveContainer height={this.props.height} width={this.props.width}>
           <BarChart
+	    margin={{left:-30}}
             layout="vertical"
             data={result}
           >
@@ -74,7 +74,7 @@ export default class StackedBar extends React.Component {
             <YAxis
               type="category"
               dataKey="name"
-              stroke="#000000"
+              stroke="#ffffff"
             />
             <Tooltip />
 	    {bars}

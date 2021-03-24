@@ -10,7 +10,7 @@ import Row from 'react-bootstrap/Row';
 import './styles.css';
 import HeatmapLayer from 'react-leaflet-heatmap-layer';
 import { Map, TileLayer, Marker, Popup, GeoJSON } from 'react-leaflet';
-import StackedBarChart from './StackedBar';
+import HeatMap from './HeatMap';
 import Footer from './Footer';
 import BackButton from './BackButton';
 import MarkerCluster from './MarkerCluster';
@@ -26,7 +26,7 @@ import {fetchList} from './api';
 
 
 
-class HeatMap extends Component {
+class HeatMapPage extends Component {
   constructor(props) {
     super(props);
     this.state = { points: [], r: [] };
@@ -78,7 +78,7 @@ class HeatMap extends Component {
       0.1: '#89BDE0', 0.2: '#96E3E6', 0.4: '#82CEB6',
       0.6: '#FAF3A5', 0.8: '#F5D98B', '1.0': '#DE9A96'
     };
-    const width = this.props.width || (isMobile ? "100vw" : "70vw");
+    const width = isMobile ? "100vw" : "70vw";
     const height = isMobile ? "500px" : "600px";
 
     var greenIcon = new L.Icon({
@@ -129,7 +129,7 @@ class HeatMap extends Component {
     const markers = this.state.r.filter(p => p.geometry && p.geometry.coordinates).map((p, i) => ({position: {lat: getFirst(p.geometry)[1], lng: getFirst(p.geometry)[0] }, text: p.properties.project_name + "<br/>" + p.properties.address}));
     const icons = [blueIcon, purpleIcon, redIcon, greenIcon];
     return (
-      <Map center={[22.275, 114.17]} zoom={14} className="index-heatmap" style={{width: width, height: height}}  maxZoom={20} dragging={this.props.dragging ?? true} scrollWheelZoom={this.props.scrollWheelZoom ?? true} touchZoom={this.props.touchZoom ?? true}  doubleClickZoom={this.props.doubleClickZoom ?? true}>
+      <Map center={[22.275, 114.17]} zoom={14} className="index-heatmap" style={{width: width, height: height}}  maxZoom={20}>
         <TileLayer
             attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
             url='http://{s}.tile.osm.org/{z}/{x}/{y}.png'
@@ -139,10 +139,10 @@ class HeatMap extends Component {
           longitudeExtractor={m => m[1]}
           latitudeExtractor={m => m[0]}
           gradient={gradient}
-          intensityExtractor={m => 120}
-          radius={50.0}
-          blur={70.0}
-          max={50.0}
+          intensityExtractor={m => 100}
+          radius={70.0}
+          blur={50.0}
+          max={150.0}
         /> 
 	<MarkerCluster markers={markers} />
      </Map>
@@ -150,8 +150,50 @@ class HeatMap extends Component {
   }
 
   render() {
-    return (this.heatMap());
+    return (
+      <div className="page">
+        <BrowserView>
+	<Row className="justify-content-md-center mt-5 mb-5">
+        <Col xm={3} className="ml-3">
+	  <BackButton />    
+	</Col>
+	<Col xs="auto">
+	<div className="detail text-center">
+          <div className="shadow-container">
+	    <h2 className="mb-5">邊個類別分得最多預算 ?</h2>
+	      <HeatMap />
+	    <div className="mb-5"><br/><br/><br/><br/></div>
+	  </div>
+	</div>
+	</Col>
+	<Col xm={3}>
+	</Col>
+	<br/>
+	<br/>
+	<br/>
+	<br/>
+	</Row>
+        </BrowserView>
+  <MobileView>
+    <Row className="ml-2 mb-2 mt-2">
+      <BackButton/>&nbsp;&nbsp;&nbsp;&nbsp;
+      <h3 className="">邊個類別分得最多預算 ?</h3>
+    </Row>
+    <Row>
+      <Col>
+        <HeatMap />
+      </Col>
+    </Row>
+  </MobileView>
+
+	<br/>
+	<br/>
+	<br/>
+	<br/>
+	<Footer />
+      </div>
+    );
   }
 }
 
-export default HeatMap;
+export default HeatMapPage;
