@@ -35,10 +35,16 @@ def run(verbose=True):
     df = df.rename(columns=mapping)
     l = list(set(mapping.values()))
     df = df[l]
+    df = df.sort_values(by=["code"])
+    #print(df[df["code"].str.contains("CIA2020089")][["group_name", "code"]])
+    #aasa
+
     CommunityActivityMetaData.objects.all().delete()
     CommunityActivity.objects.all().delete()
     for idx, row in df.iterrows():
         row["document_date"] = datetime.strptime(row["document_date"], "%d/%m/%Y")
+        if row["code"].strip() == "":
+            continue
         for d in ["start_date", "end_date", "start_date_1", "end_date_1", "end_date_2", "start_date_2"]:
             try:
                 row[d] = datetime.strptime(row[d], "%d/%m/%Y")
@@ -68,6 +74,7 @@ def run(verbose=True):
         if "." in t:
             t = t.split(".")[1]
             row["category"] = Category.objects.filter(text=t).first()
+        
         last_char = row["code"][-1:]
         if last_char.isalpha():
             parent_code = row["code"][0:-1]
@@ -93,4 +100,11 @@ def run(verbose=True):
         if comm.metadata is None:
             print(comm.code, "has no metadata")
         comm.save()
+
+    for metadata in CommunityActivityMetaData.objects.all():
+        metadata.activity = CommunityActivity.objects.filter(code=metadata.code).first()
+        if metadata.activity is None:
+            print(metadata.code, "has no activity")
+        else:
+            metadata.save()
 

@@ -15,6 +15,7 @@ from django.contrib.gis.db import models
 from django.contrib.gis.geos import Point
 from django.contrib.gis.geos import GEOSGeometry
 from django.db.models import DateTimeField, ExpressionWrapper, F
+from rest_framework_gis.fields import GeometryField
 
 
 def home_view(request):
@@ -46,20 +47,21 @@ class WorldBorderList(APIView):
 class DMWMetaDataSerializer(serializers.ModelSerializer):
     class Meta:
         model = DistrictMinorWorkMetaData
-        fields = ["project_name", "identifier", "ballpark", "project_pdf", "document_date", "ballpark", "audience_size", "outline", "location", "expected_start_date", "expected_end_date", "expected_date_format", "committee", "objective"]
+        fields = ["project_name", "identifier", "ballpark", "project_pdf", "document_date", "ballpark", "audience_size", "outline", "location", "expected_start_date", "expected_end_date", "expected_date_format", "committee", "objective", "approved"]
 
-
-class CommunityActivityMetaDataSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = CommunityActivityMetaData
-        fields = ["code", "group_type", "group_name", "document_date", "document_no", "project_name", "organization_name", "first_time", "document_url", "coorganizer_govt", "coorganizer_non_govt", "address", "latitude", "longitude", "date_type", "start_date", "end_date", "start_date_1", "start_date_type_1", "audience_size", "nature", "objective", "audience", "helping_organization", "estimation", "applied", "income", "payee", "content"]
 
 class CommunityActivitySerializer(GeoFeatureModelSerializer):
-    metadata = CommunityActivityMetaDataSerializer(many=False)
     class Meta:
         model = CommunityActivity
         geo_field = "mpoly"
-        fields = ["metadata"]
+        fields = []
+
+
+class CommunityActivityMetaDataSerializer(serializers.ModelSerializer):
+    activity = CommunityActivitySerializer(many=False)
+    class Meta:
+        model = CommunityActivityMetaData
+        fields = ["code", "group_type", "group_name", "document_date", "document_no", "project_name", "organization_name", "first_time", "document_url", "coorganizer_govt", "coorganizer_non_govt", "address", "latitude", "longitude", "date_type", "start_date", "end_date", "start_date_1", "start_date_type_1", "audience_size", "nature", "objective", "audience", "helping_organization", "estimation", "applied", "income", "payee", "content", "activity", "point", "approved"]
 
 class DistrictMinorWorkSerializer(GeoFeatureModelSerializer):
     metadata = DMWMetaDataSerializer(many=False)
@@ -268,21 +270,41 @@ class DMWDetail(GenericAPIView):
         detail  = DistrictMinorWork.objects.filter(identifier=objectID).first()
         detail_type = "dmw"
         serializer_class = DistrictMinorWorkSerializer
-        if detail is None:
-            detail_type = "comm"
-            detail = CommunityActivity.objects.filter(code=objectID).first()
-            serializer_class = CommunityActivitySerializer
-        if detail is None:
-            raise Http404
-        else:
+        if detail is not None:
             data = serializer_class(detail, many=False).data
+            print(data)
             data["properties"]["type"] = detail_type
+            data["properties"]["category"] = CategorySerializer(detail.metadata.category, many=False).data
+            data["properties"]["other_versions"] = []
             return Response(data)
+        detail_type = "comm"
+        detail = CommunityActivityMetaData.objects.filter(code=objectID).first()
+        if detail is not None:
+            children = CommunityActivityMetaData.objects.filter(parent=objectID)
+            other_versions = []
+            for child in children:
+                print(child)
+                other_versions.append({"document_date": child.document_date, "document_no": child.document_no, "document_url": child.document_url})
+
+            activity = detail.activity
+            serializer_class = CommunityActivityMetaDataSerializer
+            metadata = serializer_class(detail, many=False).data
+            f = GeometryField(precision=None)
+            if activity is None:
+                d = f.to_representation(detail.point)
+                metadata.point = None
+            else:
+                d = f.to_representation(detail.activity.mpoly)
+                metadata.activity = None
+            cat = CategorySerializer(detail.category, many=False).data
+
+            return Response({"geometry": d, "type": "Feature", "properties": {"metadata": metadata, "type": "comm", "category": cat, "other_versions": other_versions}})
+        raise Http404
 
 
 class StackedBarChart(GenericAPIView):
     def get(self, request, format=None):
-        communities = CommunityActivityMetaData.objects.filter(Q(start_date__year__gte=2014) & Q(parent__isnull=True) & Q(stacked_bar_chart_flag="Y"))
+        communities = CommunityActivityMetaData.objects.filter(Q(start_date__year__gte=2014) & Q(stacked_bar_chart_flag="Y"))
         agg = communities.values('start_date__year', 'group_name').annotate(Sum('stacked_bar_chart_amount')).order_by('start_date__year', 'group_name')
         result = {}
         committees = set()
@@ -301,6 +323,42 @@ class StackedBarChart(GenericAPIView):
         data = {"result": result.values(), "committees": committees}
         return Response(data)
 
+class TreeMap(GenericAPIView):
+    def get(self, requests, format=None):
+        year = int(self.request.query_params.get("year", "0"))
+        q = Q(start_date__year__gte=2014) & Q(stacked_bar_chart_flag="Y")
+        if year > 0:
+            print(year)
+            q = q & Q(start_date__year=year)
+        communities = CommunityActivityMetaData.objects.filter(q)
+        others = []
+        agg = communities.values('organization_name').annotate(Sum('stacked_bar_chart_amount')).order_by('organization_name')
+        result = []
+        others = []
+        organizations = set()
+        others_amount = 0.0
+        for c in agg:
+            amount = c["stacked_bar_chart_amount__sum"]
+            organization = c["organization_name"]
+            if organization == "":
+                continue
+            organizations.add(organization)
+            #year = c["start_date__year"]
+            key = year
+            d = {"name": organization, "amount": amount}
+            if amount is None:
+                print(d)
+                continue
+            if (amount <= 200000.0 and year < 0) or (year > 0 and amount <= 10000.0):
+                others_amount += float(amount)
+                #others.append(d)
+            else:
+                result.append(d)
+        if others_amount > 0:
+            result.append({"name": "其他", "amount": others_amount})
+        organizations = list(organizations)
+        data = {"result": result, "organizations": organizations}
+        return Response(data)
 
 
 

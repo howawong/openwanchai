@@ -65,6 +65,7 @@ class DistrictMinorWorkMetaData(models.Model):
     location = models.CharField(max_length=512)
     parent = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True)
     version = models.CharField(max_length=4, null=True)
+    approved = models.CharField(max_length=128, null=True, blank=True)
 
     def __str__(self):
         return self.project_name

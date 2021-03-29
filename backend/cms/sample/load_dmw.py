@@ -12,8 +12,8 @@ dmw_mapping = {
       , 'mpoly': "MULTIPOLYGON"
 }
 
-world_shp = 'WanChai_MWP.shp'
-csv_file = 'metadata.csv'
+world_shp = 'WanChai_MWP_WGS_1984.shp'
+csv_file = 'WanChai_MWP_WGS_1984.csv'
 column_mapping = 'mapping.csv'
 
 
@@ -55,7 +55,7 @@ def run(verbose=True):
         row["audience"] = ",".join(audience)
         row["ballpark_text"] = row["ballpark"]
         try:
-            row["ballpark"] = float(row["ballpark_text"])
+            row["ballpark"] = float(row["ballpark_text"].replace(",", ""))
         except:
             row["ballpark"] = 0
         m = DistrictMinorWorkMetaData(**row)

@@ -9,5 +9,6 @@ urlpatterns = [
     path("dmw", views.DMWList.as_view()),
     path("hot", views.HotList.as_view()),
     path("detail", views.DMWDetail.as_view()),
-    path("community_spending_by_committee", views.StackedBarChart.as_view())
+    path("community_spending_by_committee", views.StackedBarChart.as_view()),
+    path("community_spending_by_organization", views.TreeMap.as_view())
 ]
