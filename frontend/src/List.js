@@ -34,7 +34,7 @@ class List extends SearchNoRouter {
   }
 
   getSize() {
-    return 8;
+    return 10;
   }
 
   render() {
@@ -44,7 +44,7 @@ class List extends SearchNoRouter {
     return (
       <div className="App page">
 
-        <SwitchModeButtonGroup searchBarFunc={this.searchBarFunc} keyword={keyword} clickFullMap={() => this.goTo("/search_full")} clickMap={() => this.goTo("/search")} clickList={() => this.goTo("/list")}/>
+        <SwitchModeButtonGroup searchBarFunc={this.searchBarFunc} keyword={keyword} clickFullMap={() => this.goTo("/visuals", false)} clickMap={() => this.goTo("/search")} clickList={() => this.goTo("/list")}/>
 		<MobileView>
           <div style={{display: "none"}}>
             <SearchBar query={query} ref={this.searchBarRef} prefix="/list" history={this.props.history} />
@@ -72,7 +72,7 @@ class List extends SearchNoRouter {
         this.state.result.map(gj =>(
           <div>
 
-          <Link to={"/detail/" + gj.properties["identifier"]}  style={{ textDecoration: 'none' }} target="_blank">
+          <Link to={"/detail/" + gj.properties["identifier"]}  style={{ textDecoration: 'none' }}>
           <CategoryCard isLong={true}
             category={gj.properties["category"]}
             name={gj.properties["project_name"]}

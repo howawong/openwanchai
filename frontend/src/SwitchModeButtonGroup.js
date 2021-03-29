@@ -27,13 +27,10 @@ class SwitchModeButtonGroup extends Component {
         <Col>
           <Link to="/"><img src="/assets/logo.png" /></Link>
 		</Col>
-		<Col>
-		  尋找項目:  {this.keyword}
-		</Col>
         <Col className="text-right">
           <Button onClick={this.props.clickMap}><img className="img-btn" src="/assets/icon/place.svg" /></Button>&nbsp;
           <Button onClick={this.props.clickList}><img className="img-btn" src="/assets/icon/sort.svg" /></Button>&nbsp;
-          <Button onClick={this.props.clickFullMap}><img className="img-btn" src="/assets/icon/sort.svg" /></Button>&nbsp;
+          <Button onClick={this.props.clickFullMap}><img className="img-btn" src="/assets/icon/type.svg" /></Button>&nbsp;
         </Col>
       </Row>
     )

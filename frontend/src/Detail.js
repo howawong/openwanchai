@@ -4,12 +4,14 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import Jumbotron from 'react-bootstrap/Jumbotron';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
-import { Link } from 'react-router-dom';
+import Badge from 'react-bootstrap/Badge';
 import CategoryCard from './CategoryCard';
 import './styles.css';
 import SampleMap from './SampleMap';
+import SearchBar from './SearchBar';
 import DetailMobile from './DetailMobile';
 import {fetchDetail} from './api';
+import { Link } from 'react-router-dom';
 import {
   BrowserView,
   MobileView,
@@ -33,10 +35,8 @@ class Detail extends React.Component {
     const {id} = this.state;
     fetchDetail(id).then(
 	  result => {
-        console.log(result);
         console.log("fuck", this.sampleMap);
         if (this.sampleMap.current) {
-		    console.log("clear");
 		    this.sampleMap.current.clear([result]);
 		}
 		this.setState({...this.state, result: [result]});
@@ -56,6 +56,7 @@ class Detail extends React.Component {
     if (properties) {
 	  const type = properties["type"];
 	  const metadata = properties["metadata"];
+	  const category = properties["category"];
 	  console.log("metadata", properties);
 	  if (type == "dmw") {
 	    output.pdfURL = metadata["project_pdf"]; 
@@ -74,6 +75,7 @@ class Detail extends React.Component {
 		output.end_date = metadata["expected_end_date"];
 		output.other_versions = properties["other_versions"];
 		output.category = properties["category"];
+		output.approved = metadata["approved"];
 
 	  }
 	  if (type == "comm") {
@@ -81,8 +83,8 @@ class Detail extends React.Component {
 		output.desc_title_2 = "其他資料內容﹙申請書7a﹚";
 
 
-
-	    output.pdfURL = metadata["document_url"];
+		output.approved = metadata["approved"];
+  	        output.pdfURL = metadata["document_url"];
 		output.title = metadata["project_name"];
 		output.desc = metadata["objective"]
 		output.desc2 = metadata["content"];
@@ -101,6 +103,21 @@ class Detail extends React.Component {
   }
 
 
+  approvedStatus(approved) {
+    if (approved) {
+      var variant = "danger";
+      if (approved.includes("通過")) {
+        variant = "success";
+      }
+      return (<Badge variant={variant}>{approved}</Badge> );
+    
+    } else {
+      return (<div></div>);
+    }
+  
+  }
+
+
 
   render() {
     const {id, result} = this.state;
@@ -110,7 +127,7 @@ class Detail extends React.Component {
     console.log("detail", detail);
     if (isMobile) {
       return (
-        <DetailMobile map={map} detail={detail} detailRef={this.sampleMap}/>
+        <DetailMobile map={map} detail={detail} detailRef={this.sampleMap} approvedStatus={this.approvedStatus} history={this.props.history} goTo={this.goTo}/>
       )
     
     }
@@ -126,9 +143,9 @@ class Detail extends React.Component {
           <Col><span className="title">搜尋灣仔區撥款項目</span></Col>
           <Col>
             <ButtonGroup aria-label="Basic example">
-              <Button variant="secondary">地圖</Button>
-              <Button variant="secondary">列表</Button>
-              <Button variant="secondary">數據圖</Button>
+              <Button variant="secondary"><Link to="/search">地圖</Link></Button>
+              <Button variant="secondary"><Link to="/list">列表</Link></Button>
+              <Button variant="secondary"><Link to="/visuals">數據圖</Link></Button>
             </ButtonGroup> 
           </Col>
         </Row>
@@ -142,7 +159,7 @@ class Detail extends React.Component {
         <br/>
         <div>
           <Row>
-            <Col><h3>{detail.title}</h3></Col>
+            <Col><h3>{detail.title} {this.approvedStatus(detail.approved)}</h3></Col>
             <Col xs={2}><img src={"/assets/icon/" + (detail.category ? detail.category.img: "")} /></Col>
           </Row>
         </div>
@@ -161,7 +178,7 @@ class Detail extends React.Component {
             <Col><img src="/assets/icon/calender.svg" />開始日期: {detail.start_date}</Col>
           </Row>
           <Row>
-            <Col><img src="/assets/icon/type.svg" />類別: 聯誼</Col>
+            <Col><img src="/assets/icon/type.svg" />類別: {detail.category ? detail.category.text: ""}</Col>
             <Col><img src="/assets/icon/end date.svg" />結束日期: {detail.end_date}</Col>
           </Row>
         </div>
@@ -182,6 +199,13 @@ class Detail extends React.Component {
       </div>
     );
   }
+
+  goTo(x, shouldGet=true) {
+    console.log(sb);
+    //this.props.history.push(x);
+  }
+
+
 }
 
 

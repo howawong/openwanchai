@@ -7,13 +7,8 @@ import Col from 'react-bootstrap/Col';
 import { Link } from 'react-router-dom';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
-import './styles.css';
 import HeatmapLayer from 'react-leaflet-heatmap-layer';
 import { Map, TileLayer, Marker, Popup, GeoJSON } from 'react-leaflet';
-import HeatMap from './HeatMap';
-import Footer from './Footer';
-import BackButton from './BackButton';
-import MarkerCluster from './MarkerCluster';
 import {
   BrowserView,
   MobileView,
@@ -22,9 +17,15 @@ import {
 } from "react-device-detect";
 
 
+import './styles.css';
+import HeatMap from './HeatMap';
+import Footer from './Footer';
+import BackButton from './BackButton';
+import MarkerCluster from './MarkerCluster';
 import {fetchList} from './api';
 
 
+var L = window.L;
 
 class HeatMapPage extends Component {
   constructor(props) {

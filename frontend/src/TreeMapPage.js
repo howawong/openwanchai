@@ -34,12 +34,12 @@ class TreeMapPage extends Component {
   }
 
   render() {
-    const content = (height) => (
+    const content = (height, ratio) => (
       <div>
-            <TreeMap width="100%" height={height} ref={this.ref} max={12} w={5}  fontSize={20}/>
+            <TreeMap width="100%" ratio={ratio} height={height} ref={this.ref} max={12} w={5}  fontSize={isMobile ? 12 : 16}/>
             <div className="mb-3"><br/></div>
               <div>
-              <Form.Group controlId="exampleForm.ControlSelect1">
+              <Form.Group controlId="treemap.year">
                 <Form.Control as="select" onChange={this.onChange.bind(this)}>
                   <option value="-1">所有年份</option>
                   <option value="2014">2014</option>
@@ -68,7 +68,7 @@ class TreeMapPage extends Component {
             <div className="detail text-center">
             <div className="shadow-container">
             <h2 className="mb-5">灣仔預算樹狀圖</h2>
-            {content(800)}
+            {content(isMobile ? 200 : 800)}
             </div>
         </div>
       </Col>
@@ -87,7 +87,7 @@ class TreeMapPage extends Component {
     </Row>
     <Row>
       <Col>
-      {content(400)}
+      {content(400, isMobile ? 10 / 3 : null)}
       </Col>
     </Row>
   </MobileView>

@@ -26,7 +26,7 @@ class SearchBar extends Component {
     super(props);
     console.log("query", props);
     this.min = 0;
-    this.max = 5000000;
+    this.max = 3000000;
     this.prefix = this.props.prefix ?? "/search";
     this.mapping = [1, 3, 4, 5, 6, 7, 8,9];
     const state = this.stateFromProps(props.query);
@@ -36,12 +36,12 @@ class SearchBar extends Component {
   }
 
   stateFromProps(query) {
-    const maxValue = query ? parseInt(query.maxAmount) : this.max;
-    const minValue = query ? parseInt(query.minAmount) : this.min;
-    console.log("query", query);
+    const maxValue = (query ? parseInt(query.maxAmount ?? this.max.toString()) : this.max) ?? this.max;
+    const minValue = (query ? parseInt(query.minAmount ?? this.min.toString()) : this.min) ?? this.min;
+    console.log("query", query, minValue, maxValue);
     const keyword = query ? query.keyword : "";
-    const minDate = new Date(query ? query.minDate : "2010-01-01");
-    const maxDate = new Date(query ? query.maxDate : "2021-03-01");
+    const minDate = new Date((query ? query.minDate : "2010-01-01") ?? "2010-01-01");
+    const maxDate = new Date((query ? query.maxDate : "2021-03-01") ?? "2021-03-01");
     const checked = [true, true, true, true, true, true, true, true];
     console.log("q", query);
     if (query && query.categories) {
@@ -172,26 +172,29 @@ class SearchBar extends Component {
         <BrowserView>
         <div className="searchBar2">
           <Row>
-            <Col className="left d-none d-sm-block">
+            <Col className="left d-none d-sm-block mt-auto mb-auto">
               <Image src="/assets/icon/sort.svg" className="sort" onClick={this.toggle}/>
-        {input}
+                {input}
             </Col>
            <Col className="center mr-2">
              <Row>
-        <Col xs="auto">預算</Col>
-              <Col xs="auto"><h4>{numeral(minBudget).format("00000,0A")}</h4></Col>
-              <Col>
-          <Range
+              <Col><span className="digit">{numeral(minBudget).format("0,0A")} <span className="line">~</span> {numeral(maxBudget).format("0,0A")}</span>
+	    
+	              <Range
           defaultValue={value}
           onAfterChange={this.onRangeAfterChange}
           handleStyle={[handleStyle, handleStyle]}
         
           />
-          </Col>
-              <Col xs="auto"><h4>{numeral(maxBudget).format("0,0A")}</h4></Col>
+ 
+	    
+	    </Col>
+
              </Row>
+	    <Row>
+		</Row>
            </Col>
-           <Col className="right d-none d-lg-block">
+           <Col className="right d-none d-lg-block mt-auto mb-auto">
              <DateRangePicker
          value={[minDate, maxDate]}
                disabledDate={allowedRange("2012-01-01","2021-04-10")}

@@ -12,18 +12,17 @@ import {
 class CustomizedContent extends PureComponent {
   text(name, x, y, width, height, max, w, fontSize) {
 
-    console.log("CC", max, w, fontSize);
     var k = w;
     var p = 2;
-    if (height <= 30 || width <= 30) {
+    if (height <= 30 || width <= 40) {
       return (<text/>);
     } 
-    if (width <= (isBrowser ? 70 : 30)) {
+    if (width <= (isBrowser ? 70 : 70)) {
       k = 2;
       max = 6;
     }
-    if (height <= (isBrowser ? 70 : 30)) {
-      k = 8;
+    if (height <= (isBrowser ? 70 : 70)) {
+      k = 4;
       max = 6;
       p = 0;
     }

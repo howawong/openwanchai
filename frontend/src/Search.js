@@ -29,22 +29,25 @@ class Search extends React.Component {
   }
 
   getSize() {
-    return 4;
+    return 10;
   }
 
   componentWillReceiveProps(nextProps) {
     const query = qs.parse(nextProps.location.search.slice(1));
+    console.log("query2", query);
     this.setState({result: [], page: 1, total: 0, size: this.getSize(), loading:false, query: query}, () => { this.fetchData(1);})
   }
 
   fetchData(page) {
     const {minDate, maxDate, size, loading, query} = this.state;
+
+    console.log("query2", this.state);
 	if (! loading) {
       console.log("query", query);
       if (query.categories === undefined) {
         query.categories = ""
       }
-      fetchList(query.keyword, query.minDate, query.maxDate, query.minAmount, query.maxAmount, page, size, query.categories.split(",")).then(
+      fetchList(query.keyword, query.minDate, query.maxDate, query.minAmount ?? 0, query.maxAmount ?? 3000000, page, size, query.categories.split(",")).then(
 	    result => {
 		  if (this.sampleMap.current) {
 		    console.log("clear");
@@ -145,7 +148,7 @@ class Search extends React.Component {
         <MobileView>
           <div className="leaflet-container-mobile">
             <SwitchModeButtonGroup searchBarFunc={this.searchBarFunc} keyword={query.keyword}
-	    clickMap={() => this.goTo("/search")} clickList={() => this.goTo("/list")} clickFullMap={() => this.goTo("/search_full")}/>
+	    clickMap={() => this.goTo("/search")} clickList={() => this.goTo("/list")} clickFullMap={() => this.goTo("/visuals", false)}/>
             <div style={{display: "none"}}>
               <SearchBar query={query} ref={this.searchBarRef} history={this.props.history}/>
             </div>
@@ -171,8 +174,8 @@ class Search extends React.Component {
     );
   }
 
-  goTo(x) {
-    const url = this.searchBarRef.current.getSearchURL(x);
+  goTo(x, shouldGet=true) {
+    const url = shouldGet ? this.searchBarRef.current.getSearchURL(x) : x;
     this.props.history.push(url);
   }
 }

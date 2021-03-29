@@ -24,15 +24,23 @@ import {
 
 import {fetchList} from './api';
 
+var L = window.L;
 
 
 class HeatMap extends Component {
   constructor(props) {
     super(props);
     this.state = { points: [], r: [] };
+    this._isMounted = false;
+  }
+
+  componentWillUnmount() {
+   this._isMounted = false;
   }
 
   componentDidMount() {
+
+    this._isMounted = true;
       fetchList("", "", "", 0, 99999999, 1, 99999).then(j => {
         const points = [];
         const r = j["results"]["features"];
@@ -56,8 +64,10 @@ class HeatMap extends Component {
       }}
     });
         return [points, r];
-      }).then(l => this.setState({...this.state, points: l[0], r: l[1]}));
+      }).then(l => this._isMounted && this.setState({...this.state, points: l[0], r: l[1]}));
   }
+
+
 
   clickToFeature(e) {
     var layer = e.target;

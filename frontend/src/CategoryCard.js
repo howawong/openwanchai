@@ -33,7 +33,7 @@ class CategoryCard extends Component {
               {audience || "對象:區內所有居民"}<br/>
 			</Col>
 			<Col>
-              <span className="badge badge-secondary">{category.text}</span>&nbsp;&nbsp;
+              <span className="custom-badge badge-secondary">{category.text}</span>&nbsp;&nbsp;
 			</Col>
 			<Col>
               <span className="date">{startDateFormatted||"2020/02/01"}</span>
@@ -50,14 +50,14 @@ class CategoryCard extends Component {
             <Col className="left my-auto" xs={2}>
               <img src={"/assets/icon/" + category.img}/>
             </Col>
-            <Col xs={9}>
+            <Col xs={8} className="pl-3">
               {committee || "灣仔區街坊福利會"}<br/>
               <div className="title">{name || "粵曲歡唱娛坊眾"}</div><br/>
               {audience || "對象:區內所有居民"}<br/>
               <br/>
               <div>
               <span className="price">${budget || "$100,000"}</span>
-              <span className="badge badge-secondary">{category.text}</span>&nbsp;&nbsp;
+              <span className="custom-badge badge-secondary">{category.text}</span>&nbsp;&nbsp;
               <span className="date">{startDateFormatted||"2020/02/01"}</span>
               </div>
             </Col>
@@ -68,11 +68,11 @@ class CategoryCard extends Component {
     
     if (oneCol) {
       return (
-        <div className="card card-mobile">
+        <div className="card card-mobile w-50">
           <img src={"/assets/icon/" + category.img}/><br/>
           {committee || "灣仔區街坊福利會"}<br/>
           <div className="title">{name || "粵曲歡唱娛坊眾"}</div><br/>
-          <span className="badge badge-secondary">{category.text}</span><br/>
+          <span className="custom-badge badge-secondary">{category.text}</span><br/>
           <span className="price" style={{paddingRight: "0.5em"}}>${budget || "$100,000"}</span><br/>
           <span className="date">{startDate||"2020/01/01"}</span>
         </div>
@@ -83,17 +83,17 @@ class CategoryCard extends Component {
 
 
     return (
-      <div className="card card-mobile">
+      <div className="card card-mobile w-100 text-left">
         <Row>
           <Col className="my-auto" xs={3}>
            <img src={"/assets/icon/" + category.img}/>
           </Col>
-          <Col xs={9}>
+          <Col xs={9} className="">
             {committee || "灣仔區街坊福利會"}<br/>
             <div className="title">{name || "粵曲歡唱娛坊眾"}</div><br/>
 
             <span className="price" style={{paddingRight: "0.5em"}}>${budget || "$100,000"}</span>
-            <span className="badge badge-secondary">{category.text}</span>
+            <span className="custom-badge badge-secondary">{category.text}</span>
             <span className="date">{startDate||"22/2/2020"}</span>
           </Col>
         </Row>

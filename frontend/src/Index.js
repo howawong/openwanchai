@@ -20,7 +20,7 @@ import {
   isBrowser,
   isMobile
 } from "react-device-detect";
-
+import { withRouter } from "react-router";
 
 
 
@@ -54,6 +54,7 @@ class Index extends Component {
 
     const categoryCards =  categories.map(c => (<Link to={"/search?minAmount=0&maxAmount=5000000&minDate=2010-01-01&maxDate=2021-03-01&categories=" + c.code.toString() + "&keyword="}><ProjectCategoryCard title={c.text} img={c.img}/></Link>));
     const categoryCardsLarge =  categories.map(c => (<Link to={"/search?minAmount=0&maxAmount=5000000&minDate=2010-01-01&maxDate=2021-03-01&categories=" + c.code.toString() + "&keyword="}><ProjectCategoryCard large={true} title={c.text} img={c.img}/></Link>));
+    console.log("hot", hot.length);
     const hotCards =  hot.map(c => c["properties"]).map(c => (
 
         <Link to={"/detail/" + c["identifier"]}  style={{ textDecoration: 'none' }}>
@@ -71,7 +72,7 @@ class Index extends Component {
 
     return (
       <div className="page">
-	<Banner />    
+	<Banner history={this.props.history}/>    
 	<div className="most-visited">
           <div className="title">
             最多人查看項目
@@ -122,4 +123,4 @@ class Index extends Component {
   }
 }
 
-export default Index;
+export default withRouter(Index);

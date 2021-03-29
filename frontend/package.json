@@ -8,7 +8,8 @@
     "@testing-library/user-event": "^7.1.2",
     "@turf/turf": "^5.1.6",
     "bootstrap": "^4.5.2",
-    "leaflet": "1.6.0",
+    "cross-env": "^7.0.3",
+    "leaflet": "1.7.0",
     "leaflet.markercluster": "1.4.1",
     "moment": "^2.29.1",
     "numeral": "^2.0.6",
@@ -27,6 +28,7 @@
     "react-leaflet-heatmap-layer": "^2.0.0",
     "react-leaflet-markercluster": "^3.0.0-rc1",
     "react-router-dom": "^5.2.0",
+    "react-router-hash-link": "^2.4.0",
     "react-scripts": "3.4.3",
     "recharts": "^2.0.3",
     "rsuite": "^4.8.6",
@@ -34,7 +36,7 @@
   },
   "scripts": {
     "start": "REACT_APP_API_URL=http://192.168.1.54:8000 react-scripts start",
-    "start_prod": "REACT_APP_API_URL=https://test.openwanchai.hk/api react-scripts start",
+    "start_prod": "cross-env PUBLIC_URL=https://test.openwanchai.hk REACT_APP_API_URL=https://test.openwanchai.hk/api react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
@@ -53,5 +55,6 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  }
+  },
+  "homepage": "https://test.openwanchai.hk"
 }

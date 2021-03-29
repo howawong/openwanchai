@@ -33,7 +33,6 @@ class SampleMap extends React.Component {
     this.geoJsonLayer.current.leafletElement.clearLayers().addData(newData);
     if (l > 0) {
       const boundary = this.geoJsonLayer.current.leafletElement.getBounds();
-      console.log("bound", boundary);
       const sw = boundary._southWest;
       const ne = boundary._northEast;
       boundary._southWest = L.latLng(sw.lat - 0.1 , sw.lng + 0.075);
@@ -62,8 +61,6 @@ class SampleMap extends React.Component {
 
   render() {
     const position = [this.state.lat, this.state.lng];
-    console.log(this.props.locations);
-    console.log("sampleMap", this.geoJsonLayer);
     var greenIcon = new L.Icon({
       iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-green.png',
       shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
@@ -108,7 +105,7 @@ class SampleMap extends React.Component {
           attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
           url='http://{s}.tile.osm.org/{z}/{x}/{y}.png'
         />
-        <GeoJSON ref={this.geoJsonLayer} data={this.props.locations} style={{color: '#ff00ff'}} pointToLayer={(gj, latlng)=> {console.log("Marker", gj); return new L.Marker(latlng, {icon: icons[gj["index"] % 4]});}} onEachFeature={this.onEachFeature.bind(this)} scrollWheelZoom={false}/>
+        <GeoJSON ref={this.geoJsonLayer} data={this.props.locations} style={{color: '#ff00ff'}} pointToLayer={(gj, latlng)=> { return new L.Marker(latlng, {icon: icons[gj["index"] % 4]});}} onEachFeature={this.onEachFeature.bind(this)} scrollWheelZoom={false}/>
       </Map>
     );
   }

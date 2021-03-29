@@ -74,6 +74,13 @@
   border-radius: 48px;
 }
 
+.searchBar2 .digit {
+  width: 20em;
+  font-weight: bold;
+  font-size: 1.2rem;
+}
+
+
 .searchBar2 .search_m {
   margin-left: 0.5em;
 }
@@ -190,6 +197,10 @@
   padding: 0em;
 }
 
+.about-page .wrap-header {
+  word-wrap:break-word;
+}
+
 .about-page .left-col{
   margin-right: 10em;
   background-position: center;
@@ -212,11 +223,12 @@
   height: 20px;
 }
 
-.about-page img {
-  width: 40vw;
-  min-width: 420px;
-  margin-top:3em;
-  margin-bottom:3em;
+.about-page .chart {
+  max-width: 40vw;
+}
+
+.about-page .chart-mobile {
+  max-width: 80vw;
 }
 
 .page .border {
@@ -303,6 +315,9 @@
 .card-mobile {
   margin-left: 1em;
   margin-right: 1em;
+  display: inline-block;
+  width: 50vw;
+
 }
 
 .project-type-card {
@@ -323,7 +338,7 @@
 }
 
 .long-card {
-  width: 500px;
+  width: 12vw;
 }
 
 .project-type-card .img {
@@ -333,8 +348,7 @@
 
 .browse-gallery .card{
   display: inline-block;
-  width: 50vw;
-  min-width: 0;
+  width: 25vw;
   margin-right: 1em;
 }
 
@@ -437,7 +451,7 @@
   padding-bottom: 2em;*/
 }
 
-.badge {
+.custom-badge {
   background: rgba(121, 121, 121, 0.1);
   font-family: Noto Sans TC;
   font-style: normal;
@@ -462,9 +476,30 @@
   line-height: 3em;
 }
 
+
+
 .footer .link {
   margin-left:2em;
+  color: white;
 }
+
+.footer a:link {
+  color: white;
+  text-decoration: none;
+}
+
+.footer a:hover {
+  color: white;
+  text-decoration: underline;
+}
+
+
+
+.footer a:visited {
+  color: white;
+}
+
+
 
 .shadow-container {
   padding: 3em;

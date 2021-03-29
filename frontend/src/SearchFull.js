@@ -47,7 +47,7 @@ class SearchFull extends SearchNoRouter {
     </div>));
     const { history } = this.props;
     const pagination = this.paginationView();
-    const switchButton = (<SwitchModeButtonGroup searchBarFunc={this.searchBarFunc} clickFullMap={() => this.goTo("/search_full")} clickMap={() => this.goTo("/search")} clickList={() => this.goTo("/list")}  />);
+    const switchButton = (<SwitchModeButtonGroup searchBarFunc={this.searchBarFunc} clickFullMap={() => this.goTo("/visuals", false)} clickMap={() => this.goTo("/search")} clickList={() => this.goTo("/list")}  />);
     return (
       <div className="App page">
         <MobileView>

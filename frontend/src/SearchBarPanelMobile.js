@@ -77,7 +77,7 @@ class SearchBarPanelMobile extends Component {
       <Modal.Body>
         <Row>
           <Col className="right-col">
-	    <h4>預算&nbsp;{numeral(minBudget).format("000000,0A")} - {numeral(maxBudget).format("0,0A")}</h4></Col>
+	    <h4>預算&nbsp;{numeral(minBudget).format("0,0A")} - {numeral(maxBudget).format("0,0A")}</h4></Col>
         </Row>
         <Row>
           <Col>&nbsp;</Col>

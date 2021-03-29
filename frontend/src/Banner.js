@@ -50,7 +50,7 @@ class Banner extends Component {
       <div>
         <Jumbotron className={ isBrowser ? "banner" : "banner-mobile"}>
 	  {isBrowser ? desktopView : mobileView}
-          <SearchBar />
+          <SearchBar history={this.props.history}/>
         </Jumbotron>
       </div>
     );

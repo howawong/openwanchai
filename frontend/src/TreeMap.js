@@ -118,7 +118,7 @@ export default class TreeMap extends React.Component {
         <CustomTreemap
           data={result}
           dataKey="amount"
-          ratio={3 / 10}
+          ratio={this.props.ratio ?? 3 / 10}
           content={<CustomizedContent colors={COLORS} max={this.props.max ?? 12} w={this.props.w ?? 5} fontSize={this.props.fontSize ?? 14}/>}
         >
         <Tooltip  content={<CustomTooltip />} />

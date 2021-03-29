@@ -27,9 +27,12 @@ class DetailMobile extends Component {
     const {map, detail, detailRef} = this.props;
     const properties = map && map.properties;
     console.log(map);
+    const goTo = this.props.goTo;
     return (
       <div className="page w-100">
-        <SwitchModeButtonGroup searchBarFunc={() => {return {current: null}}}/>
+        <SwitchModeButtonGroup searchBarFunc={() => {return {current: null}}} 
+	    clickMap={() => goTo("/search")} clickList={() => goTo("/list")} clickFullMap={() => goTo("/visuals", false)}
+	    />
         <div className="detail">
           <Row className="ml-0 mr-0">
              <Col className="pl-0 pr-0">
@@ -40,7 +43,7 @@ class DetailMobile extends Component {
            </Row>
            <Row className="p-3 ml-0 mr-0">
              <Col className="pl-0 pr-0">
-                <h2>{detail.title}</h2>
+                <h2>{detail.title} {this.props.approvedStatus(detail.approved)}</h2>
                 <br/>
                 <div className="detail-field-container">
                 <Row><Col><img src="/assets/icon/application.svg" />申請團體: {detail.organization}</Col></Row>
@@ -49,7 +52,7 @@ class DetailMobile extends Component {
                 <Row><Col><img src="/assets/icon/counter.svg" />參加人數: {detail.audience_size}人</Col></Row>
                 <Row><Col><img src="/assets/icon/dollar.svg" />撥款: ${detail.amount}</Col></Row>
                 <Row><Col><img src="/assets/icon/calender.svg" />開始日期: {detail.start_date}</Col></Row>
-                <Row><Col><img src="/assets/icon/type.svg" />類別: 聯誼</Col></Row>
+                <Row><Col><img src="/assets/icon/type.svg" />類別: {detail.category ? detail.category.text: ""}</Col></Row>
                 <Row><Col><img src="/assets/icon/end date.svg" />結束日期: {detail.end_date}</Col></Row>
                 </div>
                 <div className="border"/><br/>
@@ -66,6 +69,7 @@ class DetailMobile extends Component {
       </div>
     );
   }
+	
 }
 
 export default DetailMobile;

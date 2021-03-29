@@ -34,6 +34,9 @@ exports.fetchList = (keyword, minDate, maxDate, minAmount, maxAmount, page, size
 
   var url = root
               + "/sample/dmw?"
+  minDate = minDate ?? "2010-01-01";
+  maxDate = maxDate ?? "2021-03-01";
+  keyword = keyword ?? "";
   if (minDate.length > 0) {
     url = url + "&min_date=" + minDate;
   }
