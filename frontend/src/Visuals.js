@@ -119,6 +119,8 @@ class Visuals extends Component {
 	  咦，點解「其他」會咁大嚿？「其他」即係咩呀？年年個框一樣大細係咪即係拎一樣嘅錢呀？
 	</p>
 	<br/>
+	<br/>
+	<br/>
         {this.treeMapButton()}
       </div>
     

@@ -18,7 +18,7 @@ import {
   isBrowser,
   isMobile
 } from "react-device-detect";
-
+import { withRouter } from "react-router";
 
 
 class Detail extends React.Component {
@@ -35,9 +35,8 @@ class Detail extends React.Component {
     const {id} = this.state;
     fetchDetail(id).then(
 	  result => {
-        console.log("fuck", this.sampleMap);
         if (this.sampleMap.current) {
-		    this.sampleMap.current.clear([result]);
+		    //this.sampleMap.current.clear([result], []);
 		}
 		this.setState({...this.state, result: [result]});
 	  }
@@ -117,6 +116,10 @@ class Detail extends React.Component {
   
   }
 
+  goTo(x, shouldGet=true) {
+    this.props.history.push(x);
+  }
+
 
 
   render() {
@@ -127,7 +130,7 @@ class Detail extends React.Component {
     console.log("detail", detail);
     if (isMobile) {
       return (
-        <DetailMobile map={map} detail={detail} detailRef={this.sampleMap} approvedStatus={this.approvedStatus} history={this.props.history} goTo={this.goTo}/>
+        <DetailMobile map={map} detail={detail} detailRef={this.sampleMap} approvedStatus={this.approvedStatus} history={this.props.history} goTo={this.goTo.bind(this)} history={this.props.history}/>
       )
     
     }
@@ -200,13 +203,8 @@ class Detail extends React.Component {
     );
   }
 
-  goTo(x, shouldGet=true) {
-    console.log(sb);
-    //this.props.history.push(x);
-  }
-
 
 }
 
 
-export default Detail;
+export default withRouter(Detail);

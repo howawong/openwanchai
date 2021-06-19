@@ -93,8 +93,8 @@ class About extends Component {
       <div className="ml-3" style={{display: "block"}}>
         <br/>
         <br/>
-        <br/>
-        <div className="text-right mr-5">
+	<br/>
+        <div className="text-right mr-5 mt-3">
 	  <BackButton />
         </div>
         <br/>
@@ -125,7 +125,7 @@ class About extends Component {
        <br/>
        <div className="text-center ml-3 mr-3">
 	 <h3 className="wrap-header">下載「灣仔生猛」研究報告全文&nbsp;
-       <Button  as="a" variant="primary" className="ml-5" href="/Report_Open data_v4.pdf" target="_blank">下載</Button></h3>
+       <Button  as="a" variant="primary" className="ml-5" href="/Open_WanChai-full_report(2021).pdf" target="_blank">下載</Button></h3>
          <div className="border"></div>
 	 <br/><br/>
 

@@ -312,11 +312,15 @@
   border-radius: 1em;
 }
 
+.w-95 {
+  width: 92%;
+}
+
 .card-mobile {
   margin-left: 1em;
   margin-right: 1em;
   display: inline-block;
-  width: 50vw;
+  min-width: 300px;
 
 }
 

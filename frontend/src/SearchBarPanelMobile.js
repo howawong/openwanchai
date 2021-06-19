@@ -16,6 +16,7 @@ class SearchBarPanelMobile extends Component {
     super(props);
     console.log(props);
     this.toggle = this.props.toggle;
+    this.handleShowBin = this.props.handleShowBin;
     this.state = this.stateFromProps(props);
     this.ref = React.createRef();
     this.onAmountChanged = this.props.onAmountChanged;
@@ -27,7 +28,8 @@ class SearchBarPanelMobile extends Component {
     const showBudget = props.showBudget ?? true;
     const visible = props.visible ?? true;
     const checked = props.checked;
-    const newState = {...this.state, dates: props.dates, budgets: props.budgets, showDateRange, showBudget, visible, checked};
+    const showBin = props.showBin ?? false;
+    const newState = {...this.state, dates: props.dates, budgets: props.budgets, showDateRange, showBudget, visible, checked, showBin};
     return newState;
   }
 
@@ -41,7 +43,7 @@ class SearchBarPanelMobile extends Component {
   onChange = (value) => {this.setState({show:this.state.show});};
   
   render() {
-    const { visible, dates, budgets, showDateRange, showBudget, checked } = this.state;
+    const { visible, dates, budgets, showDateRange, showBudget, checked, showBin } = this.state;
     const handleStyle = {
 	  width: 20, 
 	  marginTop: -8,
@@ -110,6 +112,8 @@ class SearchBarPanelMobile extends Component {
 		      <Form.Check type="checkbox" label="直接服務" checked={checked[5]} onChange={e => this.toggle(e)} name="5"/>
 		      <Form.Check type="checkbox" label="研究" checked={checked[6]} onChange={e => this.toggle(e)} name="6"/>
 		      <Form.Check type="checkbox" label="文化活動" checked={checked[7]} onChange={e => this.toggle(e)} name="7"/>
+	              <hr/>
+		      <Form.Check type="checkbox" label="垃圾筒" checked={showBin} onChange={e => this.handleShowBin(e)} name="7"/>
 			  <br/>
 		    </Modal.Body>
       </div>

@@ -133,4 +133,12 @@ class CommunityActivityMetaData(models.Model):
         return self.code + " "  + self.project_name
 
 
-
+class RubbishBin(models.Model):
+    fid = models.AutoField(primary_key=True)
+    point = models.PointField()
+    department = models.CharField(max_length=128, null=True)
+    bin_type = models.CharField(max_length=128, null=True)
+    separable = models.CharField(max_length=128, null=True)
+    latitude = models.DecimalField(decimal_places=6, max_digits=50, default=0.0)
+    longitude = models.DecimalField(decimal_places=6, max_digits=50, default=0.0)
+ 

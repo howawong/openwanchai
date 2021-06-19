@@ -1,6 +1,5 @@
 import React, {Component, useState} from 'react';
 import Modal from 'react-bootstrap/Modal';
-import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import Slider, { Range } from 'rc-slider';
 import Col from 'react-bootstrap/Col';
@@ -31,6 +30,7 @@ class SearchBar extends Component {
     this.mapping = [1, 3, 4, 5, 6, 7, 8,9];
     const state = this.stateFromProps(props.query);
     this.ref = React.createRef();
+    this.page = 1;
     this.keywordRef = React.createRef();
     this.state = state;
   }
@@ -40,9 +40,11 @@ class SearchBar extends Component {
     const minValue = (query ? parseInt(query.minAmount ?? this.min.toString()) : this.min) ?? this.min;
     console.log("query", query, minValue, maxValue);
     const keyword = query ? query.keyword : "";
+    const showBin = query ? (query.showBin !== null && query.showBin) : false;
     const minDate = new Date((query ? query.minDate : "2010-01-01") ?? "2010-01-01");
     const maxDate = new Date((query ? query.maxDate : "2021-03-01") ?? "2021-03-01");
     const checked = [true, true, true, true, true, true, true, true];
+    const page = query ? parseInt(query.page ?? 1) : 1;
     console.log("q", query);
     if (query && query.categories) {
       const categories = query.categories.split(",").filter(x => !isNaN(x)).map(x => parseInt(x));
@@ -53,7 +55,7 @@ class SearchBar extends Component {
 	  checked[i] = false;
 	}
       }
-   
+      
 
     }
 	}
@@ -64,10 +66,11 @@ class SearchBar extends Component {
         minDate: minDate,
         maxDate: maxDate,
             result: [],
-            page: 0,
+            page: page,
             total: 0,
             size: 6,
-      checked: checked,
+        checked: checked,
+        showBin: showBin,
         value:[this.valueToPct(minValue), this.valueToPct(maxValue)]};
 
   }
@@ -109,10 +112,10 @@ class SearchBar extends Component {
     this.setState({...this.state, minBudget: minBudget, maxBudget: maxBudget })
   };
 
-  getSearchURL = (prefix="/search") => {
-    const keyword = this.state.keyword;
-    const {minBudget, maxBudget, minDate, maxDate, checked} = this.state;
-
+  getSearchURL = (prefix="/search", newPage=null) => {
+    const keyword = this.state.keyword ?? "";
+    const {minBudget, maxBudget, minDate, maxDate, checked, showBin} = this.state;
+    const page = newPage == null ?  this.state.page : newPage;
 
     const format = "YYYY-MM-DD";
 
@@ -130,8 +133,12 @@ class SearchBar extends Component {
       minDate: moment(minDate).format(format),
       maxDate: moment(maxDate).format(format),
       keyword: keyword,
-      categories: categories
+      categories: categories,
+      page: page,
     };
+    if (showBin) {
+      params.showBin = 1;
+    }
     const queryString = Object.keys(params).map(key => key + '=' + params[key]).join('&');
     if (queryString.length > 0)
       return prefix + "?" + queryString;
@@ -152,10 +159,17 @@ class SearchBar extends Component {
     this.setState({...this.state, checked}) 
   };
 
+  handleToggleShowBin = (evt) => { 
+    console.log(evt.target);
+    var checked = this.state.showBin ?? false;
+    checked = ! checked
+    this.setState({...this.state, showBin: checked}) 
+  };
+
 
   
   render() {
-    const { show, value, minBudget, maxBudget, keyword, maxDate, minDate, checked } = this.state;
+    const { show, value, minBudget, maxBudget, keyword, maxDate, minDate, checked, showBin } = this.state;
     const { before, allowedRange } = DateRangePicker;
   const handleStyle = {
     width: 20, 
@@ -210,7 +224,7 @@ class SearchBar extends Component {
             </Col>
           </Row>
         </div>
-        <SearchBarPanelMobile showDateRange={false} showBudget={false} budgets={[minBudget, maxBudget]} dates={[minDate, maxDate]}  onAmountChanged={this.onRangeAfterChange} onDateRangeChanged={this.changeDateRange} visible={show} toggle={this.handleToggle} checked={checked}/>
+        <SearchBarPanelMobile showDateRange={false} showBudget={false} budgets={[minBudget, maxBudget]} dates={[minDate, maxDate]}  onAmountChanged={this.onRangeAfterChange} onDateRangeChanged={this.changeDateRange} visible={show} toggle={this.handleToggle} checked={checked} handleShowBin={this.handleToggleShowBin} showBin={showBin}/>
         </BrowserView>
         <MobileView>
           <div className="searchBar2">
@@ -222,7 +236,7 @@ class SearchBar extends Component {
               </Col>
             </Row>
           </div>
-          <SearchBarPanelMobile budgets={[minBudget, maxBudget]} dates={[minDate, maxDate]}  onAmountChanged={this.onRangeAfterChange} onDateRangeChanged={this.changeDateRange} visible={show} toggle={this.handleToggle} checked={checked}/>
+          <SearchBarPanelMobile budgets={[minBudget, maxBudget]} dates={[minDate, maxDate]}  onAmountChanged={this.onRangeAfterChange} onDateRangeChanged={this.changeDateRange} visible={show} toggle={this.handleToggle} checked={checked} handleShowBin={this.handleToggleShowBin} showBin={showBin}/>
         </MobileView>
       </div>
     );

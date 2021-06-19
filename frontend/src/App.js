@@ -8,6 +8,7 @@ import SearchFull from "./SearchFull";
 import TreeMapPage from "./TreeMapPage";
 import VisualPage from "./VisualPage";
 import HeatMapPage from "./HeatMapPage";
+import HeatMapRubbishPage from "./HeatMapRubbishPage";
 import StackedBarChartPage from "./StackedBarChartPage";
 import Detail from "./Detail";
 import List from "./List";
@@ -41,6 +42,7 @@ const AppRouter = () => {
 	  <Route path="/search_full" exact component={SearchFull} />
 	  <Route path="/treemap" exact component={TreeMapPage} />
 	  <Route path="/heatmap" exact component={HeatMapPage} />
+	  <Route path="/rubbish" exact component={HeatMapRubbishPage} />
 	  <Route path="/visuals" exact component={VisualPage} />
 	  <Route path="/spent-by-committee" exact component={StackedBarChartPage} />
 	  <Route path="/list" exact component={List} />

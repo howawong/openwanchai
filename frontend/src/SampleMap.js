@@ -18,23 +18,26 @@ class SampleMap extends React.Component {
 	  result: []
     };
     this.geoJsonLayer = React.createRef();
+    this.binJsonLayer = React.createRef();
     this.map = React.createRef();
   }
 
   
 
-  clear(newData) {
+  clear(newData, newBins) {
     newData = newData.filter(w => w.geometry)
+    newBins = newBins ?? [];
     const l = newData.length;
     newData.forEach((d, i) => {
       d["index"] = i;
     });
 
     this.geoJsonLayer.current.leafletElement.clearLayers().addData(newData);
+    this.geoJsonLayer.current.leafletElement.clearLayers().addData(newBins);
     if (l > 0) {
       const boundary = this.geoJsonLayer.current.leafletElement.getBounds();
       const sw = boundary._southWest;
-      const ne = boundary._northEast;
+      const ne = boundary._northEast
       boundary._southWest = L.latLng(sw.lat - 0.1 , sw.lng + 0.075);
       boundary._northEast = L.latLng(ne.lat - 0.1 , ne.lng - 0.075);
       this.map.current.leafletElement.fitBounds(boundary);
@@ -98,6 +101,26 @@ class SampleMap extends React.Component {
     });
 
     const icons = [blueIcon, purpleIcon, redIcon, greenIcon];
+    console.log("wtf", this.props.locations);
+    this.props.locations.forEach((d, i) => {
+      d["index"] = i;
+    });
+
+     if (this.props.bins)
+    this.props.bins.forEach((d, i) => {
+      d["index"] = i;
+    });
+    var blueBinIcon = new L.Icon({
+      iconUrl: '/assets/recycle-bin.png',
+      shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+      iconSize: [32, 32],
+      iconAnchor: [12, 41],
+      popupAnchor: [1, -34],
+      shadowSize: [41, 41]
+    });
+
+    const binIcons = [blueBinIcon];
+
 
     return (
       <Map key={Math.random()} ref={this.map} center={position} zoom={this.state.zoom}>
@@ -106,6 +129,7 @@ class SampleMap extends React.Component {
           url='http://{s}.tile.osm.org/{z}/{x}/{y}.png'
         />
         <GeoJSON ref={this.geoJsonLayer} data={this.props.locations} style={{color: '#ff00ff'}} pointToLayer={(gj, latlng)=> { return new L.Marker(latlng, {icon: icons[gj["index"] % 4]});}} onEachFeature={this.onEachFeature.bind(this)} scrollWheelZoom={false}/>
+        (this.props.bins && <GeoJSON ref={this.binJsonLayer} data={this.props.bins} style={{color: '#ff00ff'}} pointToLayer={(gj, latlng)=> { return new L.Marker(latlng, {icon: binIcons[gj["index"] % 1]});}}  scrollWheelZoom={false}/>}
       </Map>
     );
   }

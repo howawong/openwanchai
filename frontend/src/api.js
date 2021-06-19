@@ -1,3 +1,5 @@
+const fetch = require("node-fetch");
+
 const rootPath = () => {
   return process.env.REACT_APP_API_URL;
 };
@@ -22,8 +24,14 @@ exports.fetchTreeMap = (year=null) => {
 };
 
 
+exports.fetchRubbish = () => {
+  const root = rootPath();
+  const url =  root + "/sample/rubbish";
+  return fetch(url).then(res => res.json());
+}
 
-exports.fetchList = (keyword, minDate, maxDate, minAmount, maxAmount, page, size, categories) => {
+
+exports.fetchList = (keyword, minDate, maxDate, minAmount, maxAmount, page, size, categories, showBin) => {
   const root = rootPath();
   if (categories === undefined || categories === "") {
     categories = []
@@ -44,6 +52,7 @@ exports.fetchList = (keyword, minDate, maxDate, minAmount, maxAmount, page, size
   if (maxDate.length > 0) {
     url = url + "&max_date=" + maxDate;
   }
+
   console.log("cat", categories)
   url = url   + "&min_ballpark=" + minAmount
               + "&max_ballpark=" + maxAmount
@@ -51,6 +60,12 @@ exports.fetchList = (keyword, minDate, maxDate, minAmount, maxAmount, page, size
               + "&page=" + page
               + "&size=" + size
 	      + "&categories=" + categories.join(",");
+
+  if (showBin > 0) {
+    url = url + "&show_bin=1";
+  }
+
+
   console.log(url);
   return fetch(url).then(res => res.json());
 }
@@ -67,6 +82,7 @@ exports.fetchHot = () => {
   const root = rootPath();
   const url = root
               + "/sample/hot";
+  console.log(url, fetch);
   return fetch(url).then(res => res.json());
 }
 

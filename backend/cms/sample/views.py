@@ -16,6 +16,27 @@ from django.contrib.gis.geos import Point
 from django.contrib.gis.geos import GEOSGeometry
 from django.db.models import DateTimeField, ExpressionWrapper, F
 from rest_framework_gis.fields import GeometryField
+from rest_framework_gis.serializers import GeoFeatureModelSerializer
+
+class RubbishBinSerializer(GeoFeatureModelSerializer):
+    """ A class to serialize locations as GeoJSON compatible data """
+
+    class Meta:
+        model = RubbishBin
+        geo_field = "point"
+        
+        # you can also explicitly declare which fields you want to include
+        # as with a ModelSerializer.
+        fields = ('fid', 'department', 'bin_type', 'separable')
+
+
+class RubbishBinList(APIView):
+    def get(self, request, format=None):
+        output = []
+        bins = RubbishBin.objects.all()
+        serializer = RubbishBinSerializer(bins, many=True)
+        return Response({"result": serializer.data})
+
 
 
 def home_view(request):
@@ -25,6 +46,8 @@ def home_view(request):
 def search_config_view(request):
     output = DistrictMinorWork.objects.all().aggregate(Min('budget'), Max('budget'))
     return JsonResponse({'budget': {'min': float(output['budget__min']), 'max': float(output['budget__max'])}})
+
+
 
 
 
@@ -235,7 +258,14 @@ class DMWList(APIView):
 
         serializer = SearchResultSerializer(model_from_page, many=True)
         data = serializer.data
-        return paginator.get_paginated_response(data)
+        d = paginator.get_paginated_response(data).data
+
+        show_bin = self.request.query_params.get('show_bin', None)
+        bins = RubbishBin.objects.all() if show_bin else []
+        serializer = RubbishBinSerializer(bins, many=True)
+        d["layers"] = {"bins": serializer.data}
+       
+        return JsonResponse(d)
 
 
 class HotList(APIView):

@@ -27,7 +27,7 @@ class SearchFull extends SearchNoRouter {
   }
 
   render() {
-    const {yearRange,result, total, page, size, query} = this.state;
+    const {yearRange,result, total, page, size, query, bins} = this.state;
     console.log("Search", query);
       const resultView = result.map((gj, index) =>(
       <div key={index}>
@@ -56,7 +56,7 @@ class SearchFull extends SearchNoRouter {
         {switchButton}
 	  </div>
           <div className="map-fullscreen">
-            <SampleMap locations={result} ref={this.sampleMap} history={history}/>
+            <SampleMap locations={result} ref={this.sampleMap} history={history} bins={bins}/>
           </div>
         </MobileView>
         {isBrowser && ( 
@@ -68,7 +68,7 @@ class SearchFull extends SearchNoRouter {
             </div>
           </div>
           <div className="map-fullscreen">
-            <SampleMap locations={result} ref={this.sampleMap} history={history}/>
+            <SampleMap locations={result} ref={this.sampleMap} history={history} bins={bins}/>
           </div>
         </div>)}
       </div>

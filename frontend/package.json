@@ -12,6 +12,7 @@
     "leaflet": "1.7.0",
     "leaflet.markercluster": "1.4.1",
     "moment": "^2.29.1",
+    "node-fetch": "^2.6.1",
     "numeral": "^2.0.6",
     "qs": "^6.9.4",
     "rc-slider": "^9.6.5",
@@ -32,11 +33,12 @@
     "react-scripts": "3.4.3",
     "recharts": "^2.0.3",
     "rsuite": "^4.8.6",
-    "uuidv4": "^6.2.6"
+    "uuidv4": "^6.2.6",
+    "whatwg-fetch": "^3.6.2"
   },
   "scripts": {
     "start": "REACT_APP_API_URL=http://192.168.1.54:8000 react-scripts start",
-    "start_prod": "cross-env PUBLIC_URL=https://test.openwanchai.hk REACT_APP_API_URL=https://test.openwanchai.hk/api react-scripts start",
+    "start_prod": "cross-env PUBLIC_URL=https://wwww.openwanchai.hk REACT_APP_API_URL=https://www.openwanchai.hk/api react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
@@ -56,5 +58,5 @@
       "last 1 safari version"
     ]
   },
-  "homepage": "https://test.openwanchai.hk"
+  "homepage": "https://www.openwanchai.hk"
 }

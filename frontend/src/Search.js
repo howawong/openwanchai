@@ -24,7 +24,7 @@ class Search extends React.Component {
     super(props);
     const query = qs.parse(props.location.search.slice(1));
     this.searchBarRef = React.createRef();
-    this.state = {result: [], page: 1, total: 0, size: this.getSize(), loading:false, query: query}
+    this.state = {result: [], total: 0, size: this.getSize(), loading:false, query: query, bins:[]}
     this.sampleMap = React.createRef();
   }
 
@@ -35,10 +35,10 @@ class Search extends React.Component {
   componentWillReceiveProps(nextProps) {
     const query = qs.parse(nextProps.location.search.slice(1));
     console.log("query2", query);
-    this.setState({result: [], page: 1, total: 0, size: this.getSize(), loading:false, query: query}, () => { this.fetchData(1);})
+    this.setState({result: [], page: 1, total: 0, size: this.getSize(), loading:false, query: query, bins:[]}, () => { this.fetchData(1);})
   }
 
-  fetchData(page) {
+  fetchData() {
     const {minDate, maxDate, size, loading, query} = this.state;
 
     console.log("query2", this.state);
@@ -47,18 +47,18 @@ class Search extends React.Component {
       if (query.categories === undefined) {
         query.categories = ""
       }
-      fetchList(query.keyword, query.minDate, query.maxDate, query.minAmount ?? 0, query.maxAmount ?? 3000000, page, size, query.categories.split(",")).then(
+      const page = query.page ?? 1;
+      fetchList(query.keyword, query.minDate, query.maxDate, query.minAmount ?? 0, query.maxAmount ?? 3000000, page, size, query.categories.split(","), query.showBin).then(
 	    result => {
 		  if (this.sampleMap.current) {
-		    console.log("clear");
-
-		    this.sampleMap.current.clear(result.results["features"]);
+		
 		  }
 		  console.log(this.sampleMap);
 		  this.setState({...this.state, 
 		     			 loading: false,
-						 page: page,
+					   page: page,
 					     result: result.results["features"], 
+			                     bins: result.layers["bins"]["features"] ?? [],
 					     totalPages: result.total_pages,
 					     total: result.count,
 					     lastPage: result.links.next === null,
@@ -81,8 +81,10 @@ class Search extends React.Component {
     const { lastPage, loading, page } = this.state;
 	console.log(lastPage, loading, page);
 	if (! loading && ! lastPage) {
-	  const newpage = page + 1;
-	  this.fetchData(newpage);
+	  const newpage = (parseInt(page) + 1).toString();
+	  const url = this.searchBarRef.current.getSearchURL(this.props.location.pathname,newpage);
+          this.props.history.replace(url);
+	  //this.fetchData(newpage);
 	}
   }
 
@@ -90,8 +92,11 @@ class Search extends React.Component {
     const { firstPage, loading, page } = this.state;
 	console.log(firstPage, loading, page);
 	if (! loading && ! firstPage) {
-	  const newpage = page - 1;
-	  this.fetchData(newpage);
+	  const newpage = (parseInt(page) - 1).toString();
+	  const url = this.searchBarRef.current.getSearchURL(this.props.location.pathname,newpage);
+          this.props.history.replace(url);
+	  //this.fetchData(newpage);
+          //this.props.history.replace();
 	}
  
   }
@@ -108,8 +113,7 @@ class Search extends React.Component {
         <div className="page-number h-100  justify-content-center h-100"> <h5>{start} - {end} / {total}</h5> </div>&nbsp;&nbsp;</td>
         <td>
         <button className="btn btn-link" onClick={() => this.prevPage()}><img src="/assets/btn/previous.svg"/></button></td>
-	 <td>   
-        <button className="btn btn-link" onClick={() => this.nextPage()}><img src="/assets/btn/next.svg"/></button></td>
+        <td><button className="btn btn-link" onClick={() => this.nextPage()}><img src="/assets/btn/next.svg"/></button></td>
 	    </tr>
         </table>
       </div>
@@ -123,7 +127,7 @@ class Search extends React.Component {
   }
 
   render() {
-    const {yearRange,result, total, page, size, query} = this.state;
+    const {yearRange,result, total, page, size, query, bins} = this.state;
     console.log(this.props);
     console.log("Search", query);
 	const resultView = result.map((gj, index) =>(
@@ -152,7 +156,7 @@ class Search extends React.Component {
             <div style={{display: "none"}}>
               <SearchBar query={query} ref={this.searchBarRef} history={this.props.history}/>
             </div>
-            <SampleMap locations={result} ref={this.sampleMap}/>
+            <SampleMap locations={result} ref={this.sampleMap} bins={bins}/>
           </div>
           {pagination}
           {resultView}
@@ -167,7 +171,7 @@ class Search extends React.Component {
             {resultView}
             </div>
             <div className="leaflet-container-parent col">
-              <SampleMap locations={result} ref={this.sampleMap} history={this.props.history}/>
+              <SampleMap locations={result} ref={this.sampleMap} history={this.props.history} bins={bins}/>
             </div>
         </div>)}
       </div>

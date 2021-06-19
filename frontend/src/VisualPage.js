@@ -25,7 +25,7 @@ import {
 } from "react-device-detect";
 import { withRouter } from "react-router";
 import SwitchModeButtonGroup from './SwitchModeButtonGroup';
-
+import BackButton from './BackButton';
 
 
 class VisualPage extends Component {
@@ -56,6 +56,10 @@ class VisualPage extends Component {
 
     return (
       <div className="page">
+	<div className="text-right mr-5 mt-3">
+	  <BackButton />
+        </div>
+
 	<div className="most-visited">
           <div className="title">
             <h3>數據圖 : 灣仔的活動可以咁睇</h3>
@@ -67,7 +71,7 @@ class VisualPage extends Component {
 	<br/>
 	<br/>
 	<div className="ml-5 mr-5">
-        <h1>數據圖：灣仔啲活動可以咁樣睇</h1><br/>
+        <h3>數據圖：灣仔啲活動可以咁樣睇</h3><br/>
 
 	<p>是次項目邀請兼具地理規劃知識、數據科學及系統開發經驗的專業團隊架設「灣仔生猛」網上平台，將研究員整理好的數據及合共文件，並以三款圖表作數據可視化（Data visualization）呈現，在「數據圖」分頁整理為：熱點地圖（Heat map）、堆疊棒形圖（Stacked bar chart）、矩形樹狀圖（Tree map）。</p>
 	<p>一齊嚟逐個解讀數據圖：</p>
